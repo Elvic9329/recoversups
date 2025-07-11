@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>
+    {%- if page_title -%}
+      {{ page_title }}{% unless page_title contains shop.name %} - {{ shop.name }}{% endunless %}
+    {%- else -%}
+      {{ shop.name }}
+    {%- endif -%}
+  </title>
+  
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+  
+  <link rel="canonical" href="{{ canonical_url }}">
+  
+  {%- if settings.favicon -%}
+    <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
+  {%- endif -%}
+  
+  <!-- Preconnect to improve performance -->
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  
+  <!-- CSS -->
+  {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+  
+  <!-- Shopify head content -->
+  {{ content_for_head }}
+</head>
+<body class="template-{{ template.name | handle }}">
+  <!-- Skip to content link for accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Header -->
+  {% section 'header' %}
+  
+  <!-- Main content -->
+  <main id="main-content" role="main">
+    {{ content_for_layout }}
+  </main>
+  
+  <!-- Footer -->
+  {% section 'footer' %}
+  
+  <!-- JavaScript -->
+  {{ 'theme.js' | asset_url | script_tag }}
+  
+  <!-- Shopify scripts -->
+  {% comment %}
+    Shopify's cart drawer and other JS functionality
+  {% endcomment %}
+  
+  {% if request.design_mode %}
+    <script>
+      // Theme editor specific JavaScript
+      document.addEventListener('shopify:section:load', function(event) {
+        console.log('Section loaded:', event.detail.sectionId);
+      });
+    </script>
+  {% endif %}
+</body>
+</html>

@@ -1,0 +1,902 @@
+{% comment %}
+  Renders a product form with variant selection, inventory management, and AJAX cart functionality
+  
+  Accepts:
+  - product: {Object} Product object
+  - section: {Object} Section object
+  - show_pickup_availability: {Boolean} Show pickup availability (optional)
+  - show_dynamic_checkout: {Boolean} Show dynamic checkout buttons (optional)
+  - show_quantity_selector: {Boolean} Show quantity selector (optional)
+  
+  Usage:
+  {% render 'product-form', product: product, section: section %}
+{% endcomment %}
+
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign product_form_id = 'product-form-' | append: section.id -%}
+
+<div class="product-form" data-section-id="{{ section.id }}">
+  <product-form data-product-id="{{ product.id }}" data-section-id="{{ section.id }}">
+    {% form 'product', product, id: product_form_id, class: 'product-form__form', novalidate: 'novalidate', data-type: 'add-to-cart-form' %}
+      <input type="hidden" name="id" value="{{ current_variant.id }}" class="product-variant-id">
+      
+      {%- unless product.has_only_default_variant -%}
+        <div class="product-form__options">
+          {% for option in product.options_with_values %}
+            <div class="product-form__option" data-option-position="{{ forloop.index }}">
+              <label class="product-form__option-label" for="Option{{ forloop.index }}">
+                {{ option.name }}
+                <span class="product-form__option-required">*</span>
+              </label>
+              
+              {% if option.name == 'Color' or option.name == 'Colour' %}
+                <div class="product-form__option-colors" role="radiogroup" aria-labelledby="Option{{ forloop.index }}-label">
+                  {% for value in option.values %}
+                    {%- assign color_variant = product.variants | where: option.name, value | first -%}
+                    <label class="product-form__color-option {% if option.selected_value == value %}active{% endif %}" 
+                           data-option-value="{{ value }}" 
+                           data-variant-id="{{ color_variant.id }}"
+                           style="background-color: {{ value | downcase }}">
+                      <input type="radio" 
+                             name="options[{{ option.name }}]" 
+                             value="{{ value }}" 
+                             id="Option{{ forloop.index }}-{{ forloop.index0 }}"
+                             {% if option.selected_value == value %}checked{% endif %}
+                             class="sr-only">
+                      <span class="color-option__checkmark">
+                        <svg class="icon icon-check" width="12" height="12" viewBox="0 0 12 12">
+                          <path d="M4.5 7.5L2 5l1-1 1.5 1.5L8 2l1 1-4.5 4.5z" fill="currentColor"/>
+                        </svg>
+                      </span>
+                      <span class="sr-only">{{ value }}</span>
+                    </label>
+                  {% endfor %}
+                </div>
+              {% else %}
+                <select name="options[{{ option.name }}]" 
+                        id="Option{{ forloop.index }}" 
+                        class="product-form__option-select"
+                        aria-label="{{ option.name }}"
+                        required>
+                  {% for value in option.values %}
+                    <option value="{{ value }}" {% if option.selected_value == value %}selected{% endif %}>
+                      {{ value }}
+                    </option>
+                  {% endfor %}
+                </select>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {%- endunless -%}
+
+      <div class="product-form__error-message" id="product-form-error-{{ section.id }}" role="alert" aria-live="polite">
+      </div>
+
+      <div class="product-form__pricing" data-pricing>
+        <div class="product-form__price-container">
+          <span class="product-form__price {% if current_variant.compare_at_price > current_variant.price %}price--on-sale{% endif %}">
+            {{ current_variant.price | money }}
+          </span>
+          {% if current_variant.compare_at_price > current_variant.price %}
+            <span class="product-form__compare-price">
+              {{ current_variant.compare_at_price | money }}
+            </span>
+            <span class="product-form__save-amount">
+              Save {{ current_variant.compare_at_price | minus: current_variant.price | money }}
+            </span>
+          {% endif %}
+        </div>
+        
+        {% if current_variant.unit_price_measurement %}
+          <div class="product-form__unit-price">
+            <span class="product-form__unit-price-value">{{ current_variant.unit_price | money }}</span>
+            <span class="product-form__unit-price-separator">/</span>
+            <span class="product-form__unit-price-unit">
+              {%- if current_variant.unit_price_measurement.reference_value != 1 -%}
+                {{- current_variant.unit_price_measurement.reference_value -}}
+              {%- endif -%}
+              {{ current_variant.unit_price_measurement.reference_unit }}
+            </span>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="product-form__inventory-status" data-inventory-status>
+        {%- if current_variant.inventory_management == 'shopify' -%}
+          <div class="product-form__inventory-message" data-inventory-message>
+            {%- if current_variant.inventory_quantity <= 0 -%}
+              <span class="product-form__inventory-text product-form__inventory-text--unavailable">
+                Out of stock
+              </span>
+            {%- elsif current_variant.inventory_quantity <= 10 -%}
+              <span class="product-form__inventory-text product-form__inventory-text--low">
+                Only {{ current_variant.inventory_quantity }} left in stock
+              </span>
+            {%- else -%}
+              <span class="product-form__inventory-text product-form__inventory-text--available">
+                In stock
+              </span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {% if show_quantity_selector != false %}
+        <div class="product-form__quantity-container">
+          <label class="product-form__quantity-label" for="Quantity-{{ section.id }}">
+            Quantity
+          </label>
+          <div class="product-form__quantity-selector">
+            <button type="button" 
+                    class="product-form__quantity-button product-form__quantity-button--minus"
+                    aria-label="Decrease quantity"
+                    data-quantity-minus>
+              <svg class="icon icon-minus" width="12" height="12" viewBox="0 0 12 12">
+                <path d="M2 6h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <input type="number" 
+                   id="Quantity-{{ section.id }}" 
+                   class="product-form__quantity-input" 
+                   name="quantity" 
+                   value="1" 
+                   min="1"
+                   max="{{ current_variant.inventory_quantity | default: 99 }}"
+                   aria-live="polite"
+                   data-inventory-quantity="{{ current_variant.inventory_quantity | default: 99 }}">
+            <button type="button" 
+                    class="product-form__quantity-button product-form__quantity-button--plus"
+                    aria-label="Increase quantity"
+                    data-quantity-plus>
+              <svg class="icon icon-plus" width="12" height="12" viewBox="0 0 12 12">
+                <path d="M6 2v8M2 6h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      {% endif %}
+
+      <div class="product-form__buttons">
+        <button type="submit" 
+                class="product-form__cart-button btn btn--primary btn--full-width"
+                {% if current_variant.available == false %}disabled{% endif %}
+                data-add-to-cart>
+          <span class="btn__text" data-add-to-cart-text>
+            {%- if current_variant.available -%}
+              Add to cart
+            {%- else -%}
+              Sold out
+            {%- endif -%}
+          </span>
+          <span class="btn__loading" data-loading-spinner>
+            <svg class="spinner" width="20" height="20" viewBox="0 0 20 20">
+              <circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-dasharray="50.26548245743669" stroke-dashoffset="50.26548245743669">
+                <animate attributeName="stroke-dashoffset" dur="1s" values="50.26548245743669;0" repeatCount="indefinite"/>
+              </circle>
+            </svg>
+          </span>
+        </button>
+
+        {% if show_dynamic_checkout != false %}
+          {{ form | payment_button }}
+        {% endif %}
+      </div>
+
+      {% if show_pickup_availability %}
+        <div class="product-form__pickup-availability" data-pickup-availability>
+          {{ current_variant | pickup_availability }}
+        </div>
+      {% endif %}
+    {% endform %}
+  </product-form>
+</div>
+
+<script>
+  class ProductForm extends HTMLElement {
+    constructor() {
+      super();
+      
+      this.form = this.querySelector('form');
+      this.variantIdInput = this.querySelector('.product-variant-id');
+      this.quantityInput = this.querySelector('.product-form__quantity-input');
+      this.quantityButtons = this.querySelectorAll('[data-quantity-minus], [data-quantity-plus]');
+      this.addToCartButton = this.querySelector('[data-add-to-cart]');
+      this.addToCartText = this.querySelector('[data-add-to-cart-text]');
+      this.loadingSpinner = this.querySelector('[data-loading-spinner]');
+      this.errorMessage = this.querySelector('.product-form__error-message');
+      this.inventoryStatus = this.querySelector('[data-inventory-status]');
+      this.inventoryMessage = this.querySelector('[data-inventory-message]');
+      this.pricingContainer = this.querySelector('[data-pricing]');
+      this.pickupAvailability = this.querySelector('[data-pickup-availability]');
+      this.optionInputs = this.querySelectorAll('select[name*="options"], input[name*="options"]');
+      
+      this.productId = this.dataset.productId;
+      this.sectionId = this.dataset.sectionId;
+      this.currentVariant = null;
+      this.productData = null;
+      
+      this.init();
+    }
+
+    init() {
+      this.fetchProductData();
+      this.setupEventListeners();
+      this.updateVariant();
+    }
+
+    setupEventListeners() {
+      // Option selection
+      this.optionInputs.forEach(input => {
+        input.addEventListener('change', this.handleOptionChange.bind(this));
+      });
+
+      // Quantity controls
+      this.quantityButtons.forEach(button => {
+        button.addEventListener('click', this.handleQuantityChange.bind(this));
+      });
+
+      // Quantity input
+      if (this.quantityInput) {
+        this.quantityInput.addEventListener('change', this.validateQuantity.bind(this));
+        this.quantityInput.addEventListener('input', this.validateQuantity.bind(this));
+      }
+
+      // Form submission
+      this.form.addEventListener('submit', this.handleSubmit.bind(this));
+
+      // Cart drawer events
+      document.addEventListener('cart:updated', this.handleCartUpdate.bind(this));
+    }
+
+    async fetchProductData() {
+      try {
+        const response = await fetch(`/products/${this.productId}.js`);
+        this.productData = await response.json();
+      } catch (error) {
+        console.error('Failed to fetch product data:', error);
+      }
+    }
+
+    handleOptionChange(event) {
+      this.updateVariant();
+    }
+
+    updateVariant() {
+      if (!this.productData) return;
+
+      const selectedOptions = Array.from(this.optionInputs).map(input => input.value);
+      this.currentVariant = this.productData.variants.find(variant => {
+        return variant.options.every((option, index) => option === selectedOptions[index]);
+      });
+
+      if (this.currentVariant) {
+        this.updateVariantId();
+        this.updatePricing();
+        this.updateInventoryStatus();
+        this.updateAddToCartButton();
+        this.updateQuantityLimits();
+        this.updatePickupAvailability();
+        this.updateVariantImage();
+        this.updateURL();
+      }
+    }
+
+    updateVariantId() {
+      this.variantIdInput.value = this.currentVariant.id;
+    }
+
+    updatePricing() {
+      if (!this.pricingContainer) return;
+
+      const price = this.formatMoney(this.currentVariant.price);
+      const comparePrice = this.currentVariant.compare_at_price ? this.formatMoney(this.currentVariant.compare_at_price) : null;
+
+      let priceHTML = `<div class="product-form__price-container">`;
+      priceHTML += `<span class="product-form__price ${comparePrice ? 'price--on-sale' : ''}">${price}</span>`;
+      
+      if (comparePrice) {
+        const savings = this.formatMoney(this.currentVariant.compare_at_price - this.currentVariant.price);
+        priceHTML += `<span class="product-form__compare-price">${comparePrice}</span>`;
+        priceHTML += `<span class="product-form__save-amount">Save ${savings}</span>`;
+      }
+      
+      priceHTML += `</div>`;
+
+      if (this.currentVariant.unit_price) {
+        const unitPrice = this.formatMoney(this.currentVariant.unit_price);
+        const unitPriceMeasurement = this.currentVariant.unit_price_measurement;
+        
+        priceHTML += `<div class="product-form__unit-price">`;
+        priceHTML += `<span class="product-form__unit-price-value">${unitPrice}</span>`;
+        priceHTML += `<span class="product-form__unit-price-separator">/</span>`;
+        priceHTML += `<span class="product-form__unit-price-unit">`;
+        
+        if (unitPriceMeasurement.reference_value !== 1) {
+          priceHTML += unitPriceMeasurement.reference_value;
+        }
+        
+        priceHTML += unitPriceMeasurement.reference_unit;
+        priceHTML += `</span></div>`;
+      }
+
+      this.pricingContainer.innerHTML = priceHTML;
+    }
+
+    updateInventoryStatus() {
+      if (!this.inventoryMessage) return;
+
+      let statusHTML = '';
+      let statusClass = '';
+
+      if (this.currentVariant.inventory_management === 'shopify') {
+        if (this.currentVariant.inventory_quantity <= 0) {
+          statusHTML = 'Out of stock';
+          statusClass = 'product-form__inventory-text--unavailable';
+        } else if (this.currentVariant.inventory_quantity <= 10) {
+          statusHTML = `Only ${this.currentVariant.inventory_quantity} left in stock`;
+          statusClass = 'product-form__inventory-text--low';
+        } else {
+          statusHTML = 'In stock';
+          statusClass = 'product-form__inventory-text--available';
+        }
+      }
+
+      this.inventoryMessage.innerHTML = `<span class="product-form__inventory-text ${statusClass}">${statusHTML}</span>`;
+    }
+
+    updateAddToCartButton() {
+      const isAvailable = this.currentVariant.available;
+      
+      this.addToCartButton.disabled = !isAvailable;
+      this.addToCartText.textContent = isAvailable ? 'Add to cart' : 'Sold out';
+      
+      if (isAvailable) {
+        this.addToCartButton.classList.remove('btn--disabled');
+      } else {
+        this.addToCartButton.classList.add('btn--disabled');
+      }
+    }
+
+    updateQuantityLimits() {
+      if (!this.quantityInput) return;
+
+      const maxQuantity = this.currentVariant.inventory_quantity || 99;
+      this.quantityInput.max = maxQuantity;
+      this.quantityInput.dataset.inventoryQuantity = maxQuantity;
+
+      // Adjust current quantity if it exceeds the limit
+      if (parseInt(this.quantityInput.value) > maxQuantity) {
+        this.quantityInput.value = maxQuantity;
+      }
+    }
+
+    updatePickupAvailability() {
+      if (!this.pickupAvailability) return;
+
+      fetch(`/variants/${this.currentVariant.id}/?section_id=pickup-availability`)
+        .then(response => response.text())
+        .then(html => {
+          this.pickupAvailability.innerHTML = html;
+        })
+        .catch(error => console.error('Failed to update pickup availability:', error));
+    }
+
+    updateVariantImage() {
+      if (!this.currentVariant.featured_image) return;
+
+      const productImages = document.querySelectorAll('.product-media img');
+      const targetImage = Array.from(productImages).find(img => 
+        img.dataset.variantId === this.currentVariant.id.toString()
+      );
+
+      if (targetImage) {
+        // Trigger image change event
+        targetImage.click();
+      }
+    }
+
+    updateURL() {
+      const url = new URL(window.location);
+      url.searchParams.set('variant', this.currentVariant.id);
+      window.history.replaceState({}, '', url);
+    }
+
+    handleQuantityChange(event) {
+      const isIncrement = event.target.closest('[data-quantity-plus]');
+      const currentQuantity = parseInt(this.quantityInput.value);
+      const maxQuantity = parseInt(this.quantityInput.max);
+      
+      if (isIncrement) {
+        if (currentQuantity < maxQuantity) {
+          this.quantityInput.value = currentQuantity + 1;
+        }
+      } else {
+        if (currentQuantity > 1) {
+          this.quantityInput.value = currentQuantity - 1;
+        }
+      }
+      
+      this.validateQuantity();
+    }
+
+    validateQuantity() {
+      const quantity = parseInt(this.quantityInput.value);
+      const maxQuantity = parseInt(this.quantityInput.max);
+      
+      if (quantity > maxQuantity) {
+        this.quantityInput.value = maxQuantity;
+        this.showError(`Only ${maxQuantity} available in stock`);
+      } else if (quantity < 1) {
+        this.quantityInput.value = 1;
+      }
+    }
+
+    async handleSubmit(event) {
+      event.preventDefault();
+      
+      if (!this.currentVariant || !this.currentVariant.available) {
+        this.showError('This product is currently unavailable');
+        return;
+      }
+
+      this.setLoading(true);
+      this.clearError();
+
+      try {
+        const formData = new FormData(this.form);
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          const item = await response.json();
+          this.handleAddToCartSuccess(item);
+        } else {
+          const error = await response.json();
+          this.showError(error.message || 'Failed to add item to cart');
+        }
+      } catch (error) {
+        console.error('Add to cart error:', error);
+        this.showError('An error occurred. Please try again.');
+      } finally {
+        this.setLoading(false);
+      }
+    }
+
+    handleAddToCartSuccess(item) {
+      // Update cart count
+      this.updateCartCount();
+      
+      // Show success message
+      this.showSuccess('Added to cart!');
+      
+      // Open cart drawer if available
+      const cartDrawer = document.querySelector('cart-drawer');
+      if (cartDrawer) {
+        cartDrawer.open();
+      }
+      
+      // Trigger cart update event
+      document.dispatchEvent(new CustomEvent('cart:updated', { detail: { item } }));
+    }
+
+    handleCartUpdate(event) {
+      this.updateCartCount();
+    }
+
+    async updateCartCount() {
+      try {
+        const response = await fetch('/cart.js');
+        const cart = await response.json();
+        
+        const cartCountElements = document.querySelectorAll('.cart-count');
+        cartCountElements.forEach(element => {
+          element.textContent = cart.item_count;
+          element.style.display = cart.item_count > 0 ? 'block' : 'none';
+        });
+      } catch (error) {
+        console.error('Failed to update cart count:', error);
+      }
+    }
+
+    setLoading(isLoading) {
+      this.addToCartButton.disabled = isLoading;
+      this.addToCartText.style.display = isLoading ? 'none' : 'block';
+      this.loadingSpinner.style.display = isLoading ? 'block' : 'none';
+    }
+
+    showError(message) {
+      this.errorMessage.textContent = message;
+      this.errorMessage.style.display = 'block';
+      this.errorMessage.classList.add('product-form__error-message--visible');
+      
+      setTimeout(() => {
+        this.clearError();
+      }, 5000);
+    }
+
+    showSuccess(message) {
+      // Create or update success message
+      let successMessage = this.querySelector('.product-form__success-message');
+      if (!successMessage) {
+        successMessage = document.createElement('div');
+        successMessage.className = 'product-form__success-message';
+        successMessage.setAttribute('role', 'alert');
+        successMessage.setAttribute('aria-live', 'polite');
+        this.errorMessage.parentNode.insertBefore(successMessage, this.errorMessage);
+      }
+      
+      successMessage.textContent = message;
+      successMessage.style.display = 'block';
+      successMessage.classList.add('product-form__success-message--visible');
+      
+      setTimeout(() => {
+        successMessage.style.display = 'none';
+        successMessage.classList.remove('product-form__success-message--visible');
+      }, 3000);
+    }
+
+    clearError() {
+      this.errorMessage.style.display = 'none';
+      this.errorMessage.classList.remove('product-form__error-message--visible');
+      this.errorMessage.textContent = '';
+    }
+
+    formatMoney(cents) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      }).format(cents / 100);
+    }
+  }
+
+  customElements.define('product-form', ProductForm);
+</script>
+
+<style>
+  .product-form {
+    max-width: 500px;
+  }
+
+  .product-form__form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .product-form__options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .product-form__option {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .product-form__option-label {
+    font-weight: 500;
+    color: var(--color-text-dark);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .product-form__option-required {
+    color: var(--color-price-red);
+  }
+
+  .product-form__option-select {
+    padding: 12px 16px;
+    border: 1px solid var(--color-border-gray);
+    border-radius: var(--radius-sm);
+    background: var(--color-white);
+    font-size: var(--text-body);
+    color: var(--color-text-dark);
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+  }
+
+  .product-form__option-select:hover {
+    border-color: var(--color-primary-dark);
+  }
+
+  .product-form__option-select:focus {
+    outline: none;
+    border-color: var(--color-primary-dark);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .product-form__option-colors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .product-form__color-option {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid var(--color-border-gray);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .product-form__color-option:hover {
+    transform: scale(1.1);
+  }
+
+  .product-form__color-option.active {
+    border-color: var(--color-primary-dark);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .color-option__checkmark {
+    opacity: 0;
+    color: var(--color-white);
+    transition: opacity 0.2s ease;
+  }
+
+  .product-form__color-option.active .color-option__checkmark {
+    opacity: 1;
+  }
+
+  .product-form__pricing {
+    padding: 16px 0;
+    border-top: 1px solid var(--color-border-gray);
+    border-bottom: 1px solid var(--color-border-gray);
+  }
+
+  .product-form__price-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .product-form__price {
+    font-size: var(--text-price);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-dark);
+  }
+
+  .product-form__price.price--on-sale {
+    color: var(--color-price-red);
+  }
+
+  .product-form__compare-price {
+    font-size: var(--text-body);
+    color: #666;
+    text-decoration: line-through;
+  }
+
+  .product-form__save-amount {
+    font-size: var(--text-body);
+    color: var(--color-green-accent);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .product-form__unit-price {
+    font-size: 12px;
+    color: #666;
+  }
+
+  .product-form__inventory-status {
+    margin: 8px 0;
+  }
+
+  .product-form__inventory-text {
+    font-size: var(--text-body);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .product-form__inventory-text--available {
+    color: var(--color-green-accent);
+  }
+
+  .product-form__inventory-text--low {
+    color: #ff9500;
+  }
+
+  .product-form__inventory-text--unavailable {
+    color: var(--color-price-red);
+  }
+
+  .product-form__quantity-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .product-form__quantity-label {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-dark);
+  }
+
+  .product-form__quantity-selector {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    border: 1px solid var(--color-border-gray);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  .product-form__quantity-button {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: var(--color-white);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .product-form__quantity-button:hover {
+    background: var(--color-light-gray);
+  }
+
+  .product-form__quantity-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .product-form__quantity-input {
+    width: 60px;
+    height: 44px;
+    text-align: center;
+    border: none;
+    border-left: 1px solid var(--color-border-gray);
+    border-right: 1px solid var(--color-border-gray);
+    font-size: var(--text-body);
+    color: var(--color-text-dark);
+  }
+
+  .product-form__quantity-input:focus {
+    outline: none;
+    background: var(--color-light-gray);
+  }
+
+  .product-form__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .product-form__cart-button {
+    position: relative;
+    padding: 16px 24px;
+    background: var(--color-green-accent);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-button);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .product-form__cart-button:hover:not(:disabled) {
+    background: #6bb91a;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .product-form__cart-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn__loading {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .spinner {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .product-form__error-message,
+  .product-form__success-message {
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-body);
+    display: none;
+  }
+
+  .product-form__error-message {
+    background: #fee;
+    color: var(--color-price-red);
+    border: 1px solid #fcc;
+  }
+
+  .product-form__success-message {
+    background: #efe;
+    color: var(--color-green-accent);
+    border: 1px solid #cfc;
+  }
+
+  .product-form__error-message--visible,
+  .product-form__success-message--visible {
+    animation: slideDown 0.3s ease;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .btn--full-width {
+    width: 100%;
+  }
+
+  .btn--primary {
+    background: var(--color-green-accent);
+    color: var(--color-white);
+  }
+
+  .btn--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (max-width: 768px) {
+    .product-form {
+      max-width: 100%;
+    }
+    
+    .product-form__price-container {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    
+    .product-form__option-colors {
+      gap: 12px;
+    }
+    
+    .product-form__color-option {
+      width: 40px;
+      height: 40px;
+    }
+  }
+</style>
