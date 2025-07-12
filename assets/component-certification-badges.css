@@ -1,0 +1,423 @@
+/*
+===============================================================================
+COMPONENT CERTIFICATION BADGES - RecoverSups Theme  
+Product certifications and quality badges display
+===============================================================================
+*/
+
+/* Certification Badges Container */
+.certification-badges {
+  margin: var(--spacing-lg) 0;
+}
+
+/* Badges Layout */
+.certification-badges--badges .certification-badges__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.certification-badge {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--spacing-md);
+  background: var(--color-brand-accent);
+  border: 2px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+}
+
+.certification-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-success);
+}
+
+.certification-badge__image,
+.certification-badge__icon {
+  margin-bottom: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+}
+
+.certification-badge__image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.certification-badge__icon {
+  background: var(--color-success-light);
+  border-radius: var(--radius-md);
+}
+
+.certification-badge__name {
+  font-family: var(--font-primary);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--spacing-xs) 0;
+  line-height: var(--line-height-tight);
+}
+
+.certification-badge__description {
+  font-size: var(--text-caption);
+  color: var(--color-neutral-600);
+  line-height: var(--line-height-relaxed);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.certification-badge__verified {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--text-caption);
+  color: var(--color-success);
+  font-weight: var(--font-weight-medium);
+}
+
+.certification-badge__link {
+  position: absolute;
+  top: var(--spacing-xs);
+  right: var(--spacing-xs);
+  color: var(--color-neutral-500);
+  background: var(--color-brand-accent);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs);
+  transition: all var(--transition-base);
+}
+
+.certification-badge__link:hover {
+  color: var(--color-brand-primary);
+  background: var(--color-brand-primary-light);
+}
+
+/* List Layout */
+.certification-badges--list .certification-badges__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.certification-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--color-brand-accent);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+}
+
+.certification-item:hover {
+  border-color: var(--color-success);
+  background: var(--color-success-light);
+}
+
+.certification-item__image,
+.certification-item__icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.certification-item__image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.certification-item__icon {
+  background: var(--color-success-light);
+  border-radius: var(--radius-sm);
+}
+
+.certification-item__content {
+  flex: 1;
+}
+
+.certification-item__name {
+  font-family: var(--font-primary);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--spacing-xs) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.certification-verified-icon {
+  color: var(--color-success);
+}
+
+.certification-item__description {
+  font-size: var(--text-body-sm);
+  color: var(--color-neutral-600);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+.certification-item__link {
+  flex-shrink: 0;
+  color: var(--color-neutral-500);
+  background: var(--color-brand-accent);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs);
+  transition: all var(--transition-base);
+}
+
+.certification-item__link:hover {
+  color: var(--color-brand-primary);
+  background: var(--color-brand-primary-light);
+}
+
+/* Compact Layout */
+.certification-badges--compact .certification-badges__compact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.certification-compact {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--color-brand-accent);
+  border: 2px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  cursor: help;
+}
+
+.certification-compact:hover {
+  transform: scale(1.1);
+  border-color: var(--color-success);
+  box-shadow: var(--shadow-sm);
+}
+
+.certification-compact__image {
+  max-width: 32px;
+  max-height: 32px;
+  object-fit: contain;
+}
+
+.certification-compact__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.certification-compact__verified {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  background: var(--color-success);
+  border: 2px solid var(--color-brand-accent);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+/* Certification Icon SVG Styles */
+.certification-icon-svg {
+  transition: all var(--transition-base);
+}
+
+/* Certification Type Colors */
+.certification-icon-svg--nsf,
+.certification-icon-svg--tested {
+  color: var(--color-info);
+}
+
+.certification-icon-svg--gmp,
+.certification-icon-svg--fda {
+  color: var(--color-success);
+}
+
+.certification-icon-svg--organic,
+.certification-icon-svg--vegan,
+.certification-icon-svg--non-gmo {
+  color: var(--color-goal-recovery);
+}
+
+.certification-icon-svg--gluten-free,
+.certification-icon-svg--kosher,
+.certification-icon-svg--halal {
+  color: var(--color-warning);
+}
+
+.certification-icon-svg--usa {
+  color: var(--color-goal-muscle);
+}
+
+.certification-icon-svg--default {
+  color: var(--color-brand-primary);
+}
+
+/* Mobile Optimizations */
+@media (max-width: 767px) {
+  .certification-badges--badges .certification-badges__grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--spacing-sm);
+  }
+  
+  .certification-badge {
+    padding: var(--spacing-sm);
+  }
+  
+  .certification-badge__image,
+  .certification-badge__icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .certification-badge__name {
+    font-size: var(--text-caption);
+  }
+  
+  .certification-badge__description {
+    font-size: var(--text-tiny);
+  }
+  
+  .certification-item {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-sm);
+  }
+  
+  .certification-item__image,
+  .certification-item__icon {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .certification-badges--compact .certification-badges__compact {
+    justify-content: center;
+  }
+  
+  .certification-compact {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .certification-compact__image {
+    max-width: 24px;
+    max-height: 24px;
+  }
+}
+
+/* Tablet Optimizations */
+@media (max-width: 1024px) {
+  .certification-badges--badges .certification-badges__grid {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .certification-badge,
+  .certification-item,
+  .certification-compact,
+  .certification-icon-svg {
+    transition: none;
+  }
+  
+  .certification-badge:hover,
+  .certification-compact:hover {
+    transform: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .certification-badge,
+  .certification-item,
+  .certification-compact {
+    border-width: 3px;
+  }
+  
+  .certification-icon-svg {
+    stroke-width: 3;
+  }
+}
+
+/* Focus States */
+.certification-badge:focus,
+.certification-item:focus,
+.certification-compact:focus,
+.certification-badge__link:focus,
+.certification-item__link:focus {
+  outline: 2px solid var(--color-brand-secondary);
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  .certification-badges {
+    break-inside: avoid;
+  }
+  
+  .certification-badge,
+  .certification-item {
+    border: 1px solid #000;
+    break-inside: avoid;
+  }
+  
+  .certification-icon-svg {
+    color: #000 !important;
+  }
+  
+  .certification-badge__link,
+  .certification-item__link {
+    display: none;
+  }
+}
+
+/* Tooltip Enhancement for Compact Mode */
+.certification-compact[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-neutral-900);
+  color: var(--color-brand-accent);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-caption);
+  white-space: nowrap;
+  z-index: 1000;
+  margin-bottom: var(--spacing-xs);
+}
+
+.certification-compact[title]:hover::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--color-neutral-900);
+  z-index: 1000;
+}

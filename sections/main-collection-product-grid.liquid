@@ -1,0 +1,326 @@
+{% comment %}
+  Main Collection Product Grid - RecoverSups Theme
+  
+  Enhanced product grid with supplement-specific features
+  Supports multiple view modes and advanced filtering
+{% endcomment %}
+
+<div class="collection-product-grid" data-section="{{ section.id }}">
+  <div class="page-width">
+    
+    {% paginate collection.products by section.settings.products_per_page %}
+      
+      <!-- Product Grid -->
+      <div class="product-grid product-grid--collection" 
+           data-product-grid
+           data-view="grid"
+           style="--grid-desktop-columns: {{ section.settings.columns_desktop }}; --grid-mobile-columns: {{ section.settings.columns_mobile }};">
+        
+        {% for product in collection.products %}
+          <div class="product-grid__item">
+            {% render 'product-card',
+               product: product,
+               media_aspect_ratio: section.settings.image_ratio,
+               show_secondary_image: section.settings.show_secondary_image,
+               show_vendor: section.settings.show_vendor,
+               show_rating: section.settings.show_rating,
+               show_quick_add: section.settings.show_quick_add,
+               show_benefits: section.settings.show_benefits,
+               show_fitness_goals: section.settings.show_fitness_goals,
+               section_id: section.id %}
+          </div>
+        {% else %}
+          <!-- Empty State -->
+          <div class="collection-empty">
+            <div class="collection-empty__content">
+              <h2 class="collection-empty__title">No products found</h2>
+              <p class="collection-empty__text">
+                Try adjusting your filters or browse our full range of supplements.
+              </p>
+              <a href="{{ routes.all_products_collection_url }}" 
+                 class="btn btn--primary">
+                Browse All Products
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+        
+      </div>
+      
+      <!-- Loading State -->
+      <div class="product-grid__loading" data-loading hidden>
+        <div class="loading-overlay">
+          <div class="loading-spinner">
+            <svg class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+              <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+            </svg>
+          </div>
+          <p class="loading-text">Loading products...</p>
+        </div>
+      </div>
+      
+      <!-- Pagination -->
+      {% if paginate.pages > 1 %}
+        <div class="collection-pagination">
+          {% if section.settings.pagination_type == 'paginated' %}
+            {% render 'pagination', paginate: paginate %}
+          {% else %}
+            <!-- Load More Button -->
+            {% if paginate.next %}
+              <button type="button" 
+                      class="btn btn--secondary btn--full-width load-more-btn"
+                      data-load-more="{{ paginate.next.url }}">
+                <span class="load-more-text">Load More Products</span>
+                <span class="load-more-loading" hidden>
+                  <svg class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                  </svg>
+                  Loading...
+                </span>
+              </button>
+            {% endif %}
+          {% endif %}
+        </div>
+      {% endif %}
+      
+    {% endpaginate %}
+    
+  </div>
+</div>
+
+<!-- Collection Product Grid JavaScript -->
+<script>
+  class CollectionProductGrid {
+    constructor() {
+      this.grid = document.querySelector('[data-product-grid]');
+      this.loadMoreBtn = document.querySelector('[data-load-more]');
+      this.loadingState = document.querySelector('[data-loading]');
+      this.viewToggle = document.querySelector('[data-view-toggle]');
+      
+      this.init();
+    }
+    
+    init() {
+      this.bindEvents();
+    }
+    
+    bindEvents() {
+      // Load More functionality
+      if (this.loadMoreBtn) {
+        this.loadMoreBtn.addEventListener('click', this.loadMore.bind(this));
+      }
+      
+      // View Toggle functionality
+      if (this.viewToggle) {
+        this.viewToggle.addEventListener('click', this.handleViewToggle.bind(this));
+      }
+      
+      // Filter change handling
+      document.addEventListener('shopify:filters:changed', this.handleFilterChange.bind(this));
+    }
+    
+    async loadMore(event) {
+      const button = event.currentTarget;
+      const url = button.dataset.loadMore;
+      
+      if (!url) return;
+      
+      button.disabled = true;
+      button.querySelector('.load-more-text').hidden = true;
+      button.querySelector('.load-more-loading').hidden = false;
+      
+      try {
+        const response = await fetch(url);
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        // Get new products
+        const newProducts = doc.querySelectorAll('.product-grid__item');
+        newProducts.forEach(product => {
+          this.grid.appendChild(product);
+        });
+        
+        // Update load more button
+        const newLoadMoreBtn = doc.querySelector('[data-load-more]');
+        if (newLoadMoreBtn) {
+          button.dataset.loadMore = newLoadMoreBtn.dataset.loadMore;
+        } else {
+          button.remove();
+        }
+        
+        // Trigger custom event
+        document.dispatchEvent(new CustomEvent('collection:products:loaded', {
+          detail: { products: newProducts }
+        }));
+        
+      } catch (error) {
+        console.error('Error loading more products:', error);
+      } finally {
+        button.disabled = false;
+        button.querySelector('.load-more-text').hidden = false;
+        button.querySelector('.load-more-loading').hidden = true;
+      }
+    }
+    
+    handleViewToggle(event) {
+      const button = event.target.closest('.view-toggle__btn');
+      if (!button) return;
+      
+      const view = button.dataset.view;
+      
+      // Update active button
+      this.viewToggle.querySelectorAll('.view-toggle__btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      button.classList.add('active');
+      
+      // Update grid view
+      this.grid.dataset.view = view;
+      
+      // Store preference
+      localStorage.setItem('collection-view', view);
+    }
+    
+    handleFilterChange(event) {
+      this.showLoading();
+      
+      // The page will reload, but we show loading state for better UX
+      setTimeout(() => {
+        this.hideLoading();
+      }, 3000);
+    }
+    
+    showLoading() {
+      if (this.loadingState) {
+        this.loadingState.hidden = false;
+      }
+    }
+    
+    hideLoading() {
+      if (this.loadingState) {
+        this.loadingState.hidden = true;
+      }
+    }
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      new CollectionProductGrid();
+    });
+  } else {
+    new CollectionProductGrid();
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Collection Product Grid",
+  "tag": "section", 
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product Grid"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 50,
+      "step": 2,
+      "default": 16,
+      "label": "Products per page"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "Number of columns on desktop"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        { "value": "1", "label": "1 column" },
+        { "value": "2", "label": "2 columns" }
+      ],
+      "default": "2",
+      "label": "Number of columns on mobile"
+    },
+    {
+      "type": "header",
+      "content": "Product Cards"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        { "value": "adapt", "label": "Adapt to image" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "adapt",
+      "label": "Image ratio"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "Show second product image on hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show product vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": true,
+      "label": "Show product rating"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "default": true,
+      "label": "Enable quick add"
+    },
+    {
+      "type": "header",
+      "content": "Supplement Features"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_benefits",
+      "default": true,
+      "label": "Show product benefits"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_fitness_goals",
+      "default": true,
+      "label": "Show fitness goals"
+    },
+    {
+      "type": "header",
+      "content": "Pagination"
+    },
+    {
+      "type": "select",
+      "id": "pagination_type",
+      "options": [
+        { "value": "paginated", "label": "Paginated" },
+        { "value": "load_more", "label": "Load more button" }
+      ],
+      "default": "paginated",
+      "label": "Pagination type"
+    }
+  ]
+}
+{% endschema %}

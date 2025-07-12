@@ -1,0 +1,100 @@
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "show_collection_description": true,
+        "show_collection_image": true,
+        "color_scheme": "background-1"
+      }
+    },
+    "filters": {
+      "type": "collection-filters",
+      "settings": {
+        "enable_filtering": true,
+        "enable_sorting": true,
+        "filter_type": "horizontal",
+        "show_product_count": true,
+        "show_view_toggle": true,
+        "color_scheme": "background-2"
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 16,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "image_ratio": "adapt",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": true,
+        "show_quick_add": true,
+        "show_benefits": true,
+        "show_fitness_goals": true,
+        "enable_country_selector": false,
+        "pagination_type": "paginated"
+      }
+    },
+    "supplement-guide": {
+      "type": "rich-text",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "heading": "Supplement Selection Guide",
+            "heading_size": "h2"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<h3>How to Choose the Right Supplements<\/h3><p>Our supplement collection is carefully curated to support your fitness goals. Use our smart filters to find products based on your specific objectives, dietary requirements, and preferred ingredients.<\/p><h3>Quality Assurance<\/h3><p>All products are third-party tested for purity and potency. Look for our certification badges to identify products that meet the highest quality standards.<\/p>"
+          }
+        }
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "background-2",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "Trending Supplements",
+        "heading_size": "h2",
+        "description": "Most popular products this month",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "trending",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "enable_desktop_slider": true,
+        "color_scheme": "background-1",
+        "image_ratio": "adapt",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": true,
+        "enable_quick_add": false,
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "filters", 
+    "product-grid",
+    "supplement-guide",
+    "featured-collection"
+  ]
+}

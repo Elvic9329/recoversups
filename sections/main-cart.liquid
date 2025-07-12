@@ -1,0 +1,537 @@
+{% comment %}
+  Main Cart Section - RecoverSups Theme
+  
+  Complete cart page with AJAX functionality, shipping calculator, and conversion optimization
+  Includes supplement-specific features and upsells
+{% endcomment %}
+
+<div class="cart-page" data-section="{{ section.id }}">
+  <div class="page-width">
+    
+    <div class="cart-page__header">
+      <h1 class="cart-page__title">Your Cart</h1>
+      {% if cart.item_count > 0 %}
+        <p class="cart-page__subtitle">
+          {{ cart.item_count }} 
+          {% if cart.item_count == 1 %}item{% else %}items{% endif %} 
+          in your cart
+        </p>
+      {% endif %}
+    </div>
+    
+    {% if cart.item_count > 0 %}
+      
+      <div class="cart-content">
+        <!-- Cart Items Section -->
+        <div class="cart-items-wrapper">
+          
+          <!-- Cart Items Header (Desktop) -->
+          <div class="cart-items__header">
+            <div class="cart-header__product">Product</div>
+            <div class="cart-header__price">Price</div>
+            <div class="cart-header__quantity">Quantity</div>
+            <div class="cart-header__total">Total</div>
+            <div class="cart-header__remove"></div>
+          </div>
+          
+          <!-- Cart Items -->
+          <div class="cart-items" data-cart-items>
+            {% for item in cart.items %}
+              {% render 'cart-item', 
+                 item: item, 
+                 section_id: section.id,
+                 show_vendor: section.settings.show_vendor %}
+            {% endfor %}
+          </div>
+          
+          <!-- Cart Actions -->
+          <div class="cart-actions">
+            <div class="cart-actions__left">
+              <a href="{{ routes.all_products_collection_url }}" class="btn btn--secondary">
+                Continue Shopping
+              </a>
+              
+              {% if section.settings.enable_cart_notes %}
+                <details class="cart-note">
+                  <summary class="cart-note__toggle">
+                    Add Order Note
+                    {% render 'icon-chevron-down' %}
+                  </summary>
+                  <div class="cart-note__content">
+                    <label for="cart-note" class="cart-note__label">
+                      Special instructions for your order
+                    </label>
+                    <textarea id="cart-note" 
+                              name="note" 
+                              class="cart-note__textarea"
+                              placeholder="Tell us about any allergies, preferences, or special requests..."
+                              data-cart-note>{{ cart.note }}</textarea>
+                  </div>
+                </details>
+              {% endif %}
+            </div>
+            
+            <div class="cart-actions__right">
+              <button type="button" 
+                      class="cart-clear"
+                      onclick="window.location.href='{{ routes.cart_clear_url }}'">
+                Clear Cart
+              </button>
+            </div>
+          </div>
+          
+        </div>
+        
+        <!-- Cart Summary Sidebar -->
+        <div class="cart-summary-wrapper">
+          <div class="cart-summary">
+            
+            <h2 class="cart-summary__title">Order Summary</h2>
+            
+            <!-- Subtotal -->
+            <div class="cart-summary__line">
+              <span class="cart-summary__label">Subtotal</span>
+              <span class="cart-summary__value" data-cart-subtotal>
+                {{ cart.total_price | money }}
+              </span>
+            </div>
+            
+            <!-- Savings Display -->
+            {% if section.settings.show_cart_savings %}
+              {% assign total_savings = 0 %}
+              {% for item in cart.items %}
+                {% if item.original_price > item.final_price %}
+                  {% assign item_savings = item.original_price | minus: item.final_price | times: item.quantity %}
+                  {% assign total_savings = total_savings | plus: item_savings %}
+                {% endif %}
+              {% endfor %}
+              
+              {% if total_savings > 0 %}
+                <div class="cart-summary__line cart-summary__savings">
+                  <span class="cart-summary__label">You Save</span>
+                  <span class="cart-summary__value cart-summary__value--savings">
+                    -{{ total_savings | money }}
+                  </span>
+                </div>
+              {% endif %}
+            {% endif %}
+            
+            <!-- Shipping Estimator -->
+            {% if section.settings.show_shipping_estimator %}
+              <div class="cart-summary__shipping">
+                <div class="shipping-estimator" data-shipping-estimator>
+                  <h3 class="shipping-estimator__title">Shipping</h3>
+                  
+                  {% if cart.total_price >= 7500 %}
+                    <div class="shipping-estimator__free">
+                      <span class="shipping-free-icon">✓</span>
+                      <span>Free shipping applied!</span>
+                    </div>
+                  {% else %}
+                    {% assign remaining = 7500 | minus: cart.total_price %}
+                    <div class="shipping-estimator__progress">
+                      <div class="shipping-progress">
+                        <div class="shipping-progress__bar">
+                          <div class="shipping-progress__fill" 
+                               style="width: {{ cart.total_price | times: 100 | divided_by: 7500 }}%"></div>
+                        </div>
+                        <p class="shipping-progress__text">
+                          Add <strong>{{ remaining | money }}</strong> more for free shipping
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div class="shipping-estimator__rates">
+                      <button type="button" class="shipping-estimator__toggle" data-shipping-toggle>
+                        Calculate shipping
+                        {% render 'icon-chevron-down' %}
+                      </button>
+                      
+                      <div class="shipping-estimator__form" data-shipping-form hidden>
+                        <div class="shipping-form__fields">
+                          <select name="country" class="shipping-field">
+                            <option value="US">United States</option>
+                            <option value="CA">Canada</option>
+                          </select>
+                          
+                          <input type="text" 
+                                 name="zip" 
+                                 class="shipping-field" 
+                                 placeholder="ZIP/Postal Code">
+                          
+                          <button type="button" class="btn btn--secondary" data-shipping-calculate>
+                            Calculate
+                          </button>
+                        </div>
+                        
+                        <div class="shipping-rates" data-shipping-rates hidden></div>
+                      </div>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+            
+            <!-- Taxes -->
+            {% if section.settings.show_taxes_included %}
+              <div class="cart-summary__line cart-summary__taxes">
+                <span class="cart-summary__label">
+                  {% if cart.taxes_included %}
+                    Taxes included
+                  {% else %}
+                    Taxes calculated at checkout
+                  {% endif %}
+                </span>
+              </div>
+            {% endif %}
+            
+            <!-- Total -->
+            <div class="cart-summary__total">
+              <span class="cart-summary__total-label">Total</span>
+              <span class="cart-summary__total-value" data-cart-total>
+                {{ cart.total_price | money }}
+              </span>
+            </div>
+            
+            <!-- Checkout Buttons -->
+            <div class="cart-summary__checkout">
+              <form action="{{ routes.cart_url }}" method="post" novalidate class="cart-form">
+                <button type="submit" 
+                        name="add" 
+                        class="btn btn--primary btn--full-width cart-checkout-btn"
+                        {% if cart.item_count == 0 %}disabled{% endif %}>
+                  <span class="checkout-text">Secure Checkout</span>
+                  <span class="checkout-icon">🔒</span>
+                </button>
+              </form>
+              
+              {{ content_for_additional_checkout_buttons }}
+              
+              <div class="cart-summary__security">
+                <small class="security-text">
+                  <span class="security-icon">🛡️</span>
+                  SSL encrypted • Secure payment
+                </small>
+              </div>
+            </div>
+            
+            <!-- Supplement Stack Recommendations -->
+            <div class="cart-summary__recommendations">
+              <h3 class="recommendations__title">Complete Your Stack</h3>
+              <p class="recommendations__subtitle">
+                Based on your cart items
+              </p>
+              
+              <div class="stack-recommendations" data-stack-recommendations>
+                <!-- Populated via JavaScript based on cart contents -->
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+      
+    {% else %}
+      
+      <!-- Empty Cart State -->
+      <div class="cart-empty">
+        <div class="cart-empty__content">
+          <div class="cart-empty__icon">
+            {% render 'icon-cart-empty' %}
+          </div>
+          
+          <h2 class="cart-empty__title">Your cart is empty</h2>
+          
+          <p class="cart-empty__text">
+            Start building your supplement stack with our premium, science-backed products.
+          </p>
+          
+          <a href="{{ routes.all_products_collection_url }}" 
+             class="btn btn--primary cart-empty__cta">
+            Shop Supplements
+          </a>
+          
+          <!-- Featured Categories -->
+          <div class="cart-empty__categories">
+            <h3 class="empty-categories__title">Popular Categories</h3>
+            <div class="empty-categories__grid">
+              <a href="/collections/protein" class="category-quick-link">
+                <span class="category-icon">💪</span>
+                <span class="category-name">Protein</span>
+              </a>
+              <a href="/collections/pre-workout" class="category-quick-link">
+                <span class="category-icon">⚡</span>
+                <span class="category-name">Pre-Workout</span>
+              </a>
+              <a href="/collections/recovery" class="category-quick-link">
+                <span class="category-icon">🔄</span>
+                <span class="category-name">Recovery</span>
+              </a>
+              <a href="/collections/vitamins" class="category-quick-link">
+                <span class="category-icon">🌿</span>
+                <span class="category-name">Vitamins</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    {% endif %}
+    
+  </div>
+</div>
+
+<!-- Cart AJAX Functionality -->
+{% if section.settings.cart_ajax_enable %}
+  <script>
+    class CartPage {
+      constructor() {
+        this.cart = document.querySelector('[data-cart-items]');
+        this.noteField = document.querySelector('[data-cart-note]');
+        this.shippingEstimator = document.querySelector('[data-shipping-estimator]');
+        
+        this.init();
+      }
+      
+      init() {
+        this.bindEvents();
+        this.loadStackRecommendations();
+      }
+      
+      bindEvents() {
+        // Cart note updates
+        if (this.noteField) {
+          this.noteField.addEventListener('change', this.updateCartNote.bind(this));
+        }
+        
+        // Shipping estimator
+        if (this.shippingEstimator) {
+          const toggle = this.shippingEstimator.querySelector('[data-shipping-toggle]');
+          const calculate = this.shippingEstimator.querySelector('[data-shipping-calculate]');
+          
+          if (toggle) {
+            toggle.addEventListener('click', this.toggleShippingForm.bind(this));
+          }
+          
+          if (calculate) {
+            calculate.addEventListener('click', this.calculateShipping.bind(this));
+          }
+        }
+        
+        // Listen for cart updates
+        document.addEventListener('cart:updated', this.handleCartUpdate.bind(this));
+      }
+      
+      async updateCartNote(event) {
+        const note = event.target.value;
+        
+        try {
+          await fetch('/cart/update.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ note: note })
+          });
+        } catch (error) {
+          console.error('Error updating cart note:', error);
+        }
+      }
+      
+      toggleShippingForm() {
+        const form = this.shippingEstimator.querySelector('[data-shipping-form]');
+        const toggle = this.shippingEstimator.querySelector('[data-shipping-toggle]');
+        
+        if (form.hidden) {
+          form.hidden = false;
+          toggle.setAttribute('aria-expanded', 'true');
+        } else {
+          form.hidden = true;
+          toggle.setAttribute('aria-expanded', 'false');
+        }
+      }
+      
+      async calculateShipping() {
+        const form = this.shippingEstimator.querySelector('[data-shipping-form]');
+        const country = form.querySelector('[name="country"]').value;
+        const zip = form.querySelector('[name="zip"]').value;
+        const ratesContainer = form.querySelector('[data-shipping-rates]');
+        
+        if (!zip) {
+          alert('Please enter a ZIP/Postal code');
+          return;
+        }
+        
+        try {
+          const response = await fetch('/cart/shipping_rates.json?' + new URLSearchParams({
+            'shipping_address[country]': country,
+            'shipping_address[zip]': zip
+          }));
+          
+          const data = await response.json();
+          
+          if (data.shipping_rates && data.shipping_rates.length > 0) {
+            let ratesHTML = '<h4>Available shipping options:</h4>';
+            data.shipping_rates.forEach(rate => {
+              ratesHTML += `
+                <div class="shipping-rate">
+                  <span class="rate-name">${rate.name}</span>
+                  <span class="rate-price">${rate.price}</span>
+                </div>
+              `;
+            });
+            ratesContainer.innerHTML = ratesHTML;
+            ratesContainer.hidden = false;
+          } else {
+            ratesContainer.innerHTML = '<p>No shipping rates available for this location.</p>';
+            ratesContainer.hidden = false;
+          }
+        } catch (error) {
+          console.error('Error calculating shipping:', error);
+          ratesContainer.innerHTML = '<p>Error calculating shipping rates.</p>';
+          ratesContainer.hidden = false;
+        }
+      }
+      
+      handleCartUpdate(event) {
+        // Update cart totals and counts
+        this.updateCartTotals(event.detail.cart);
+        this.updateShippingProgress(event.detail.cart);
+        this.loadStackRecommendations();
+      }
+      
+      updateCartTotals(cart) {
+        const subtotalElement = document.querySelector('[data-cart-subtotal]');
+        const totalElement = document.querySelector('[data-cart-total]');
+        
+        if (subtotalElement) {
+          subtotalElement.textContent = this.formatMoney(cart.total_price);
+        }
+        
+        if (totalElement) {
+          totalElement.textContent = this.formatMoney(cart.total_price);
+        }
+      }
+      
+      updateShippingProgress(cart) {
+        const progressBar = document.querySelector('.shipping-progress__fill');
+        const progressText = document.querySelector('.shipping-progress__text');
+        const freeShipping = document.querySelector('.shipping-estimator__free');
+        const progressContainer = document.querySelector('.shipping-estimator__progress');
+        
+        const freeShippingThreshold = 7500; // $75.00 in cents
+        
+        if (cart.total_price >= freeShippingThreshold) {
+          if (freeShipping) freeShipping.style.display = 'block';
+          if (progressContainer) progressContainer.style.display = 'none';
+        } else {
+          if (freeShipping) freeShipping.style.display = 'none';
+          if (progressContainer) progressContainer.style.display = 'block';
+          
+          const percentage = (cart.total_price / freeShippingThreshold) * 100;
+          const remaining = freeShippingThreshold - cart.total_price;
+          
+          if (progressBar) {
+            progressBar.style.width = percentage + '%';
+          }
+          
+          if (progressText) {
+            progressText.innerHTML = `Add <strong>${this.formatMoney(remaining)}</strong> more for free shipping`;
+          }
+        }
+      }
+      
+      loadStackRecommendations() {
+        // Load personalized supplement recommendations based on cart contents
+        const container = document.querySelector('[data-stack-recommendations]');
+        if (!container) return;
+        
+        // This would integrate with your recommendation engine
+        // For now, showing placeholder
+        container.innerHTML = `
+          <div class="stack-recommendation">
+            <span class="recommendation-text">Add Creatine for enhanced strength</span>
+            <button class="btn btn--small btn--secondary">Add</button>
+          </div>
+        `;
+      }
+      
+      formatMoney(cents) {
+        return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: 'USD'
+        }).format(cents / 100);
+      }
+    }
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        new CartPage();
+      });
+    } else {
+      new CartPage();
+    }
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Main Cart",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Cart Features"
+    },
+    {
+      "type": "checkbox",
+      "id": "cart_ajax_enable",
+      "default": true,
+      "label": "Enable AJAX cart"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show product vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart_note",
+      "default": true,
+      "label": "Enable cart notes"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cart_notes",
+      "default": true,
+      "label": "Enable order notes"
+    },
+    {
+      "type": "header",
+      "content": "Shipping & Pricing"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping_estimator",
+      "default": true,
+      "label": "Show shipping estimator"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_taxes_included",
+      "default": true,
+      "label": "Show tax information"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart_savings",
+      "default": true,
+      "label": "Show total savings"
+    }
+  ]
+}
+{% endschema %}

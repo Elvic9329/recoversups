@@ -1,0 +1,297 @@
+/*
+===============================================================================
+COMPONENT BENEFIT ICONS - RecoverSups Theme  
+Product benefits display with icons and descriptions
+===============================================================================
+*/
+
+/* Benefit Icons Container */
+.benefit-icons {
+  margin: var(--spacing-lg) 0;
+}
+
+/* Grid Layout */
+.benefit-icons--grid .benefit-icons__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.benefit-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--spacing-md);
+  background: var(--color-brand-accent);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+}
+
+.benefit-icon:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-brand-secondary);
+}
+
+.benefit-icon__visual {
+  margin-bottom: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  background: var(--color-brand-primary-light);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.benefit-icon__name {
+  font-family: var(--font-primary);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.benefit-icon__description {
+  font-size: var(--text-body-sm);
+  color: var(--color-neutral-600);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+/* List Layout */
+.benefit-icons--list .benefit-icons__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--color-brand-accent);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+}
+
+.benefit-item:hover {
+  border-color: var(--color-brand-secondary);
+  background: var(--color-brand-secondary-light);
+}
+
+.benefit-item__icon {
+  flex-shrink: 0;
+  padding: var(--spacing-sm);
+  background: var(--color-brand-primary-light);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.benefit-item__content {
+  flex: 1;
+}
+
+.benefit-item__name {
+  font-family: var(--font-primary);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.benefit-item__description {
+  font-size: var(--text-body-sm);
+  color: var(--color-neutral-600);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+/* Inline Layout */
+.benefit-icons--inline .benefit-icons__inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.benefit-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-brand-primary-light);
+  border: 1px solid var(--color-brand-primary);
+  border-radius: var(--radius-full);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-brand-primary);
+  text-decoration: none;
+  transition: all var(--transition-base);
+  cursor: default;
+}
+
+.benefit-chip:hover {
+  background: var(--color-brand-primary);
+  color: var(--color-brand-accent);
+  transform: scale(1.05);
+}
+
+.benefit-chip__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.benefit-chip__name {
+  white-space: nowrap;
+}
+
+/* Icon Sizes */
+.benefit-icons--sm .benefit-icon-svg {
+  width: 20px;
+  height: 20px;
+}
+
+.benefit-icons--md .benefit-icon-svg {
+  width: 24px;
+  height: 24px;
+}
+
+.benefit-icons--lg .benefit-icon-svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* Benefit Icon SVG Styles */
+.benefit-icon-svg {
+  transition: all var(--transition-base);
+}
+
+/* Goal-based Colors */
+.benefit-icon-svg--muscle {
+  color: var(--color-goal-muscle);
+}
+
+.benefit-icon-svg--energy {
+  color: var(--color-goal-energy);
+}
+
+.benefit-icon-svg--recovery {
+  color: var(--color-goal-recovery);
+}
+
+.benefit-icon-svg--endurance {
+  color: var(--color-goal-endurance);
+}
+
+.benefit-icon-svg--weight {
+  color: var(--color-goal-weight);
+}
+
+.benefit-icon-svg--general {
+  color: var(--color-brand-primary);
+}
+
+/* Mobile Optimizations */
+@media (max-width: 767px) {
+  .benefit-icons--grid .benefit-icons__grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-sm);
+  }
+  
+  .benefit-icon {
+    padding: var(--spacing-sm);
+  }
+  
+  .benefit-icon__name {
+    font-size: var(--text-body-sm);
+  }
+  
+  .benefit-icon__description {
+    font-size: var(--text-caption);
+  }
+  
+  .benefit-item {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-sm);
+  }
+  
+  .benefit-item__icon {
+    align-self: center;
+  }
+  
+  .benefit-icons--inline .benefit-icons__inline {
+    justify-content: center;
+  }
+  
+  .benefit-chip {
+    font-size: var(--text-caption);
+    padding: var(--spacing-xs);
+  }
+}
+
+/* Tablet Optimizations */
+@media (max-width: 1024px) {
+  .benefit-icons--grid .benefit-icons__grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .benefit-icon,
+  .benefit-item,
+  .benefit-chip,
+  .benefit-icon-svg {
+    transition: none;
+  }
+  
+  .benefit-icon:hover,
+  .benefit-chip:hover {
+    transform: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .benefit-icon,
+  .benefit-item,
+  .benefit-chip {
+    border-width: 2px;
+  }
+  
+  .benefit-icon-svg {
+    stroke-width: 3;
+  }
+}
+
+/* Focus States */
+.benefit-chip:focus {
+  outline: 2px solid var(--color-brand-secondary);
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  .benefit-icons {
+    break-inside: avoid;
+  }
+  
+  .benefit-icon,
+  .benefit-item {
+    border: 1px solid #000;
+    break-inside: avoid;
+  }
+  
+  .benefit-icon-svg {
+    color: #000 !important;
+  }
+}

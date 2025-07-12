@@ -1,0 +1,355 @@
+{% comment %}
+  Cart Item Component - RecoverSups Theme
+  
+  Individual cart item with AJAX functionality and supplement-specific features
+  
+  Parameters:
+    - item: Cart item object (required)
+    - section_id: Section ID for unique form IDs
+    - show_vendor: Show product vendor
+{% endcomment %}
+
+{% liquid
+  assign show_vendor = show_vendor | default: false
+  assign item_id = item.key | handle
+%}
+
+<div class="cart-item" data-cart-item="{{ item_id }}" data-cart-item-key="{{ item.key }}">
+  
+  <!-- Product Image -->
+  <div class="cart-item__media">
+    {% if item.image %}
+      <img src="{{ item.image | image_url: width: 150 }}"
+           alt="{{ item.image.alt | escape }}"
+           loading="lazy"
+           width="150"
+           height="150"
+           class="cart-item__image">
+    {% else %}
+      <div class="cart-item__image cart-item__image--placeholder">
+        {% render 'icon-product' %}
+      </div>
+    {% endif %}
+    
+    <!-- Supplement Badge -->
+    {% assign fitness_goal = item.product.metafields.goals.primary.value %}
+    {% if fitness_goal %}
+      <span class="cart-item__goal-badge cart-item__goal-badge--{{ fitness_goal | handle }}">
+        {{ fitness_goal }}
+      </span>
+    {% endif %}
+  </div>
+  
+  <!-- Product Details -->
+  <div class="cart-item__details">
+    
+    <!-- Product Title & Vendor -->
+    <div class="cart-item__info">
+      {% if show_vendor and item.product.vendor != blank %}
+        <p class="cart-item__vendor">{{ item.product.vendor }}</p>
+      {% endif %}
+      
+      <h3 class="cart-item__title">
+        <a href="{{ item.product.url }}">{{ item.product.title | escape }}</a>
+      </h3>
+      
+      <!-- Variant Title -->
+      {% unless item.product.has_only_default_variant %}
+        <p class="cart-item__variant">{{ item.variant.title }}</p>
+      {% endunless %}
+      
+      <!-- SKU -->
+      {% if item.variant.sku != blank %}
+        <p class="cart-item__sku">SKU: {{ item.variant.sku }}</p>
+      {% endif %}
+    </div>
+    
+    <!-- Supplement Info -->
+    <div class="cart-item__supplement-info">
+      {% assign servings = item.product.metafields.nutrition.servings_per_container.value %}
+      {% if servings %}
+        <span class="supplement-detail">
+          <span class="detail-label">Servings:</span>
+          <span class="detail-value">{{ servings }}</span>
+        </span>
+      {% endif %}
+      
+      {% assign benefits = item.product.metafields.benefits.list.value %}
+      {% if benefits and benefits.size > 0 %}
+        <div class="cart-item__benefits">
+          {% for benefit in benefits limit: 2 %}
+            <span class="benefit-tag">{{ benefit.name }}</span>
+          {% endfor %}
+          {% if benefits.size > 2 %}
+            <span class="benefit-more">+{{ benefits.size | minus: 2 }} more</span>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+    
+    <!-- Mobile Price (Shows on mobile only) -->
+    <div class="cart-item__price-mobile">
+      {% if item.original_price != item.final_price %}
+        <span class="cart-price cart-price--original">
+          {{ item.original_price | money }}
+        </span>
+        <span class="cart-price cart-price--sale">
+          {{ item.final_price | money }}
+        </span>
+      {% else %}
+        <span class="cart-price">
+          {{ item.final_price | money }}
+        </span>
+      {% endif %}
+    </div>
+    
+  </div>
+  
+  <!-- Price (Desktop) -->
+  <div class="cart-item__price">
+    {% if item.original_price != item.final_price %}
+      <span class="cart-price cart-price--original">
+        {{ item.original_price | money }}
+      </span>
+      <span class="cart-price cart-price--sale">
+        {{ item.final_price | money }}
+      </span>
+      <span class="cart-price cart-price--savings">
+        Save {{ item.original_price | minus: item.final_price | money }}
+      </span>
+    {% else %}
+      <span class="cart-price">
+        {{ item.final_price | money }}
+      </span>
+    {% endif %}
+  </div>
+  
+  <!-- Quantity Controls -->
+  <div class="cart-item__quantity">
+    <div class="quantity-selector" data-quantity-selector>
+      <button type="button" 
+              class="quantity-btn quantity-btn--minus"
+              data-quantity-change="-1"
+              aria-label="Decrease quantity">
+        {% render 'icon-minus' %}
+      </button>
+      
+      <input type="number"
+             class="quantity-input"
+             name="updates[{{ item.key }}]"
+             id="updates_{{ item.key }}"
+             value="{{ item.quantity }}"
+             min="0"
+             max="{{ item.variant.inventory_quantity }}"
+             data-quantity-input
+             aria-label="Quantity">
+      
+      <button type="button" 
+              class="quantity-btn quantity-btn--plus"
+              data-quantity-change="1"
+              aria-label="Increase quantity">
+        {% render 'icon-plus' %}
+      </button>
+    </div>
+    
+    <!-- Stock Level Indicator -->
+    {% if item.variant.inventory_management == 'shopify' and item.variant.inventory_quantity <= 10 %}
+      <div class="cart-item__stock-warning">
+        Only {{ item.variant.inventory_quantity }} left in stock
+      </div>
+    {% endif %}
+  </div>
+  
+  <!-- Total Price -->
+  <div class="cart-item__total">
+    <span class="cart-total-price" data-item-total>
+      {{ item.final_line_price | money }}
+    </span>
+    
+    {% if item.line_level_discount_allocations.size > 0 %}
+      <div class="cart-item__discounts">
+        {% for discount in item.line_level_discount_allocations %}
+          <span class="cart-discount">
+            {{ discount.discount_application.title }} (-{{ discount.amount | money }})
+          </span>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+  
+  <!-- Remove Button -->
+  <div class="cart-item__remove">
+    <button type="button" 
+            class="cart-remove-btn"
+            data-cart-remove="{{ item.key }}"
+            aria-label="Remove {{ item.product.title | escape }} from cart">
+      {% render 'icon-trash' %}
+    </button>
+  </div>
+  
+  <!-- Loading State -->
+  <div class="cart-item__loading" data-loading hidden>
+    <div class="loading-spinner">
+      <svg class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+      </svg>
+    </div>
+  </div>
+  
+</div>
+
+<!-- Cart Item JavaScript -->
+<script>
+  class CartItem {
+    constructor(element) {
+      this.element = element;
+      this.key = element.dataset.cartItemKey;
+      this.quantityInput = element.querySelector('[data-quantity-input]');
+      this.quantitySelector = element.querySelector('[data-quantity-selector]');
+      this.removeBtn = element.querySelector('[data-cart-remove]');
+      this.loadingState = element.querySelector('[data-loading]');
+      
+      this.init();
+    }
+    
+    init() {
+      this.bindEvents();
+    }
+    
+    bindEvents() {
+      // Quantity change buttons
+      if (this.quantitySelector) {
+        this.quantitySelector.addEventListener('click', this.handleQuantityChange.bind(this));
+      }
+      
+      // Quantity input direct change
+      if (this.quantityInput) {
+        this.quantityInput.addEventListener('change', this.handleQuantityInput.bind(this));
+      }
+      
+      // Remove button
+      if (this.removeBtn) {
+        this.removeBtn.addEventListener('click', this.handleRemove.bind(this));
+      }
+    }
+    
+    async handleQuantityChange(event) {
+      const button = event.target.closest('[data-quantity-change]');
+      if (!button) return;
+      
+      const change = parseInt(button.dataset.quantityChange);
+      const currentQuantity = parseInt(this.quantityInput.value);
+      const newQuantity = Math.max(0, currentQuantity + change);
+      
+      await this.updateQuantity(newQuantity);
+    }
+    
+    async handleQuantityInput(event) {
+      const newQuantity = parseInt(event.target.value);
+      await this.updateQuantity(newQuantity);
+    }
+    
+    async handleRemove() {
+      await this.updateQuantity(0);
+    }
+    
+    async updateQuantity(quantity) {
+      this.showLoading();
+      
+      try {
+        const response = await fetch('/cart/change.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: this.key,
+            quantity: quantity
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to update cart');
+        }
+        
+        const cart = await response.json();
+        
+        if (quantity === 0) {
+          // Remove item from DOM
+          this.element.remove();
+          
+          // Check if cart is now empty
+          if (cart.item_count === 0) {
+            window.location.reload();
+          }
+        } else {
+          // Update quantity input
+          this.quantityInput.value = quantity;
+          
+          // Update line total
+          const item = cart.items.find(item => item.key === this.key);
+          if (item) {
+            const totalElement = this.element.querySelector('[data-item-total]');
+            if (totalElement) {
+              totalElement.textContent = this.formatMoney(item.final_line_price);
+            }
+          }
+        }
+        
+        // Dispatch custom event for cart updates
+        document.dispatchEvent(new CustomEvent('cart:updated', {
+          detail: { cart: cart, item: cart.items.find(item => item.key === this.key) }
+        }));
+        
+        // Show success feedback
+        this.showSuccess();
+        
+      } catch (error) {
+        console.error('Error updating cart:', error);
+        this.showError();
+      } finally {
+        this.hideLoading();
+      }
+    }
+    
+    showLoading() {
+      if (this.loadingState) {
+        this.loadingState.hidden = false;
+      }
+      this.element.classList.add('cart-item--loading');
+    }
+    
+    hideLoading() {
+      if (this.loadingState) {
+        this.loadingState.hidden = true;
+      }
+      this.element.classList.remove('cart-item--loading');
+    }
+    
+    showSuccess() {
+      this.element.classList.add('cart-item--success');
+      setTimeout(() => {
+        this.element.classList.remove('cart-item--success');
+      }, 1000);
+    }
+    
+    showError() {
+      this.element.classList.add('cart-item--error');
+      setTimeout(() => {
+        this.element.classList.remove('cart-item--error');
+      }, 3000);
+    }
+    
+    formatMoney(cents) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      }).format(cents / 100);
+    }
+  }
+  
+  // Initialize cart items
+  document.querySelectorAll('[data-cart-item]').forEach(element => {
+    new CartItem(element);
+  });
+</script>

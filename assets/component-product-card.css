@@ -8,7 +8,7 @@ Universal product card for supplements e-commerce
 /* Product Card Block */
 .product-card {
   position: relative;
-  background: var(--color-brand-accent);
+  background: var(--color-card);
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: all 0.3s ease;
@@ -26,7 +26,7 @@ Universal product card for supplements e-commerce
 /* Product Card Variants */
 .product-card--minimal {
   box-shadow: none;
-  border: 1px solid var(--color-neutral-100);
+  border: 1px solid var(--color-border);
 }
 
 .product-card--featured {

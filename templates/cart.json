@@ -1,0 +1,127 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-cart",
+      "settings": {
+        "show_cart_note": true,
+        "show_shipping_estimator": true,
+        "show_taxes_included": true,
+        "show_cart_savings": true,
+        "enable_cart_notes": true,
+        "show_vendor": false,
+        "cart_ajax_enable": true
+      }
+    },
+    "cart-upsells": {
+      "type": "cart-upsells",
+      "settings": {
+        "heading": "Complete Your Stack",
+        "heading_size": "h2",
+        "description": "Add these supplements to maximize your results",
+        "show_description": true,
+        "upsell_type": "related",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "show_vendor": false,
+        "show_rating": true,
+        "show_quick_add": true,
+        "color_scheme": "background-2",
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "shipping-info": {
+      "type": "rich-text",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "heading": "Shipping & Returns",
+            "heading_size": "h3"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<div class=\"shipping-benefits\"><div class=\"shipping-benefit\"><strong>Free Shipping</strong><br>On orders over $75</div><div class=\"shipping-benefit\"><strong>Fast Delivery</strong><br>2-3 business days</div><div class=\"shipping-benefit\"><strong>Easy Returns</strong><br>30-day return policy</div><div class=\"shipping-benefit\"><strong>Secure Checkout</strong><br>SSL encrypted payments</div></div>"
+          }
+        }
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "background-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "trust-signals": {
+      "type": "multicolumn",
+      "blocks": [
+        {
+          "type": "column",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/nsf-certified.png",
+            "title": "NSF Certified",
+            "text": "Third-party tested for sport and quality assurance",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        {
+          "type": "column", 
+          "settings": {
+            "image": "shopify:\/\/shop_images\/money-back-guarantee.png",
+            "title": "Money Back Guarantee",
+            "text": "Not satisfied? Get your money back within 30 days",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/expert-formulated.png",
+            "title": "Expert Formulated",
+            "text": "Developed by nutrition scientists and fitness experts",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        {
+          "type": "column",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/secure-checkout.png",
+            "title": "Secure Checkout",
+            "text": "Your payment information is always protected",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      ],
+      "settings": {
+        "title": "Why Choose RecoverSups?",
+        "heading_size": "h2",
+        "image_width": "third",
+        "image_ratio": "adapt",
+        "columns_desktop": 4,
+        "column_alignment": "center",
+        "background_style": "none",
+        "button_label": "",
+        "button_link": "",
+        "color_scheme": "background-2",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "cart-upsells", 
+    "shipping-info",
+    "trust-signals"
+  ]
+}

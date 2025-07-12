@@ -1,0 +1,489 @@
+/*
+===============================================================================
+COMPONENT FILTERS - RecoverSups Theme  
+Advanced filtering system for supplement collections
+Using updated design system tokens
+===============================================================================
+*/
+
+/* Filter Wrapper */
+.collection-filters-wrapper {
+  background: var(--color-card);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+}
+
+.collection-filters {
+  padding: var(--spacing-lg) 0;
+}
+
+/* Filter Header */
+.collection-filters__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.collection-filters__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.collection-filters__count {
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-foreground);
+}
+
+.collection-filters__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+/* Active Filters */
+.collection-filters__active {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+.filter-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.filter-tag__remove {
+  background: none;
+  border: none;
+  color: inherit;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-base);
+}
+
+.filter-tag__remove:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.filter-clear {
+  color: var(--color-muted-foreground);
+  text-decoration: underline;
+  font-size: var(--text-body-sm);
+  transition: color var(--transition-base);
+}
+
+.filter-clear:hover {
+  color: var(--color-primary);
+}
+
+/* Sort Dropdown */
+.collection-sort {
+  position: relative;
+}
+
+.collection-sort__select {
+  appearance: none;
+  background: var(--color-input);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-xl) var(--spacing-sm) var(--spacing-md);
+  font-size: var(--text-body-sm);
+  color: var(--color-foreground);
+  cursor: pointer;
+  min-width: 180px;
+}
+
+.collection-sort__select:focus {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+  border-color: var(--color-ring);
+}
+
+.collection-sort::after {
+  content: '';
+  position: absolute;
+  right: var(--spacing-sm);
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  border: 4px solid transparent;
+  border-top-color: var(--color-muted-foreground);
+}
+
+/* View Toggle */
+.collection-view-toggle {
+  display: flex;
+  background: var(--color-muted);
+  border-radius: var(--radius-md);
+  padding: 2px;
+}
+
+.view-toggle__btn {
+  background: none;
+  border: none;
+  padding: var(--spacing-xs);
+  cursor: pointer;
+  border-radius: calc(var(--radius-md) - 2px);
+  color: var(--color-muted-foreground);
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.view-toggle__btn.active {
+  background: var(--color-background);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.view-toggle__btn:hover:not(.active) {
+  color: var(--color-foreground);
+}
+
+/* Filter Content */
+.collection-filters__content {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+/* Filter Groups */
+.filter-group {
+  min-width: 200px;
+  flex: 1;
+}
+
+.filter-group__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+  cursor: pointer;
+}
+
+.filter-group__title {
+  font-family: var(--font-primary);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-foreground);
+  margin: 0;
+}
+
+.filter-group__count {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.filter-group__toggle {
+  background: none;
+  border: none;
+  color: var(--color-muted-foreground);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-base);
+  transform: rotate(0deg);
+}
+
+.filter-group__toggle[aria-expanded="true"] {
+  transform: rotate(180deg);
+}
+
+.filter-group__toggle:hover {
+  color: var(--color-foreground);
+  background: var(--color-muted);
+}
+
+/* Filter Content */
+.filter-group__content {
+  transition: all var(--transition-base);
+}
+
+.filter-group--horizontal .filter-group__content[aria-hidden="true"] {
+  display: none;
+}
+
+/* Filter Options */
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.filter-option {
+  display: flex;
+  align-items: center;
+}
+
+.filter-checkbox {
+  margin: 0 var(--spacing-sm) 0 0;
+  accent-color: var(--color-primary);
+}
+
+.filter-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  cursor: pointer;
+  font-size: var(--text-body-sm);
+  color: var(--color-foreground);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.filter-text {
+  flex: 1;
+}
+
+.filter-count {
+  color: var(--color-muted-foreground);
+  font-size: var(--text-caption);
+}
+
+/* Fitness Goal Icons */
+.fitness-goal-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-sm);
+  background: var(--color-muted);
+}
+
+.fitness-goal-icon--muscle { background: var(--color-goal-muscle); color: white; }
+.fitness-goal-icon--energy { background: var(--color-goal-energy); color: white; }
+.fitness-goal-icon--recovery { background: var(--color-goal-recovery); color: white; }
+.fitness-goal-icon--endurance { background: var(--color-goal-endurance); color: white; }
+.fitness-goal-icon--weight { background: var(--color-goal-weight); color: white; }
+
+/* Certification Icons */
+.certification-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  color: var(--color-primary);
+}
+
+/* Price Range Filter */
+.filter-price-range {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.price-range-inputs {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.price-input-group {
+  flex: 1;
+}
+
+.price-label {
+  display: block;
+  font-size: var(--text-caption);
+  color: var(--color-muted-foreground);
+  margin-bottom: var(--spacing-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.price-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.price-currency {
+  position: absolute;
+  left: var(--spacing-sm);
+  color: var(--color-muted-foreground);
+  font-size: var(--text-body-sm);
+  z-index: 1;
+}
+
+.price-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-sm) var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-input);
+  color: var(--color-foreground);
+  font-size: var(--text-body-sm);
+}
+
+.price-input:focus {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+  border-color: var(--color-ring);
+}
+
+.price-range-submit {
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.price-range-submit:hover {
+  background: var(--color-accent);
+}
+
+.price-range-submit:focus {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Show More/Less */
+.filter-show-more {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+  padding: var(--spacing-xs) 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+  transition: color var(--transition-base);
+}
+
+.filter-show-more:hover {
+  color: var(--color-accent);
+}
+
+/* Mobile Filter Toggle */
+.collection-filters__mobile-toggle {
+  display: none;
+  position: fixed;
+  bottom: var(--spacing-lg);
+  right: var(--spacing-lg);
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border: none;
+  border-radius: var(--radius-full);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  z-index: var(--z-fixed);
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.filter-count {
+  background: var(--color-accent);
+  color: var(--color-accent-foreground);
+  border-radius: var(--radius-full);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .collection-filters {
+    padding: var(--spacing-md) 0;
+  }
+  
+  .collection-filters__header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-sm);
+  }
+  
+  .collection-filters__content {
+    display: none;
+  }
+  
+  .collection-filters__mobile-toggle {
+    display: flex;
+  }
+  
+  .collection-sort__select {
+    min-width: auto;
+    flex: 1;
+  }
+  
+  .price-range-inputs {
+    flex-direction: column;
+  }
+}
+
+/* Dark Mode Support */
+.dark .collection-sort::after {
+  border-top-color: var(--color-muted-foreground);
+}
+
+/* Focus Trap for Accessibility */
+.filter-group:focus-within .filter-group__content {
+  border: 1px solid var(--color-ring);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .filter-tag,
+  .view-toggle__btn.active,
+  .price-range-submit {
+    border: 2px solid currentColor;
+  }
+  
+  .filter-checkbox {
+    outline: 1px solid var(--color-border);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .filter-group__toggle,
+  .filter-group__content,
+  .filter-tag__remove,
+  .price-range-submit,
+  .view-toggle__btn {
+    transition: none;
+  }
+  
+  .filter-group__toggle[aria-expanded="true"] {
+    transform: none;
+  }
+}

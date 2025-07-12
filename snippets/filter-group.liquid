@@ -1,0 +1,158 @@
+{% comment %}
+  Filter Group Component - RecoverSups Theme
+  
+  Individual filter group with supplement-specific styling and logic
+  
+  Parameters:
+    - filter: Filter object (required)
+    - filter_type: Layout type (horizontal|sidebar|drawer)
+{% endcomment %}
+
+{% liquid
+  assign filter_type = filter_type | default: 'horizontal'
+  assign filter_id = filter.param_name | handle
+  assign is_price_filter = filter.type == 'price_range'
+  assign is_fitness_goal = filter.param_name == 'filter.p.m.fitness_goal'
+  assign is_certification = filter.param_name == 'filter.p.m.certifications'
+%}
+
+<div class="filter-group filter-group--{{ filter.type }} filter-group--{{ filter_type }}" 
+     data-filter-group="{{ filter_id }}">
+  
+  <!-- Filter Header -->
+  <div class="filter-group__header">
+    <h3 class="filter-group__title">
+      {{ filter.label }}
+      {% if filter.active_values.size > 0 %}
+        <span class="filter-group__count">({{ filter.active_values.size }})</span>
+      {% endif %}
+    </h3>
+    
+    {% if filter_type == 'horizontal' %}
+      <button type="button" 
+              class="filter-group__toggle"
+              data-filter-toggle="{{ filter_id }}"
+              aria-expanded="false">
+        {% render 'icon-chevron-down' %}
+      </button>
+    {% endif %}
+  </div>
+  
+  <!-- Filter Content -->
+  <div class="filter-group__content" data-filter-content="{{ filter_id }}">
+    
+    {% if is_price_filter %}
+      <!-- Price Range Filter -->
+      <div class="filter-price-range">
+        <div class="price-range-inputs">
+          <div class="price-input-group">
+            <label for="filter-price-from" class="price-label">From</label>
+            <div class="price-input-wrapper">
+              <span class="price-currency">$</span>
+              <input type="number" 
+                     id="filter-price-from"
+                     class="price-input"
+                     name="filter.v.price.gte"
+                     value="{{ filter.min_value.value | divided_by: 100 }}"
+                     min="{{ filter.range_min | divided_by: 100 }}"
+                     max="{{ filter.range_max | divided_by: 100 }}"
+                     placeholder="{{ filter.range_min | divided_by: 100 }}">
+            </div>
+          </div>
+          
+          <div class="price-input-group">
+            <label for="filter-price-to" class="price-label">To</label>
+            <div class="price-input-wrapper">
+              <span class="price-currency">$</span>
+              <input type="number" 
+                     id="filter-price-to"
+                     class="price-input"
+                     name="filter.v.price.lte"
+                     value="{{ filter.max_value.value | divided_by: 100 }}"
+                     min="{{ filter.range_min | divided_by: 100 }}"
+                     max="{{ filter.range_max | divided_by: 100 }}"
+                     placeholder="{{ filter.range_max | divided_by: 100 }}">
+            </div>
+          </div>
+        </div>
+        
+        <button type="submit" class="price-range-submit">
+          Apply
+        </button>
+      </div>
+      
+    {% else %}
+      <!-- Standard Filter Options -->
+      <div class="filter-options filter-options--{{ filter.type }}">
+        {% for filter_value in filter.values %}
+          <div class="filter-option{% if is_fitness_goal %} filter-option--fitness-goal{% endif %}{% if is_certification %} filter-option--certification{% endif %}">
+            
+            {% if filter.type == 'boolean' %}
+              <!-- Checkbox Filter -->
+              <input type="checkbox" 
+                     id="filter-{{ filter_id }}-{{ forloop.index }}"
+                     class="filter-checkbox"
+                     name="{{ filter_value.param_name }}"
+                     value="{{ filter_value.value }}"
+                     {% if filter_value.active %}checked{% endif %}
+                     {% unless filter_value.count > 0 %}disabled{% endunless %}>
+              
+              <label for="filter-{{ filter_id }}-{{ forloop.index }}" 
+                     class="filter-label">
+                
+                {% if is_fitness_goal %}
+                  <span class="fitness-goal-icon fitness-goal-icon--{{ filter_value.value | handle }}">
+                    {% render 'benefit-icon-svg', icon: filter_value.value, size: 20 %}
+                  </span>
+                {% elsif is_certification %}
+                  <span class="certification-icon">
+                    {% render 'certification-icon-svg', code: filter_value.value, size: 16 %}
+                  </span>
+                {% endif %}
+                
+                <span class="filter-text">{{ filter_value.label }}</span>
+                <span class="filter-count">({{ filter_value.count }})</span>
+              </label>
+              
+            {% else %}
+              <!-- List Filter (for colors, etc.) -->
+              <a href="{{ filter_value.url_to_add }}" 
+                 class="filter-link{% if filter_value.active %} filter-link--active{% endif %}"
+                 {% unless filter_value.count > 0 %}aria-disabled="true"{% endunless %}>
+                
+                {% if filter.type == 'color' %}
+                  <span class="filter-color" 
+                        style="background-color: {{ filter_value.value }};"
+                        title="{{ filter_value.label }}"></span>
+                {% endif %}
+                
+                <span class="filter-text">{{ filter_value.label }}</span>
+                <span class="filter-count">({{ filter_value.count }})</span>
+                
+                {% if filter_value.active %}
+                  <span class="filter-remove" 
+                        onclick="event.preventDefault(); window.location.href='{{ filter_value.url_to_remove }}'">
+                    {% render 'icon-close' %}
+                  </span>
+                {% endif %}
+              </a>
+            {% endif %}
+            
+          </div>
+        {% endfor %}
+        
+        <!-- Show More/Less for long lists -->
+        {% if filter.values.size > 8 %}
+          <button type="button" 
+                  class="filter-show-more"
+                  data-show-more="{{ filter_id }}">
+            <span class="show-more-text">Show more</span>
+            <span class="show-less-text" hidden>Show less</span>
+            {% render 'icon-chevron-down' %}
+          </button>
+        {% endif %}
+      </div>
+    {% endif %}
+    
+  </div>
+</div>

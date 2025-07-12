@@ -1,0 +1,177 @@
+{% comment %}
+  Collection Filters Section - RecoverSups Theme
+  
+  Supplement-specific filtering system with advanced options
+  Supports filtering by fitness goals, ingredients, certifications, and more
+{% endcomment %}
+
+<div class="collection-filters-wrapper" data-section="{{ section.id }}">
+  {% if section.settings.enable_filtering and collection.filters != empty %}
+    <div class="page-width">
+      <div class="collection-filters collection-filters--{{ section.settings.filter_type }}">
+        
+        <!-- Filter Header -->
+        <div class="collection-filters__header">
+          <div class="collection-filters__summary">
+            {% if section.settings.show_product_count %}
+              <span class="collection-filters__count">
+                {{ collection.products_count }}
+                {% if collection.products_count == 1 %}
+                  product
+                {% else %}
+                  products
+                {% endif %}
+              </span>
+            {% endif %}
+            
+            <!-- Active Filters -->
+            <div class="collection-filters__active" data-active-filters>
+              {% for filter in collection.filters %}
+                {% for filter_value in filter.active_values %}
+                  <span class="filter-tag" data-filter-remove="{{ filter_value.url_to_remove }}">
+                    {{ filter_value.label }}
+                    <button type="button" 
+                            class="filter-tag__remove"
+                            onclick="window.location.href='{{ filter_value.url_to_remove }}'"
+                            aria-label="Remove {{ filter_value.label }} filter">
+                      {% render 'icon-close' %}
+                    </button>
+                  </span>
+                {% endfor %}
+              {% endfor %}
+              
+              {% if collection.filters != empty and collection.current_type == nil and collection.current_vendor == nil %}
+                {% assign clear_url = collection.url %}
+                {% if collection.sort_by != collection.default_sort_by %}
+                  {% assign clear_url = clear_url | append: '?sort_by=' | append: collection.sort_by %}
+                {% endif %}
+                <a href="{{ clear_url }}" class="filter-clear">
+                  Clear all
+                </a>
+              {% endif %}
+            </div>
+          </div>
+          
+          <!-- Sort and View Toggle -->
+          <div class="collection-filters__controls">
+            {% if section.settings.enable_sorting %}
+              <div class="collection-sort">
+                <label for="sort-by" class="visually-hidden">Sort by</label>
+                <select id="sort-by" 
+                        class="collection-sort__select"
+                        onchange="window.location.href='{{ collection.url }}?sort_by=' + this.value">
+                  {% assign sort_by = collection.sort_by | default: collection.default_sort_by %}
+                  <option value="manual"{% if sort_by == 'manual' %} selected{% endif %}>Featured</option>
+                  <option value="best-selling"{% if sort_by == 'best-selling' %} selected{% endif %}>Best selling</option>
+                  <option value="title-ascending"{% if sort_by == 'title-ascending' %} selected{% endif %}>Alphabetically, A-Z</option>
+                  <option value="title-descending"{% if sort_by == 'title-descending' %} selected{% endif %}>Alphabetically, Z-A</option>
+                  <option value="price-ascending"{% if sort_by == 'price-ascending' %} selected{% endif %}>Price, low to high</option>
+                  <option value="price-descending"{% if sort_by == 'price-descending' %} selected{% endif %}>Price, high to low</option>
+                  <option value="created-ascending"{% if sort_by == 'created-ascending' %} selected{% endif %}>Date, old to new</option>
+                  <option value="created-descending"{% if sort_by == 'created-descending' %} selected{% endif %}>Date, new to old</option>
+                </select>
+                {% render 'icon-caret-down' %}
+              </div>
+            {% endif %}
+            
+            {% if section.settings.show_view_toggle %}
+              <div class="collection-view-toggle" data-view-toggle>
+                <button type="button" 
+                        class="view-toggle__btn view-toggle__btn--grid active"
+                        data-view="grid"
+                        aria-label="Grid view">
+                  {% render 'icon-grid' %}
+                </button>
+                <button type="button" 
+                        class="view-toggle__btn view-toggle__btn--list"
+                        data-view="list"
+                        aria-label="List view">
+                  {% render 'icon-list' %}
+                </button>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        
+        <!-- Filter Groups -->
+        <div class="collection-filters__content">
+          {% for filter in collection.filters %}
+            {% render 'filter-group', 
+               filter: filter, 
+               filter_type: section.settings.filter_type %}
+          {% endfor %}
+        </div>
+        
+        <!-- Mobile Filter Toggle -->
+        <button type="button" 
+                class="collection-filters__mobile-toggle"
+                data-filter-toggle
+                aria-expanded="false">
+          <span class="filter-icon">{% render 'icon-filter' %}</span>
+          <span class="filter-text">Filters</span>
+          <span class="filter-count" data-filter-count></span>
+        </button>
+        
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Collection Filters",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Filter Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "default": true,
+      "label": "Enable product filtering"
+    },
+    {
+      "type": "checkbox", 
+      "id": "enable_sorting",
+      "default": true,
+      "label": "Enable product sorting"
+    },
+    {
+      "type": "select",
+      "id": "filter_type",
+      "options": [
+        { "value": "horizontal", "label": "Horizontal" },
+        { "value": "sidebar", "label": "Sidebar" },
+        { "value": "drawer", "label": "Drawer" }
+      ],
+      "default": "horizontal",
+      "label": "Filter layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "default": true,
+      "label": "Show product count"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_toggle",
+      "default": true,
+      "label": "Show view toggle"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    }
+  ]
+}
+{% endschema %}
