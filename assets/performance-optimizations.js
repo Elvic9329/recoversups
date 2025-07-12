@@ -1,9 +1,10 @@
 /**
  * Performance Optimizations - RecoverSups Theme
- * Advanced performance techniques and lazy loading
+ * Advanced performance techniques and lazy loading with ES6 modules
+ * @version 2.0.0
  */
 
-class PerformanceOptimizer {
+export class PerformanceOptimizer {
   constructor() {
     this.config = {
       lazyLoadOffset: 100,
@@ -129,6 +130,18 @@ class PerformanceOptimizer {
         break;
       case 'testimonials':
         this.loadTestimonials(section);
+        break;
+      case 'shop-by-goal':
+        this.loadShopByGoalSection(section);
+        break;
+      case 'product-bundles':
+        this.loadProductBundles(section);
+        break;
+      case 'fitness-testimonials':
+        this.loadFitnessTestimonials(section);
+        break;
+      case 'product-comparison':
+        this.loadProductComparison(section);
         break;
     }
   }
@@ -377,6 +390,172 @@ class PerformanceOptimizer {
     );
   }
   
+  loadShopByGoalSection(section) {
+    // Load goal-specific content and animations
+    const goals = section.querySelectorAll('[data-goal-card]');
+    goals.forEach(goal => {
+      goal.classList.add('animate-on-scroll');
+    });
+  }
+  
+  loadProductBundles(section) {
+    // Lazy load bundle product data
+    const bundleId = section.dataset.bundleId;
+    if (!bundleId) return;
+    
+    fetch(`/products/${bundleId}.js`)
+      .then(response => response.json())
+      .then(product => {
+        this.renderBundleData(section, product);
+      })
+      .catch(error => {
+        console.error('Failed to load bundle data:', error);
+      });
+  }
+  
+  loadFitnessTestimonials(section) {
+    // Lazy load testimonial videos/images
+    const testimonials = section.querySelectorAll('[data-testimonial]');
+    testimonials.forEach(testimonial => {
+      const video = testimonial.querySelector('video[data-src]');
+      if (video) {
+        video.src = video.dataset.src;
+      }
+    });
+  }
+  
+  loadProductComparison(section) {
+    // Load comparison data for selected products
+    const productIds = section.dataset.productIds?.split(',');
+    if (!productIds) return;
+    
+    Promise.all(
+      productIds.map(id => fetch(`/products/${id}.js`).then(r => r.json()))
+    ).then(products => {
+      this.renderComparisonTable(section, products);
+    }).catch(error => {
+      console.error('Failed to load comparison products:', error);
+    });
+  }
+  
+  renderBundleData(section, product) {
+    const container = section.querySelector('[data-bundle-container]');
+    if (!container) return;
+    
+    // Render bundle-specific data
+    container.innerHTML = `
+      <div class="bundle-info">
+        <h3>${product.title}</h3>
+        <p class="bundle-savings">Save ${this.calculateBundleSavings(product)}%</p>
+      </div>
+    `;
+  }
+  
+  renderComparisonTable(section, products) {
+    const container = section.querySelector('[data-comparison-container]');
+    if (!container) return;
+    
+    // Render comparison table
+    const tableHTML = this.buildComparisonTable(products);
+    container.innerHTML = tableHTML;
+  }
+  
+  buildComparisonTable(products) {
+    // Build comparison table HTML
+    return `
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            ${products.map(p => `<th>${p.title}</th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Price</td>
+            ${products.map(p => `<td>${this.formatPrice(p.price)}</td>`).join('')}
+          </tr>
+        </tbody>
+      </table>
+    `;
+  }
+  
+  calculateBundleSavings(product) {
+    // Calculate savings percentage for bundles
+    const compare_at_price = product.compare_at_price || 0;
+    const price = product.price || 0;
+    
+    if (compare_at_price > price) {
+      return Math.round(((compare_at_price - price) / compare_at_price) * 100);
+    }
+    return 0;
+  }
+  
+  // Enhanced image optimization for supplements
+  initSupplementImageOptimizations() {
+    // Preload nutrition fact images
+    const nutritionImages = document.querySelectorAll('[data-nutrition-image]');
+    nutritionImages.forEach(img => {
+      if (this.isInViewport(img)) {
+        const link = document.createElement('link');
+        link.rel = 'preload';
+        link.href = img.dataset.src;
+        link.as = 'image';
+        document.head.appendChild(link);
+      }
+    });
+    
+    // Optimize product gallery images
+    this.optimizeProductGallery();
+  }
+  
+  optimizeProductGallery() {
+    const galleries = document.querySelectorAll('.product-gallery');
+    galleries.forEach(gallery => {
+      const images = gallery.querySelectorAll('img[data-src]');
+      
+      // Preload first 2 images
+      images.forEach((img, index) => {
+        if (index < 2) {
+          const link = document.createElement('link');
+          link.rel = 'preload';
+          link.href = img.dataset.src;
+          link.as = 'image';
+          document.head.appendChild(link);
+        }
+      });
+    });
+  }
+  
+  // Service Worker registration for caching
+  registerServiceWorker() {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(registration => {
+          console.log('SW registered:', registration);
+        })
+        .catch(error => {
+          console.log('SW registration failed:', error);
+        });
+    }
+  }
+  
+  // Memory optimization
+  cleanupUnusedResources() {
+    // Remove unused images from memory
+    const unusedImages = document.querySelectorAll('img:not([src]):not([data-src])');
+    unusedImages.forEach(img => {
+      if (img.parentNode) {
+        img.parentNode.removeChild(img);
+      }
+    });
+    
+    // Clear old performance entries
+    if (performance.clearResourceTimings) {
+      performance.clearResourceTimings();
+    }
+  }
+  
   formatPrice(price) {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -384,13 +563,3 @@ class PerformanceOptimizer {
     }).format(price / 100);
   }
 }
-
-// Initialize performance optimizations
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => new PerformanceOptimizer());
-} else {
-  new PerformanceOptimizer();
-}
-
-// Export for use in other modules
-window.PerformanceOptimizer = PerformanceOptimizer;

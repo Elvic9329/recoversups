@@ -27,10 +27,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   
-  <!-- Critical CSS - Inlined for Performance -->
-  <style>{{ 'critical.css' | asset_url | asset }}</style>
+  <!-- Intelligent Critical CSS Loading -->
+  {% render 'critical-css-loader' %}
   
-  <!-- Non-Critical CSS - Lazy Loaded -->
+  <!-- Fallback for legacy CSS -->
   <link rel="preload" href="{{ 'theme.scss.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="{{ 'theme.scss.css' | asset_url }}"></noscript>
   

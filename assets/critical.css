@@ -1,109 +1,198 @@
 /*
 ===============================================================================
 CRITICAL CSS - RecoverSups Theme
-Above-the-fold styles for optimal performance
-Must be inlined in <head> - Maximum 14KB
+Above-the-fold styles for fastest page rendering
+This file should be inlined in <head> for optimal performance
 ===============================================================================
 */
 
-/* Critical Variables - Subset */
+/* === CRITICAL DESIGN TOKENS === */
 :root {
-  --color-brand-primary: #000000;
-  --color-brand-secondary: #7ED321;
-  --color-brand-accent: #FFFFFF;
-  --color-neutral-900: #1A1A1A;
-  --color-neutral-700: #333333;
-  --color-neutral-500: #666666;
-  --color-neutral-100: #F5F5F5;
-  --color-neutral-50: #FAFAFA;
-  
-  --font-primary: "Montserrat", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-secondary: "Open Sans", -apple-system, BlinkMacSystemFont, sans-serif;
-  
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  
-  --breakpoint-mobile: 768px;
+  --rs-background: #ffffff;
+  --rs-foreground: #1a202c;
+  --rs-primary: #b62921;
+  --rs-primary-foreground: #ffffff;
+  --rs-font-sans: Montserrat, -apple-system, BlinkMacSystemFont, sans-serif;
+  --rs-spacing-sm: 0.5rem;
+  --rs-spacing-md: 1rem;
+  --rs-spacing-lg: 1.5rem;
+  --rs-radius-md: 0.375rem;
+  --rs-transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Critical Reset */
-*,*::before,*::after{box-sizing:border-box}
-*{margin:0}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{line-height:1.5;-webkit-font-smoothing:antialiased;font-family:var(--font-secondary);color:var(--color-neutral-900);background-color:var(--color-neutral-50)}
-img{display:block;max-width:100%;height:auto}
+/* === CRITICAL RESET === */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
-/* Skip Link - Critical for A11y */
-.skip-link{position:absolute;top:-40px;left:6px;background:var(--color-brand-primary);color:var(--color-brand-accent);padding:8px;text-decoration:none;z-index:9999;border-radius:var(--radius-sm)}
-.skip-link:focus{top:6px}
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+}
 
-/* Container - Critical Layout */
-.container{max-width:1200px;margin:0 auto;padding:0 var(--spacing-lg)}
-@media (max-width:768px){.container{padding:0 var(--spacing-md)}}
+body {
+  margin: 0;
+  font-family: var(--rs-font-sans);
+  color: var(--rs-foreground);
+  background-color: var(--rs-background);
+}
 
-/* Header - Critical Above Fold */
-.header{background:var(--color-brand-accent);border-bottom:1px solid var(--color-neutral-100);position:relative;z-index:100}
+/* === CRITICAL LAYOUT === */
+.page-width {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--rs-spacing-md);
+}
 
-/* Navigation - Critical Visible Elements */
-.navigation{display:flex;align-items:center;justify-content:space-between;padding:var(--spacing-md) 0}
-.navigation__logo{font-family:var(--font-primary);font-size:1.5rem;font-weight:700;color:var(--color-brand-primary);text-decoration:none}
-.navigation__menu{display:none}
-@media (min-width:768px){.navigation__menu{display:flex;list-style:none;gap:var(--spacing-lg)}}
-.navigation__link{color:var(--color-neutral-700);text-decoration:none;font-weight:500;transition:color 0.2s}
-.navigation__link:hover{color:var(--color-brand-secondary)}
+/* === CRITICAL HEADER === */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--rs-background);
+  border-bottom: 1px solid #cbd5e0;
+}
 
-/* Mobile Menu Button - Critical */
-.mobile-menu-toggle{display:flex;align-items:center;justify-content:center;width:44px;height:44px;background:none;border:none;color:var(--color-neutral-700);cursor:pointer}
-@media (min-width:768px){.mobile-menu-toggle{display:none}}
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--rs-spacing-md) 0;
+}
 
-/* Cart Toggle - Critical */
-.cart-toggle{position:relative;background:none;border:none;color:var(--color-neutral-700);cursor:pointer;padding:var(--spacing-sm)}
-.cart-count{position:absolute;top:0;right:0;background:var(--color-brand-secondary);color:var(--color-brand-primary);border-radius:50%;width:18px;height:18px;font-size:0.75rem;font-weight:600;display:flex;align-items:center;justify-content:center;transform:translate(25%,-25%)}
+.header__logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--rs-primary);
+  text-decoration: none;
+}
 
-/* Hero Section - Critical Above Fold */
-.hero-carousel-section{position:relative;height:60vh;min-height:500px;max-height:800px;overflow:hidden}
-.hero-slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.7s ease}
-.hero-slide.active{opacity:1}
-.hero-slide__bg{position:absolute;inset:0;width:100%;height:100%}
-.hero-slide__bg img{width:100%;height:100%;object-fit:cover}
-.hero-slide__overlay{position:absolute;inset:0;background:rgba(0,0,0,0.4)}
-.hero-slide__content{position:relative;z-index:10;text-align:center;max-width:800px;padding:0 var(--spacing-lg)}
-.hero-title{font-family:var(--font-primary);font-size:clamp(2rem,5vw,4rem);font-weight:800;color:var(--color-brand-accent);margin-bottom:var(--spacing-lg);line-height:1.2}
-.hero-description{font-size:clamp(1rem,2vw,1.25rem);color:rgba(255,255,255,0.9);margin-bottom:var(--spacing-xl);line-height:1.6}
+/* === CRITICAL BUTTONS === */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--rs-spacing-sm);
+  padding: var(--rs-spacing-sm) var(--rs-spacing-md);
+  border: 1px solid transparent;
+  border-radius: var(--rs-radius-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--rs-transition-base);
+}
 
-/* Critical Button - Above Fold CTA */
-.btn{display:inline-flex;align-items:center;justify-content:center;font-family:var(--font-primary);font-weight:600;text-decoration:none;border-radius:var(--radius-md);transition:all 0.2s ease;cursor:pointer;border:2px solid transparent;padding:var(--spacing-md) var(--spacing-lg);font-size:1rem}
-.btn--primary{background-color:var(--color-brand-secondary);color:var(--color-brand-primary);border-color:var(--color-brand-secondary)}
-.btn--primary:hover{background-color:var(--color-brand-primary);color:var(--color-brand-accent);transform:translateY(-1px)}
+.btn--primary {
+  background: var(--rs-primary);
+  color: var(--rs-primary-foreground);
+}
 
-/* Loading States - Critical UX */
-.loading{opacity:0.6;pointer-events:none}
-.loading-spinner{display:inline-block;width:20px;height:20px;border:2px solid var(--color-neutral-100);border-radius:50%;border-top-color:var(--color-brand-secondary);animation:spin 1s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+.btn--primary:hover {
+  background: #a02318;
+}
 
-/* Utility Classes - Critical Only */
-.text-center{text-align:center}
-.hidden{display:none}
-@media (max-width:767px){.hidden-mobile{display:none}}
-@media (min-width:768px){.hidden-desktop{display:none}}
+/* === CRITICAL LOADING === */
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid var(--rs-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
 
-/* Focus States - Critical A11y */
-button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--color-brand-secondary);outline-offset:2px}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
-/* Performance - Prevent Layout Shift */
-img[data-src]{background:var(--color-neutral-100);min-height:200px}
-.product-card__image-container{aspect-ratio:1;background:var(--color-neutral-100)}
+/* === CRITICAL PRODUCT GRID === */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--rs-spacing-lg);
+}
 
-/* Mobile Optimizations */
-@media (max-width:767px){
-  .hero-carousel-section{height:50vh;min-height:400px}
-  .hero-title{font-size:2rem}
-  .hero-description{font-size:1rem}
-  .btn{min-height:44px;font-size:16px}
+.product-card {
+  border: 1px solid #e2e8f0;
+  border-radius: var(--rs-radius-md);
+  overflow: hidden;
+  transition: var(--rs-transition-base);
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.product-card__media {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.product-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* === CRITICAL MOBILE === */
+@media (max-width: 767px) {
+  .page-width {
+    padding: 0 var(--rs-spacing-sm);
+  }
+  
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--rs-spacing-sm);
+  }
+  
+  .header__inner {
+    padding: var(--rs-spacing-sm) 0;
+  }
+}
+
+/* === CRITICAL ACCESSIBILITY === */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  border: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+  clip-path: inset(100%) !important;
+  clip: rect(0 0 0 0) !important;
+  overflow: hidden !important;
+}
+
+*:focus {
+  outline: 2px solid var(--rs-primary);
+  outline-offset: 2px;
+}
+
+/* === CRITICAL PERFORMANCE === */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent layout shift for images */
+img[width][height] {
+  height: auto;
+}
+
+/* Font display optimization */
+@font-face {
+  font-family: 'Montserrat';
+  font-display: swap;
+}
+
+/* === DARK MODE CRITICAL === */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --rs-background: #1a1a1a;
+    --rs-foreground: #f7fafc;
+  }
 }

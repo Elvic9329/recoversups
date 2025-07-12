@@ -1,8 +1,12 @@
 /**
  * RecoverSups Theme - Main JavaScript Entry Point
- * Modular, optimized JavaScript for supplements e-commerce
+ * Modular ES6 architecture for supplements e-commerce
  * @version 2.0.0
  */
+
+import { CartModule } from './module-cart.js';
+import { NavigationModule } from './module-navigation.js';
+import { PerformanceOptimizer } from './performance-optimizations.js';
 
 class RecoverSupsTheme {
   constructor() {
@@ -69,13 +73,22 @@ class RecoverSupsTheme {
   }
   
   loadCoreModules() {
-    // Navigation and Cart are loaded automatically via their own files
-    // This ensures they're available immediately
+    // Initialize performance optimizer first
+    this.modules.performance = new PerformanceOptimizer();
+    
+    // Initialize cart functionality
+    if (document.querySelector('.cart-drawer') || document.querySelector('[data-cart-toggle]')) {
+      this.modules.cart = new CartModule();
+    }
+    
+    // Initialize navigation
+    if (document.querySelector('.header__nav')) {
+      this.modules.navigation = new NavigationModule();
+    }
     
     // Load other modules on demand
     this.loadModule('productForm');
     this.loadModule('animations');
-    this.loadModule('lazyLoading');
   }
   
   loadModule(moduleName) {

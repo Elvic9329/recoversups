@@ -1,0 +1,149 @@
+{% comment %}
+  Critical CSS Loader - RecoverSups Theme
+  
+  Intelligent CSS loading system based on page type and content context
+  Optimizes above-the-fold rendering and implements progressive enhancement
+  
+  Parameters:
+    - page_type: Current page type for context-aware loading
+    - section_name: Specific section requiring CSS (optional)
+    - preload_next: Preload CSS for likely next page (optional)
+  
+  Usage:
+    {% render 'critical-css-loader' %}
+    {% render 'critical-css-loader', section_name: 'product-gallery' %}
+    {% render 'critical-css-loader', preload_next: 'collection' %}
+{% endcomment %}
+
+{% liquid
+  assign current_page = request.page_type | default: 'index'
+  assign section_context = section_name | default: ''
+  assign preload_context = preload_next | default: ''
+%}
+
+{% comment %} Critical CSS is always loaded inline for fastest rendering {% endcomment %}
+{% if current_page == 'index' or current_page == 'collection' or current_page == 'product' %}
+  <style data-critical="true">
+    {{ 'critical.css' | asset_url | asset_content }}
+  </style>
+{% endif %}
+
+{% comment %} Page-specific CSS loading with priority {% endcomment %}
+{% case current_page %}
+  {% when 'index' %}
+    {{ 'page-index.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'section-hero.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'section-featured-products.css' | asset_url | stylesheet_tag: preload: true }}
+    
+    {% comment %} Preload likely next pages {% endcomment %}
+    <link rel="preload" href="{{ 'page-collection.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ 'component-filters.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+  {% when 'collection' %}
+    {{ 'page-collection.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'component-filters.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'component-product-card.css' | asset_url | stylesheet_tag: preload: true }}
+    
+    {% comment %} Preload product page assets {% endcomment %}
+    <link rel="preload" href="{{ 'page-product.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ 'section-main-product.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    
+  {% when 'product' %}
+    {{ 'page-product.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'section-main-product.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'component-nutrition-table.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'component-benefit-icons.css' | asset_url | stylesheet_tag: preload: true }}
+    
+    {% comment %} Lazy load non-critical product components {% endcomment %}
+    <link rel="preload" href="{{ 'component-certification-badges.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="{{ 'section-product-recommendations.css' | asset_url }}" as="style" media="print" onload="this.media='all';this.onload=null;">
+    
+  {% when 'cart' %}
+    {{ 'page-cart.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'component-cart-item.css' | asset_url | stylesheet_tag: preload: true }}
+    
+  {% when 'search' %}
+    {{ 'page-search.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'component-search.css' | asset_url | stylesheet_tag: preload: true }}
+    
+  {% else %}
+    {% comment %} Default page loading {% endcomment %}
+    {{ 'components-manifest.css' | asset_url | stylesheet_tag: preload: true }}
+{% endcase %}
+
+{% comment %} Section-specific CSS loading {% endcomment %}
+{% if section_context != '' %}
+  {% case section_context %}
+    {% when 'product-gallery' %}
+      <link rel="preload" href="{{ 'section-product-gallery.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      
+    {% when 'cart-drawer' %}
+      <link rel="preload" href="{{ 'component-cart-drawer.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      
+    {% when 'shop-by-goal' %}
+      <link rel="preload" href="{{ 'section-shop-by-goal.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      
+    {% when 'product-bundles' %}
+      <link rel="preload" href="{{ 'section-product-bundles.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      
+    {% when 'fitness-testimonials' %}
+      <link rel="preload" href="{{ 'section-fitness-testimonials.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+      
+    {% when 'product-comparison' %}
+      <link rel="preload" href="{{ 'section-product-comparison.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  {% endcase %}
+{% endif %}
+
+{% comment %} Intersection Observer for lazy loading non-critical CSS {% endcomment %}
+<script>
+  // Lazy load non-critical CSS when sections come into viewport
+  if ('IntersectionObserver' in window) {
+    const lazyStyleObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const section = entry.target;
+          const cssFile = section.dataset.lazyCSS;
+          if (cssFile && !document.querySelector(`link[href="${cssFile}"]`)) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = cssFile;
+            document.head.appendChild(link);
+            lazyStyleObserver.unobserve(section);
+          }
+        }
+      });
+    }, {
+      rootMargin: '100px 0px'
+    });
+
+    // Observe sections that need lazy CSS loading
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('[data-lazy-css]').forEach(section => {
+        lazyStyleObserver.observe(section);
+      });
+    });
+  }
+</script>
+
+{% comment %} Fallback for browsers without JS {% endcomment %}
+<noscript>
+  {{ 'components-manifest.css' | asset_url | stylesheet_tag }}
+</noscript>
+
+{% comment %} DNS prefetch for external resources {% endcomment %}
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link rel="dns-prefetch" href="//fonts.gstatic.com">
+
+{% comment %} Resource hints for performance {% endcomment %}
+{% if preload_context != '' %}
+  {% case preload_context %}
+    {% when 'collection' %}
+      <link rel="prefetch" href="{{ routes.collections_url }}">
+      
+    {% when 'product' %}
+      <link rel="prefetch" href="{{ routes.all_products_url }}">
+      
+    {% when 'cart' %}
+      <link rel="prefetch" href="{{ routes.cart_url }}">
+  {% endcase %}
+{% endif %}

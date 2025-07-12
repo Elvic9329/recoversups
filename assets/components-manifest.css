@@ -1,0 +1,175 @@
+/*
+===============================================================================
+COMPONENTS MANIFEST - RecoverSups Theme
+Central manifest for all CSS components
+Optimized loading order for performance
+===============================================================================
+*/
+
+/* === CRITICAL CSS === */
+/* These styles are loaded first and should be inlined for above-the-fold content */
+
+@import url('./design-tokens.css');
+@import url('./base-reset.css');
+@import url('./base-typography.css');
+
+/* === LAYOUT COMPONENTS === */
+/* Core layout and structure components */
+
+@import url('./component-buttons.css');
+@import url('./component-forms.css');
+
+/* === PRODUCT COMPONENTS === */
+/* Product-related components (high priority for e-commerce) */
+
+@import url('./component-product-card.css');
+@import url('./component-product-badge.css');
+
+/* === NAVIGATION & INTERACTION === */
+/* Navigation and user interaction components */
+
+@import url('./component-cart-drawer.css');
+
+/* === SUPPLEMENT-SPECIFIC COMPONENTS === */
+/* Specialized components for supplement industry */
+
+@import url('./component-nutrition-table.css');
+@import url('./component-benefit-icons.css');
+@import url('./component-certification-badges.css');
+
+/* === PAGE-SPECIFIC STYLES === */
+/* Page-specific styles (can be lazy-loaded) */
+
+@import url('./page-collection.css');
+@import url('./page-cart.css');
+
+/* === ADVANCED COMPONENTS === */
+/* Complex components with lower priority */
+
+@import url('./component-filters.css');
+@import url('./component-cart-item.css');
+
+/* === SECTION STYLES === */
+/* Section-specific styles (lowest priority) */
+
+@import url('./section-category-grid.css');
+@import url('./section-featured-products.css');
+
+/* === UTILITY CLASSES === */
+/* Utility and helper classes */
+
+@import url('./utils-mixins.css');
+
+/* === CRITICAL INLINE STYLES === */
+/* These should be inlined in the <head> for fastest rendering */
+
+.critical-loading {
+  /* Loading state for critical components */
+  background: var(--rs-muted);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* === PERFORMANCE OPTIMIZATIONS === */
+
+/* Reduce layout shifts with aspect ratios */
+.product-card__media {
+  aspect-ratio: 1 / 1;
+}
+
+.cart-item__media {
+  aspect-ratio: 1 / 1;
+}
+
+/* Optimize font loading */
+@font-face {
+  font-family: 'Montserrat';
+  font-display: swap;
+  /* Ensures text remains visible during font swap */
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-display: swap;
+}
+
+/* === RESPONSIVE BREAKPOINTS === */
+
+/* Mobile-first approach */
+@media (max-width: 767px) {
+  /* Mobile-specific optimizations */
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: block !important; }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet-specific optimizations */
+  .hide-tablet { display: none !important; }
+  .show-tablet { display: block !important; }
+}
+
+@media (min-width: 1024px) {
+  /* Desktop-specific optimizations */
+  .hide-desktop { display: none !important; }
+  .show-desktop { display: block !important; }
+}
+
+/* === ACCESSIBILITY IMPROVEMENTS === */
+
+/* Improve focus indicators */
+*:focus {
+  outline: 2px solid var(--rs-ring);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .product-card,
+  .cart-item,
+  .filter-group {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* === PRINT STYLES === */
+
+@media print {
+  /* Optimize for printing */
+  .no-print,
+  .cart-drawer,
+  .mobile-menu,
+  button:not(.btn--print) {
+    display: none !important;
+  }
+  
+  .product-card,
+  .cart-item {
+    break-inside: avoid;
+  }
+  
+  /* Ensure good contrast for printing */
+  * {
+    color: #000 !important;
+    background: #fff !important;
+  }
+  
+  .product-card,
+  .cart-item {
+    border: 1px solid #000 !important;
+  }
+}

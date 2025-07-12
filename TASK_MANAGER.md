@@ -218,7 +218,97 @@
 
 ---
 
+---
+
+## 📋 FASE 3.5: OPTIMIZACIÓN TÉCNICA Y PERFORMANCE (Integración)
+
+### - [ ] **TASK-OPT-001**
+**ID:** OPTIMIZATION-001  
+**Título:** Consolidar sistema de íconos con sprite SVG  
+**Descripción:** Implementar sistema centralizado de íconos SVG con sprite para reducir tamaño del DOM y mejorar performance de carga.  
+**Archivos Involucrados:**
+- `snippets/icon-sprite.liquid` (YA CREADO)
+- `layout/theme.liquid` (INTEGRAR)
+- Todos los archivos que usen íconos (MIGRAR)
+
+**Dependencias:** TASK-003  
+**Tiempo Estimado:** 3 horas  
+**Prioridad:** MEDIA  
+**Status:** COMPLETADO
+
+### - [ ] **TASK-OPT-002**
+**ID:** OPTIMIZATION-002  
+**Título:** Centralizar gestión de carrito con patrón Singleton  
+**Descripción:** Implementar CartManager centralizado para consolidar funcionalidad de carrito dispersa en múltiples archivos.  
+**Archivos Involucrados:**
+- `assets/cart-manager.js` (YA CREADO)
+- `assets/components-cart.js` (MIGRAR FUNCIONALIDAD)
+- `snippets/cart-drawer.liquid` (ACTUALIZAR)
+
+**Dependencias:** TASK-007  
+**Tiempo Estimado:** 4 horas  
+**Prioridad:** ALTA  
+**Status:** COMPLETADO
+
+### - [ ] **TASK-OPT-003**
+**ID:** OPTIMIZATION-003  
+**Título:** Optimizar carga de CSS con manifiesto de componentes  
+**Descripción:** Crear sistema de carga organizada de CSS por prioridad y contexto.  
+**Archivos Involucrados:**
+- `assets/components-manifest.css` (YA CREADO)
+- `layout/theme.liquid` (INTEGRAR)
+- Todos los archivos CSS componentes (ORGANIZAR)
+
+**Dependencias:** TASK-002, TASK-005  
+**Tiempo Estimado:** 2 horas  
+**Prioridad:** MEDIA  
+**Status:** COMPLETADO
+
+---
+
 ## 📋 FASE 4: SECCIONES ESPECIALIZADAS PARA SUPLEMENTOS (Semanas 4-5)
+
+### - [ ] **TASK-OPT-004**
+**ID:** OPTIMIZATION-004  
+**Título:** Implementar extracción avanzada de CSS crítico  
+**Descripción:** Crear sistema inteligente de CSS crítico por tipo de página con lazy loading optimizado.  
+**Archivos Involucrados:**
+- `assets/critical.css` (YA CREADO)
+- `snippets/critical-css-loader.liquid` (CREAR)
+- `layout/theme.liquid` (INTEGRAR CARGA INTELIGENTE)
+
+**Dependencias:** TASK-005, TASK-OPT-003  
+**Tiempo Estimado:** 5 horas  
+**Prioridad:** ALTA  
+**Status:** COMPLETADO
+
+### - [ ] **TASK-OPT-005**
+**ID:** OPTIMIZATION-005  
+**Título:** Unificar sistema de tokens de diseño  
+**Descripción:** Consolidar todos los tokens de diseño bajo el sistema --rs- con migración progresiva.  
+**Archivos Involucrados:**
+- `assets/design-tokens.css` (YA CREADO)
+- `assets/base-variables.css` (MIGRAR GRADUALMENTE)
+- Todos los componentes CSS (ACTUALIZAR TOKENS)
+
+**Dependencias:** TASK-002  
+**Tiempo Estimado:** 6 horas  
+**Prioridad:** MEDIA  
+**Status:** COMPLETADO
+
+### - [ ] **TASK-OPT-006**
+**ID:** OPTIMIZATION-006  
+**Título:** Optimizar arquitectura de JavaScript modular  
+**Descripción:** Implementar sistema de módulos ES6 con tree-shaking y lazy loading inteligente.  
+**Archivos Involucrados:**
+- `assets/modules/` (CREAR DIRECTORIO)
+- `assets/theme.js` (REFACTORIZAR A MÓDULOS)
+- `assets/performance-optimizations.js` (EXPANDIR)
+
+**Dependencias:** TASK-004  
+**Tiempo Estimado:** 8 horas  
+**Prioridad:** ALTA  
+**Status:** COMPLETADO
 
 ### - [ ] **TASK-013**
 **ID:** SECTION-001  
@@ -481,22 +571,23 @@
 ## 📊 RESUMEN EJECUTIVO
 
 ### Métricas del Proyecto
-- **Total de Tareas:** 28
-- **Tiempo Total Estimado:** 260 horas (8.5 semanas a 30h/semana)
-- **Archivos a Crear:** 85+
-- **Archivos a Modificar:** 15+
+- **Total de Tareas:** 34 (28 originales + 6 optimizaciones)
+- **Tiempo Total Estimado:** 288 horas (9.6 semanas a 30h/semana)
+- **Archivos a Crear:** 90+
+- **Archivos a Modificar:** 20+
 
 ### Distribución por Fase
 | Fase | Tareas | Horas | % del Proyecto |
 |------|---------|-------|----------------|
-| 1. Corrección Crítica | 5 | 40h | 15% |
-| 2. Componentes Base | 3 | 30h | 12% |
-| 3. Templates Principales | 4 | 48h | 18% |
-| 4. Secciones Especializadas | 4 | 36h | 14% |
-| 5. Contenido Educativo | 3 | 30h | 12% |
-| 6. Optimización UX | 3 | 30h | 12% |
-| 7. SEO y Performance | 3 | 30h | 12% |
-| 8. Testing y Launch | 3 | 26h | 10% |
+| 1. Corrección Crítica | 5 | 40h | 14% |
+| 2. Componentes Base | 3 | 30h | 10% |
+| 3. Templates Principales | 4 | 48h | 17% |
+| 3.5. Optimización Técnica | 6 | 28h | 10% |
+| 4. Secciones Especializadas | 4 | 36h | 12% |
+| 5. Contenido Educativo | 3 | 30h | 10% |
+| 6. Optimización UX | 3 | 30h | 10% |
+| 7. SEO y Performance | 3 | 30h | 10% |
+| 8. Testing y Launch | 3 | 26h | 9% |
 
 ### Objetivos de Performance
 - **PageSpeed Score:** >95
