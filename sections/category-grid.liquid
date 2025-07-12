@@ -1,10 +1,10 @@
 <div class="category-grid-section">
   <div class="container">
     {% if section.settings.title != blank %}
-      <h2 class="section-title">{{ section.settings.title }}</h2>
+      <h2 class="category-grid-section__title">{{ section.settings.title }}</h2>
     {% endif %}
     
-    <div class="category-grid" data-columns="{{ section.settings.grid_columns }}">
+    <div class="category-grid-section__grid category-grid-section__grid--columns-{{ section.settings.grid_columns }}">
       {% assign collections_to_show = section.settings.collections_to_show | default: 6 %}
       {% assign collection_count = 0 %}
       
@@ -13,8 +13,8 @@
           {% assign collection = collections[block.settings.collection] %}
           {% if collection %}
             <div class="category-card" {{ block.shopify_attributes }}>
-              <a href="{{ collection.url }}" class="category-card-link">
-                <div class="category-card-image">
+              <a href="{{ collection.url }}" class="category-card__link">
+                <div class="category-card__image-container">
                   {% if collection.featured_image %}
                     <img 
                       src="{{ collection.featured_image | image_url: width: 400 }}" 
@@ -22,11 +22,11 @@
                       width="400"
                       height="300"
                       loading="lazy"
-                      class="category-image"
+                      class="category-card__image"
                     />
                   {% else %}
-                    <div class="category-placeholder">
-                      <svg class="placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <div class="category-card__placeholder">
+                      <svg class="category-card__placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
                         <circle cx="8.5" cy="8.5" r="1.5"/>
                         <polyline points="21,15 16,10 5,21"/>
@@ -34,9 +34,9 @@
                     </div>
                   {% endif %}
                 </div>
-                <div class="category-card-content">
-                  <h3 class="category-title">{{ collection.title }}</h3>
-                  <p class="category-count">{{ collection.products_count }} 
+                <div class="category-card__content">
+                  <h3 class="category-card__title">{{ collection.title }}</h3>
+                  <p class="category-card__count">{{ collection.products_count }} 
                     {% if collection.products_count == 1 %}
                       Product
                     {% else %}
@@ -54,136 +54,10 @@
   </div>
 </div>
 
-<style>
-.category-grid-section {
-  padding: 60px 0;
-  background-color: var(--color-light-gray);
-}
-
-.section-title {
-  text-align: center;
-  margin-bottom: 40px;
-  font-size: var(--text-h2);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-dark-gray);
-}
-
-.category-grid {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(2, 1fr);
-}
-
-@media (min-width: 768px) {
-  .category-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .category-grid[data-columns="6"] {
-    grid-template-columns: repeat(6, 1fr);
-  }
-  
-  .category-grid[data-columns="4"] {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  
-  .category-grid[data-columns="3"] {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.category-card {
-  background: var(--color-pure-white);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative;
-}
-
-.category-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-card-hover);
-}
-
-.category-card-link {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  height: 100%;
-}
-
-.category-card-image {
-  position: relative;
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-}
-
-.category-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.category-card:hover .category-image {
-  transform: scale(1.05);
-}
-
-.category-placeholder {
-  width: 100%;
-  height: 100%;
-  background-color: var(--color-light-gray);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.placeholder-icon {
-  width: 40px;
-  height: 40px;
-  color: var(--color-medium-gray);
-}
-
-.category-card-content {
-  padding: 20px;
-  text-align: center;
-}
-
-.category-title {
-  font-size: var(--text-product-title);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-dark-gray);
-  margin-bottom: 8px;
-  line-height: 1.3;
-}
-
-.category-count {
-  font-size: var(--text-body-sm);
-  color: var(--color-medium-gray);
-  margin: 0;
-}
-
-@media (max-width: 767px) {
-  .category-grid-section {
-    padding: 40px 0;
-  }
-  
-  .category-card-image {
-    height: 150px;
-  }
-  
-  .category-card-content {
-    padding: 15px;
-  }
-  
-  .category-title {
-    font-size: 16px;
-  }
-}
-</style>
+{% comment %}
+  Category Grid Section Styles
+  External CSS: section-category-grid.css
+{% endcomment %}
 
 {% schema %}
 {

@@ -24,16 +24,25 @@
   
   <!-- Preconnect to improve performance -->
   <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   
-  <!-- CSS -->
-  {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+  <!-- Critical CSS - Inlined for Performance -->
+  <style>{{ 'critical.css' | asset_url | asset }}</style>
+  
+  <!-- Non-Critical CSS - Lazy Loaded -->
+  <link rel="preload" href="{{ 'theme.scss.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="{{ 'theme.scss.css' | asset_url }}"></noscript>
   
   <!-- Shopify head content -->
   {{ content_for_head }}
-</head>
+{{ content_for_header }}</head>
 <body class="template-{{ template.name | handle }}">
   <!-- Skip to content link for accessibility -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <!-- Cart Drawer -->
+  {% render 'cart-drawer' %}
   
   <!-- Header -->
   {% section 'header' %}
@@ -46,8 +55,11 @@
   <!-- Footer -->
   {% section 'footer' %}
   
-  <!-- JavaScript -->
-  {{ 'theme.js' | asset_url | script_tag }}
+  <!-- Core JavaScript Modules - Async Loading for Performance -->
+  <script src="{{ 'components-navigation.js' | asset_url }}" defer></script>
+  <script src="{{ 'components-cart.js' | asset_url }}" defer></script>
+  <script src="{{ 'performance-optimizations.js' | asset_url }}" defer></script>
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
   
   <!-- Shopify scripts -->
   {% comment %}

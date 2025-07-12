@@ -1,0 +1,117 @@
+/*
+===============================================================================
+RECOVERSUPS THEME - Main SCSS Entry Point
+Modular CSS architecture for supplements e-commerce
+===============================================================================
+*/
+
+/* Base Layer - Foundation */
+@import 'base-reset.css';
+@import 'base-variables.css';
+@import 'base-typography.css';
+
+/* Component Layer - Reusable UI Components */
+@import 'component-buttons.css';
+@import 'component-forms.css';
+@import 'component-product-card.css';
+@import 'component-product-badge.css';
+@import 'component-cart-drawer.css';
+
+/* Utility Layer - Helper Classes */
+@import 'utils-mixins.css';
+
+/* Layout Layer - Page Structure (To be created in next tasks) */
+/* @import 'layout-header.css'; */
+/* @import 'layout-footer.css'; */
+/* @import 'layout-grid.css'; */
+
+/* Section Layer - Page Sections */
+@import 'section-category-grid.css';
+@import 'section-featured-products.css';
+/* @import 'section-hero.css'; */
+
+/* Page Layer - Specific Pages (To be created in next tasks) */
+/* @import 'page-product.css'; */
+/* @import 'page-collection.css'; */
+/* @import 'page-cart.css'; */
+
+/* Utility Layer - Helper Classes (To be created in next tasks) */
+/* @import 'utils-animations.css'; */
+/* @import 'utils-spacing.css'; */
+
+/*
+===============================================================================
+TEMPORARY LEGACY STYLES
+Will be migrated to modular files in subsequent tasks
+===============================================================================
+*/
+
+/* Redundant container and grid styles moved to utils-mixins.css */
+
+/* Basic Layout */
+.main-content {
+  min-height: 60vh;
+  padding: var(--spacing-xl) 0;
+}
+
+/* Redundant utility classes moved to utils-mixins.css */
+
+/*
+===============================================================================
+CRITICAL CSS - Above the fold optimization
+===============================================================================
+*/
+
+{% comment %}
+This section contains critical CSS that should be inlined
+in the <head> for performance. Will be optimized in TASK-005.
+{% endcomment %}
+
+/* Skip to content link */
+.skip-link:focus {
+  position: fixed;
+  top: var(--spacing-md);
+  left: var(--spacing-md);
+  z-index: var(--z-toast);
+  background: var(--color-brand-primary);
+  color: var(--color-brand-accent);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Loading states */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-neutral-300);
+  border-radius: 50%;
+  border-top-color: var(--color-brand-secondary);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Shopify section spacing */
+.shopify-section {
+  display: block;
+}
+
+.shopify-section + .shopify-section {
+  margin-top: var(--spacing-xl);
+}
+
+/* Theme Editor specific styles */
+.shopify-design-mode .shopify-section {
+  outline: 2px dashed var(--color-brand-secondary);
+  outline-offset: -2px;
+}

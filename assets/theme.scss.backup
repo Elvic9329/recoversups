@@ -1735,7 +1735,7 @@ a:hover {
 // -----------------------------------------------------------------------------
 // IMPORTS
 // -----------------------------------------------------------------------------
-@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;700&display=swap');
+// Font imports moved to layout/theme.liquid for better performance
 
 // -----------------------------------------------------------------------------
 // SCSS MIXINS

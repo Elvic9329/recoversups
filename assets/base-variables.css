@@ -1,0 +1,118 @@
+/*
+===============================================================================
+BASE VARIABLES - RecoverSups Theme
+Design tokens and CSS custom properties for supplements e-commerce
+===============================================================================
+*/
+
+:root {
+  /* Brand Colors - RecoverSups Identity */
+  --color-brand-primary: #000000;      /* Black potencia */
+  --color-brand-secondary: #7ED321;    /* Verde energía */
+  --color-brand-accent: #FFFFFF;       /* Blanco pureza */
+  
+  /* Fitness Goals Color System */
+  --color-goal-muscle: #4A90E2;        /* Azul músculo */
+  --color-goal-energy: #FF6B35;        /* Naranja energía */
+  --color-goal-recovery: #9013FE;      /* Púrpura recuperación */
+  --color-goal-endurance: #00BCD4;     /* Cian resistencia */
+  --color-goal-weight: #E91E63;        /* Rosa definición */
+  
+  /* Neutral Grays Professional */
+  --color-neutral-900: #1A1A1A;        /* Negro texto */
+  --color-neutral-700: #333333;        /* Gris oscuro */
+  --color-neutral-500: #666666;        /* Gris medio */
+  --color-neutral-300: #999999;        /* Gris claro */
+  --color-neutral-100: #F5F5F5;        /* Gris muy claro */
+  --color-neutral-50: #FAFAFA;         /* Casi blanco */
+  
+  /* States and Communication */
+  --color-success: #4CAF50;            /* Verde éxito */
+  --color-warning: #FF9800;            /* Naranja advertencia */
+  --color-error: #F44336;              /* Rojo error */
+  --color-info: #2196F3;               /* Azul información */
+  
+  /* Typography Scale Responsive */
+  --font-primary: "Montserrat", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-secondary: "Open Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "Roboto Mono", Consolas, Monaco, monospace;
+  
+  /* Responsive Typography Scale */
+  --text-hero: clamp(2.5rem, 5vw, 4.5rem);
+  --text-h1: clamp(2rem, 4vw, 3.5rem);
+  --text-h2: clamp(1.5rem, 3vw, 2.5rem);
+  --text-h3: clamp(1.25rem, 2.5vw, 2rem);
+  --text-h4: clamp(1.125rem, 2vw, 1.5rem);
+  --text-h5: clamp(1rem, 1.5vw, 1.25rem);
+  --text-h6: clamp(0.875rem, 1.25vw, 1.125rem);
+  
+  /* Body Text Sizes */
+  --text-body-lg: 1.125rem;
+  --text-body: 1rem;
+  --text-body-sm: 0.875rem;
+  --text-caption: 0.75rem;
+  
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* Spacing Scale */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  
+  /* Border Radius */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  
+  /* Breakpoints */
+  --breakpoint-mobile: 768px;
+  --breakpoint-tablet: 1024px;
+  --breakpoint-desktop: 1200px;
+  --breakpoint-wide: 1440px;
+  
+  /* Z-Index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
+}
+
+/* Dark Mode Variants */
+.dark {
+  --color-neutral-900: #FFFFFF;
+  --color-neutral-700: #E5E5E5;
+  --color-neutral-500: #999999;
+  --color-neutral-300: #666666;
+  --color-neutral-100: #333333;
+  --color-neutral-50: #1A1A1A;
+}

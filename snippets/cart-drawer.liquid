@@ -1,0 +1,357 @@
+{% comment %}
+  Cart Drawer Component - RecoverSups Theme
+  
+  Description: Sliding cart drawer with AJAX functionality and upsells
+  
+  Features:
+    - AJAX cart operations (add, update, remove)
+    - Real-time cart updates
+    - Upsell product recommendations
+    - Shipping calculator
+    - Promo code input
+    - Order notes
+    - Accessibility optimized
+  
+  Dependencies:
+    - CSS: component-cart-drawer.css
+    - JS: components-cart.js
+  
+  Usage:
+    {% render 'cart-drawer' %}
+    
+  Accessibility:
+    - Keyboard navigation
+    - Screen reader optimized
+    - Focus management
+    - ARIA labels and states
+{% endcomment %}
+
+<!-- Cart Overlay -->
+<div class="cart-overlay" 
+     data-cart-overlay 
+     aria-hidden="true">
+</div>
+
+<!-- Cart Drawer -->
+<aside class="cart-drawer" 
+       data-cart-drawer 
+       role="dialog" 
+       aria-modal="true" 
+       aria-labelledby="cart-drawer-title"
+       aria-hidden="true">
+  
+  <!-- Cart Header -->
+  <header class="cart-drawer__header">
+    <h2 id="cart-drawer-title" class="cart-drawer__title">
+      Shopping Cart
+      <span class="cart-drawer__count" data-cart-count>
+        ({{ cart.item_count }})
+      </span>
+    </h2>
+    
+    <button type="button" 
+            class="cart-drawer__close" 
+            data-cart-close
+            aria-label="Close cart">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18"/>
+        <path d="M6 6L12 12L18 6"/>
+      </svg>
+    </button>
+  </header>
+  
+  <!-- Cart Body -->
+  <div class="cart-drawer__body">
+    
+    <!-- Free Shipping Progress Bar -->
+    {% assign free_shipping_threshold = 75.00 %}
+    {% assign progress_percentage = cart.total_price | divided_by: 100.0 | divided_by: free_shipping_threshold | times: 100 | at_most: 100 %}
+    
+    <div class="cart-drawer__shipping-progress">
+      {% if cart.total_price >= free_shipping_threshold * 100 %}
+        <div class="shipping-message shipping-message--achieved">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+          Congratulations! You've earned free shipping!
+        </div>
+      {% else %}
+        {% assign remaining = free_shipping_threshold | times: 100 | minus: cart.total_price %}
+        <div class="shipping-message">
+          Add <strong>{{ remaining | money }}</strong> more for <strong>FREE SHIPPING</strong>
+        </div>
+      {% endif %}
+      
+      <div class="progress-bar">
+        <div class="progress-bar__fill" style="width: {{ progress_percentage }}%"></div>
+      </div>
+    </div>
+    
+    <!-- Cart Items -->
+    <div class="cart-drawer__items" data-cart-items>
+      {% if cart.item_count == 0 %}
+        <div class="cart-drawer__empty">
+          <div class="cart-drawer__empty-icon">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <path d="M3 3h2l.4 2M7 13h10l4-8H5.4m1.6 8L5 3H3"/>
+              <circle cx="9" cy="21" r="1"/>
+              <circle cx="20" cy="21" r="1"/>
+            </svg>
+          </div>
+          <h3 class="cart-drawer__empty-title">Your cart is empty</h3>
+          <p class="cart-drawer__empty-text">Add some products to get started</p>
+          <a href="{{ collections.all.url }}" class="btn btn--primary btn--lg">
+            Continue Shopping
+          </a>
+        </div>
+      {% else %}
+        {% for item in cart.items %}
+          <div class="cart-item" data-key="{{ item.key }}">
+            
+            <!-- Product Image -->
+            <div class="cart-item__image">
+              <a href="{{ item.url }}">
+                {% if item.featured_image %}
+                  <img src="{{ item.featured_image | image_url: width: 120 }}" 
+                       alt="{{ item.product.title | escape }}"
+                       loading="lazy"
+                       width="60"
+                       height="60">
+                {% else %}
+                  <div class="cart-item__placeholder">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <polyline points="21,15 16,10 5,21"/>
+                    </svg>
+                  </div>
+                {% endif %}
+              </a>
+            </div>
+            
+            <!-- Product Details -->
+            <div class="cart-item__details">
+              <h3 class="cart-item__title">
+                <a href="{{ item.url }}">{{ item.product.title }}</a>
+              </h3>
+              
+              {% if item.product.vendor != blank %}
+                <div class="cart-item__vendor">{{ item.product.vendor }}</div>
+              {% endif %}
+              
+              {% unless item.variant.title contains 'Default' %}
+                <div class="cart-item__variant">{{ item.variant.title }}</div>
+              {% endunless %}
+              
+              {% comment %} Supplement-specific properties {% endcomment %}
+              {% if item.properties.size > 0 %}
+                <div class="cart-item__properties">
+                  {% for property in item.properties %}
+                    {% unless property.first contains '_' %}
+                      <div class="cart-item__property">
+                        <span class="property-name">{{ property.first }}:</span>
+                        <span class="property-value">{{ property.last }}</span>
+                      </div>
+                    {% endunless %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+              
+              <!-- Price -->
+              <div class="cart-item__price">
+                {% if item.original_price != item.final_price %}
+                  <span class="cart-item__price-compare">{{ item.original_price | money }}</span>
+                  <span class="cart-item__price-final">{{ item.final_price | money }}</span>
+                  <span class="cart-item__discount">
+                    {% assign discount = item.original_price | minus: item.final_price %}
+                    Save {{ discount | money }}
+                  </span>
+                {% else %}
+                  <span class="cart-item__price-regular">{{ item.price | money }}</span>
+                {% endif %}
+              </div>
+            </div>
+            
+            <!-- Quantity Controls -->
+            <div class="cart-item__quantity">
+              <div class="quantity-input">
+                <button type="button" 
+                        class="quantity-input__button quantity-input__decrease"
+                        data-cart-quantity-change="-1"
+                        data-key="{{ item.key }}"
+                        aria-label="Decrease quantity">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14"/>
+                  </svg>
+                </button>
+                
+                <input type="number" 
+                       class="quantity-input__field"
+                       value="{{ item.quantity }}" 
+                       min="0" 
+                       data-cart-quantity
+                       data-key="{{ item.key }}"
+                       aria-label="Quantity for {{ item.product.title | escape }}">
+                
+                <button type="button" 
+                        class="quantity-input__button quantity-input__increase"
+                        data-cart-quantity-change="1"
+                        data-key="{{ item.key }}"
+                        aria-label="Increase quantity">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Line Total -->
+            <div class="cart-item__total">
+              {{ item.final_line_price | money }}
+            </div>
+            
+            <!-- Remove Button -->
+            <button type="button" 
+                    class="cart-item__remove"
+                    data-cart-remove
+                    data-key="{{ item.key }}"
+                    aria-label="Remove {{ item.product.title | escape }} from cart">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 6L6 18"/>
+                <path d="M6 6L12 12L18 6"/>
+              </svg>
+            </button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+    
+    <!-- Cart Upsells (only show if cart has items) -->
+    {% if cart.item_count > 0 %}
+      <div class="cart-drawer__upsells">
+        <h3 class="cart-drawer__upsells-title">Complete Your Stack</h3>
+        <div class="cart-drawer__upsells-products" data-cart-upsells>
+          <!-- Upsell products will be loaded via JavaScript based on cart contents -->
+        </div>
+      </div>
+    {% endif %}
+  </div>
+  
+  <!-- Cart Footer -->
+  {% if cart.item_count > 0 %}
+    <footer class="cart-drawer__footer">
+      
+      <!-- Promo Code -->
+      <div class="cart-drawer__promo">
+        <details class="cart-drawer__promo-details">
+          <summary class="cart-drawer__promo-toggle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="5" width="6" height="6" rx="1"/>
+              <path d="M9 11h6"/>
+              <path d="M9 12v6"/>
+              <path d="M15 11v6"/>
+            </svg>
+            Add promo code
+          </summary>
+          <form class="cart-drawer__promo-form" action="/cart" method="post">
+            <div class="form__group">
+              <input type="text" 
+                     name="discount" 
+                     class="form__input"
+                     placeholder="Enter promo code"
+                     aria-label="Promo code">
+              <button type="submit" class="btn btn--secondary">Apply</button>
+            </div>
+          </form>
+        </details>
+      </div>
+      
+      <!-- Order Notes -->
+      <div class="cart-drawer__notes">
+        <details class="cart-drawer__notes-details">
+          <summary class="cart-drawer__notes-toggle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14,2 14,8 20,8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10,9 9,9 8,9"/>
+            </svg>
+            Add order note
+          </summary>
+          <div class="cart-drawer__notes-form">
+            <textarea name="note" 
+                      class="form__textarea"
+                      placeholder="Special instructions for your order..."
+                      data-cart-note
+                      rows="3">{{ cart.note }}</textarea>
+          </div>
+        </details>
+      </div>
+      
+      <!-- Cart Totals -->
+      <div class="cart-drawer__totals">
+        <div class="cart-drawer__subtotal">
+          <span class="cart-drawer__subtotal-label">Subtotal:</span>
+          <span class="cart-drawer__subtotal-price" data-cart-subtotal>
+            {{ cart.total_price | money }}
+          </span>
+        </div>
+        
+        {% if cart.cart_level_discount_applications.size > 0 %}
+          <div class="cart-drawer__discounts">
+            {% for discount_application in cart.cart_level_discount_applications %}
+              <div class="cart-drawer__discount">
+                <span class="discount-title">{{ discount_application.title }}:</span>
+                <span class="discount-amount">-{{ discount_application.total_allocated_amount | money }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+        
+        <div class="cart-drawer__shipping-note">
+          Shipping calculated at checkout
+        </div>
+      </div>
+      
+      <!-- Checkout Buttons -->
+      <div class="cart-drawer__actions">
+        <a href="{{ routes.cart_url }}" class="btn btn--secondary btn--full">
+          View Cart
+        </a>
+        <button type="button" 
+                class="btn btn--primary btn--full btn--lg"
+                data-checkout-btn
+                onclick="window.location.href='{{ routes.cart_url }}'">
+          Checkout • {{ cart.total_price | money }}
+        </button>
+      </div>
+      
+      <!-- Security Badges -->
+      <div class="cart-drawer__security">
+        <div class="security-badges">
+          <div class="security-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <circle cx="12" cy="16" r="1"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            Secure Checkout
+          </div>
+          <div class="security-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            SSL Protected
+          </div>
+        </div>
+      </div>
+    </footer>
+  {% endif %}
+  
+  <!-- Loading Overlay -->
+  <div class="cart-drawer__loading" data-cart-loading style="display: none;">
+    <div class="loading-spinner"></div>
+    <span>Updating cart...</span>
+  </div>
+</aside>

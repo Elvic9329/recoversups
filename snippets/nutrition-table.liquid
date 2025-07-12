@@ -1,0 +1,181 @@
+{% comment %}
+  Nutrition Table Component - RecoverSups Theme
+  
+  Description: Displays supplement facts and nutrition information
+  
+  Parameters:
+    - product: Product object (required)
+    - serving_size: Override serving size from metafields
+    - servings_per_container: Override servings from metafields
+    - show_daily_values: Show % Daily Values (default: true)
+    - table_style: Style variant (default|compact|detailed)
+  
+  Usage:
+    {% render 'nutrition-table', product: product %}
+    {% render 'nutrition-table', product: product, table_style: 'compact' %}
+  
+  Metafields Expected:
+    - product.metafields.nutrition.serving_size
+    - product.metafields.nutrition.servings_per_container
+    - product.metafields.nutrition.facts (JSON array)
+    - product.metafields.nutrition.ingredients
+    - product.metafields.nutrition.allergens
+    
+  Dependencies:
+    - CSS: component-nutrition-table.css
+{% endcomment %}
+
+{% liquid
+  assign serving_size = serving_size | default: product.metafields.nutrition.serving_size.value
+  assign servings_per_container = servings_per_container | default: product.metafields.nutrition.servings_per_container.value
+  assign nutrition_facts = product.metafields.nutrition.facts.value
+  assign ingredients = product.metafields.nutrition.ingredients.value
+  assign allergens = product.metafields.nutrition.allergens.value
+  assign show_daily_values = show_daily_values | default: true
+  assign table_style = table_style | default: 'default'
+%}
+
+{% if nutrition_facts or serving_size %}
+<div class="nutrition-table nutrition-table--{{ table_style }}" data-nutrition-table>
+  
+  <!-- Nutrition Facts Header -->
+  <div class="nutrition-table__header">
+    <h3 class="nutrition-table__title">Supplement Facts</h3>
+    {% if serving_size %}
+      <div class="nutrition-table__serving">
+        <span class="serving-label">Serving Size:</span>
+        <span class="serving-value">{{ serving_size }}</span>
+      </div>
+    {% endif %}
+    {% if servings_per_container %}
+      <div class="nutrition-table__servings">
+        <span class="servings-label">Servings Per Container:</span>
+        <span class="servings-value">{{ servings_per_container }}</span>
+      </div>
+    {% endif %}
+  </div>
+  
+  <!-- Nutrition Facts Content -->
+  {% if nutrition_facts %}
+    <div class="nutrition-table__content">
+      <table class="nutrition-facts-table" role="table" aria-label="Nutrition facts">
+        <thead class="nutrition-facts-table__head">
+          <tr>
+            <th scope="col" class="ingredient-col">Ingredient</th>
+            <th scope="col" class="amount-col">Amount Per Serving</th>
+            {% if show_daily_values %}
+              <th scope="col" class="daily-value-col">% Daily Value*</th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody class="nutrition-facts-table__body">
+          {% for fact in nutrition_facts %}
+            <tr class="nutrition-fact-row">
+              <td class="ingredient-name" data-ingredient="{{ fact.name | handle }}">
+                {{ fact.name }}
+                {% if fact.form %}
+                  <span class="ingredient-form">({{ fact.form }})</span>
+                {% endif %}
+              </td>
+              <td class="ingredient-amount">
+                {{ fact.amount }}
+                {% if fact.unit %}
+                  <span class="amount-unit">{{ fact.unit }}</span>
+                {% endif %}
+              </td>
+              {% if show_daily_values %}
+                <td class="daily-value">
+                  {% if fact.daily_value %}
+                    {{ fact.daily_value }}%
+                  {% else %}
+                    <span class="daily-value-not-established">†</span>
+                  {% endif %}
+                </td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      
+      {% if show_daily_values %}
+        <div class="nutrition-table__footnotes">
+          <p class="daily-value-note">
+            * Percent Daily Values are based on a 2,000 calorie diet.
+          </p>
+          <p class="not-established-note">
+            † Daily Value not established.
+          </p>
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+  
+  <!-- Other Ingredients -->
+  {% if ingredients %}
+    <div class="nutrition-table__ingredients">
+      <h4 class="ingredients-title">Other Ingredients:</h4>
+      <p class="ingredients-list">{{ ingredients }}</p>
+    </div>
+  {% endif %}
+  
+  <!-- Allergen Information -->
+  {% if allergens %}
+    <div class="nutrition-table__allergens">
+      <h4 class="allergens-title">Allergen Information:</h4>
+      <p class="allergens-list">{{ allergens }}</p>
+    </div>
+  {% endif %}
+  
+  <!-- Usage Instructions -->
+  {% assign usage_instructions = product.metafields.nutrition.usage_instructions.value %}
+  {% if usage_instructions %}
+    <div class="nutrition-table__usage">
+      <h4 class="usage-title">Directions for Use:</h4>
+      <p class="usage-instructions">{{ usage_instructions }}</p>
+    </div>
+  {% endif %}
+  
+  <!-- Warnings -->
+  {% assign warnings = product.metafields.nutrition.warnings.value %}
+  {% if warnings %}
+    <div class="nutrition-table__warnings">
+      <h4 class="warnings-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        Important Warnings:
+      </h4>
+      <p class="warnings-text">{{ warnings }}</p>
+    </div>
+  {% endif %}
+  
+  <!-- Storage Instructions -->
+  {% assign storage = product.metafields.nutrition.storage.value %}
+  {% if storage %}
+    <div class="nutrition-table__storage">
+      <h4 class="storage-title">Storage:</h4>
+      <p class="storage-instructions">{{ storage }}</p>
+    </div>
+  {% endif %}
+  
+</div>
+
+<!-- Schema.org structured data for nutrition -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NutritionInformation",
+  "description": "Supplement Facts for {{ product.title | escape }}",
+  {% if serving_size %}"servingSize": "{{ serving_size | escape }}",{% endif %}
+  {% if servings_per_container %}"numberOfServings": {{ servings_per_container }},{% endif %}
+  "about": {
+    "@type": "Product",
+    "name": "{{ product.title | escape }}",
+    "url": "{{ shop.url }}{{ product.url }}"
+  }
+}
+</script>
+
+{% endif %}

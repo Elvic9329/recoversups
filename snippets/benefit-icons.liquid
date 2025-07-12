@@ -1,0 +1,189 @@
+{% comment %}
+  Benefit Icons Component - RecoverSups Theme
+  
+  Description: Displays product benefits with icons and descriptions
+  
+  Parameters:
+    - product: Product object (required)
+    - benefits: Array of benefits (optional, overrides metafields)
+    - layout: Display layout (grid|list|inline) (default: grid)
+    - show_descriptions: Show benefit descriptions (default: true)
+    - icon_size: Icon size (sm|md|lg) (default: md)
+    - max_benefits: Maximum number of benefits to show
+  
+  Usage:
+    {% render 'benefit-icons', product: product %}
+    {% render 'benefit-icons', product: product, layout: 'list', icon_size: 'lg' %}
+  
+  Metafields Expected:
+    - product.metafields.benefits.list (JSON array)
+    
+  Example metafield structure:
+    [
+      {
+        "name": "Muscle Growth",
+        "description": "Supports lean muscle development",
+        "icon": "muscle",
+        "goal": "muscle"
+      },
+      {
+        "name": "Energy Boost",
+        "description": "Provides sustained energy",
+        "icon": "energy",
+        "goal": "energy"
+      }
+    ]
+  
+  Dependencies:
+    - CSS: component-benefit-icons.css
+{% endcomment %}
+
+{% liquid
+  assign benefits = benefits | default: product.metafields.benefits.list.value
+  assign layout = layout | default: 'grid'
+  assign show_descriptions = show_descriptions | default: true
+  assign icon_size = icon_size | default: 'md'
+  assign max_benefits = max_benefits | default: 8
+%}
+
+{% if benefits and benefits.size > 0 %}
+<div class="benefit-icons benefit-icons--{{ layout }} benefit-icons--{{ icon_size }}" data-benefit-icons>
+  
+  {% if layout == 'grid' %}
+    <div class="benefit-icons__grid">
+      {% for benefit in benefits limit: max_benefits %}
+        <div class="benefit-icon" data-benefit="{{ benefit.icon | default: benefit.name | handle }}">
+          <div class="benefit-icon__visual">
+            {% render 'benefit-icon-svg', icon: benefit.icon, goal: benefit.goal %}
+          </div>
+          <div class="benefit-icon__content">
+            <h3 class="benefit-icon__name">{{ benefit.name }}</h3>
+            {% if show_descriptions and benefit.description %}
+              <p class="benefit-icon__description">{{ benefit.description }}</p>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    
+  {% elsif layout == 'list' %}
+    <div class="benefit-icons__list">
+      {% for benefit in benefits limit: max_benefits %}
+        <div class="benefit-item" data-benefit="{{ benefit.icon | default: benefit.name | handle }}">
+          <div class="benefit-item__icon">
+            {% render 'benefit-icon-svg', icon: benefit.icon, goal: benefit.goal %}
+          </div>
+          <div class="benefit-item__content">
+            <h3 class="benefit-item__name">{{ benefit.name }}</h3>
+            {% if show_descriptions and benefit.description %}
+              <p class="benefit-item__description">{{ benefit.description }}</p>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    
+  {% elsif layout == 'inline' %}
+    <div class="benefit-icons__inline">
+      {% for benefit in benefits limit: max_benefits %}
+        <div class="benefit-chip" 
+             data-benefit="{{ benefit.icon | default: benefit.name | handle }}"
+             title="{{ benefit.description | escape }}">
+          <div class="benefit-chip__icon">
+            {% render 'benefit-icon-svg', icon: benefit.icon, goal: benefit.goal %}
+          </div>
+          <span class="benefit-chip__name">{{ benefit.name }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  
+</div>
+{% endif %}
+
+{% comment %}
+  Benefit Icon SVG Renderer
+  Internal snippet for rendering benefit icons
+{% endcomment %}
+{% capture benefit_icon_svg %}
+{% liquid
+  assign icon = benefit_icon_svg_icon | default: 'default'
+  assign goal = benefit_icon_svg_goal | default: 'general'
+%}
+
+{% case icon %}
+  {% when 'muscle' %}
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="benefit-icon-svg benefit-icon-svg--{{ goal }}">
+      <path d="M6.5 12c0-1.657 1.343-3 3-3s3 1.343 3 3-1.343 3-3 3-3-1.343-3-3z"/>
+      <path d="M17.5 12c0-1.657 1.343-3 3-3s3 1.343 3 3-1.343 3-3 3-3-1.343-3-3z"/>
+      <path d="M12.5 6v12"/>
+      <path d="M9.5 9l6 6"/>
+      <path d="M15.5 9l-6 6"/>
+    </svg>
+    
+  {% when 'energy' %}
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="benefit-icon-svg benefit-icon-svg--{{ goal }}">
+      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+    </svg>
+    
+  {% when 'recovery' %}
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="benefit-icon-svg benefit-icon-svg--{{ goal }}">
+      <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+    </svg>
+    
+  {% when 'endurance' %}
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="benefit-icon-svg benefit-icon-svg--{{ goal }}">
+      <circle cx="12" cy="12" r="10"/>
+      <polyline points="12,6 12,12 16,14"/>
+    </svg>
+    
+  {% when 'strength' %}
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="benefit-icon-svg benefit-icon-svg--{{ goal }}">
+      <path d="M6.5 6.5L17.5 17.5"/>
+      <path d="M17.5 6.5L6.5 17.5"/>
+      <circle cx="12" cy="12" r="2"/>
+    </svg>
+    
+  {% when 'focus' %}
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="benefit-icon-svg benefit-icon-svg--{{ goal }}">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6M4.22 19.78l4.24-4.24M15.54 8.46l4.24-4.24"/>
+    </svg>
+    
+  {% when 'protein' %}
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="benefit-icon-svg benefit-icon-svg--{{ goal }}">
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+    </svg>
+    
+  {% when 'immune' %}
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="benefit-icon-svg benefit-icon-svg--{{ goal }}">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      <path d="M9 12l2 2 4-4"/>
+    </svg>
+    
+  {% when 'joint' %}
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="benefit-icon-svg benefit-icon-svg--{{ goal }}">
+      <circle cx="12" cy="8" r="6"/>
+      <path d="M8.56 17.8A8.004 8.004 0 0 0 20 12a8 8 0 0 0-11.44 5.8"/>
+      <path d="M15.44 6.2A8.004 8.004 0 0 0 4 12a8 8 0 0 0 11.44-5.8"/>
+    </svg>
+    
+  {% when 'metabolism' %}
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="benefit-icon-svg benefit-icon-svg--{{ goal }}">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    </svg>
+    
+  {% else %}
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="benefit-icon-svg benefit-icon-svg--{{ goal }}">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+      <line x1="9" y1="9" x2="9.01" y2="9"/>
+      <line x1="15" y1="9" x2="15.01" y2="9"/>
+    </svg>
+{% endcase %}
+{% endcapture %}
+
+{% comment %} Internal snippet renderer {% endcomment %}
+{% if benefit_icon_svg_icon %}
+  {{ benefit_icon_svg }}
+{% endif %}
