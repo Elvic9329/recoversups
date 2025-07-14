@@ -1,0 +1,536 @@
+{% comment %}
+  Fitness Testimonials Section - RecoverSups Theme
+  
+  Testimonials section specifically designed for fitness transformations
+  Showcases before/after results and customer success stories
+  
+  Settings:
+    - section_title: Main section heading
+    - section_subtitle: Descriptive subtitle  
+    - layout: grid/carousel/masonry layout
+    - show_before_after: Display before/after images
+    - auto_rotate: Auto-rotate testimonials
+    - filter_by_goal: Filter testimonials by fitness goal
+{% endcomment %}
+
+{% liquid
+  assign section_id = 'fitness-testimonials-' | append: section.id
+  assign testimonials_count = section.blocks.size
+  assign layout_class = section.settings.layout | default: 'grid'
+  assign show_before_after = section.settings.show_before_after | default: true
+  assign auto_rotate = section.settings.auto_rotate | default: false
+  assign filter_enabled = section.settings.filter_by_goal | default: false
+%}
+
+<section 
+  id="{{ section_id }}"
+  class="fitness-testimonials fitness-testimonials--{{ layout_class }} section-spacing"
+  data-section-type="fitness-testimonials"
+  data-lazy-section
+  {% if section.settings.background_color %}
+    style="background-color: {{ section.settings.background_color }};"
+  {% endif %}
+>
+  <div class="page-width">
+    
+    {% comment %} Section Header {% endcomment %}
+    {% if section.settings.section_title != blank or section.settings.section_subtitle != blank %}
+      <div class="fitness-testimonials__header section-header">
+        {% if section.settings.section_title != blank %}
+          <h2 class="fitness-testimonials__title section-title">
+            {{ section.settings.section_title }}
+          </h2>
+        {% endif %}
+        
+        {% if section.settings.section_subtitle != blank %}
+          <p class="fitness-testimonials__subtitle section-subtitle">
+            {{ section.settings.section_subtitle }}
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+    
+    {% comment %} Goal Filter Tabs {% endcomment %}
+    {% if filter_enabled and testimonials_count > 3 %}
+      <div class="fitness-testimonials__filters">
+        <div class="testimonial-filters">
+          <button 
+            class="testimonial-filter testimonial-filter--active"
+            data-filter="all"
+          >
+            All Results
+          </button>
+          
+          <button 
+            class="testimonial-filter"
+            data-filter="muscle-gain"
+          >
+            Muscle Gain
+          </button>
+          
+          <button 
+            class="testimonial-filter"
+            data-filter="weight-loss"
+          >
+            Weight Loss
+          </button>
+          
+          <button 
+            class="testimonial-filter"
+            data-filter="strength"
+          >
+            Strength
+          </button>
+          
+          <button 
+            class="testimonial-filter"
+            data-filter="endurance"
+          >
+            Endurance
+          </button>
+        </div>
+      </div>
+    {% endif %}
+    
+    {% comment %} Testimonials Container {% endcomment %}
+    {% if testimonials_count > 0 %}
+      <div class="fitness-testimonials__container">
+        <div 
+          class="fitness-testimonials__grid testimonials-{{ layout_class }}"
+          {% if layout_class == 'carousel' %}
+            data-carousel="testimonials"
+            data-slides-per-view="auto"
+            data-space-between="24"
+            {% if auto_rotate %}data-autoplay="6000"{% endif %}
+          {% endif %}
+        >
+          
+          {% for block in section.blocks %}
+            {% liquid
+              assign customer_name = block.settings.customer_name
+              assign customer_age = block.settings.customer_age
+              assign customer_goal = block.settings.customer_goal
+              assign transformation_time = block.settings.transformation_time
+              assign testimonial_text = block.settings.testimonial_text
+              assign before_image = block.settings.before_image
+              assign after_image = block.settings.after_image
+              assign customer_photo = block.settings.customer_photo
+              assign products_used = block.settings.products_used
+              assign results_achieved = block.settings.results_achieved
+              assign star_rating = block.settings.star_rating | default: 5
+              assign verified = block.settings.verified | default: false
+              assign featured = block.settings.featured | default: false
+              assign goal_tag = block.settings.goal_tag | default: 'general'
+            %}
+            
+            {% render 'transformation-card',
+              name: customer_name,
+              age: customer_age,
+              goal: customer_goal,
+              time: transformation_time,
+              testimonial: testimonial_text,
+              before_image: before_image,
+              after_image: after_image,
+              customer_photo: customer_photo,
+              products: products_used,
+              results: results_achieved,
+              rating: star_rating,
+              verified: verified,
+              featured: featured,
+              goal_tag: goal_tag,
+              show_before_after: show_before_after,
+              block_id: block.id,
+              index: forloop.index,
+              layout: layout_class
+            %}
+            
+          {% endfor %}
+          
+        </div>
+        
+        {% comment %} Carousel Navigation {% endcomment %}
+        {% if layout_class == 'carousel' and testimonials_count > 2 %}
+          <div class="fitness-testimonials__navigation">
+            <button 
+              class="carousel-nav carousel-nav--prev"
+              data-carousel-prev="testimonials"
+              aria-label="Previous testimonials"
+            >
+              {% render 'icon-sprite', name: 'chevron-left', size: 20 %}
+            </button>
+            
+            <button 
+              class="carousel-nav carousel-nav--next"
+              data-carousel-next="testimonials"
+              aria-label="Next testimonials"
+            >
+              {% render 'icon-sprite', name: 'chevron-right', size: 20 %}
+            </button>
+          </div>
+        {% endif %}
+        
+      </div>
+    {% endif %}
+    
+    {% comment %} Statistics Section {% endcomment %}
+    {% if section.settings.show_statistics %}
+      <div class="fitness-testimonials__stats">
+        <div class="testimonial-stats">
+          <h3 class="testimonial-stats__title">Proven Results</h3>
+          <div class="testimonial-stats__grid">
+            
+            <div class="stat-item">
+              <div class="stat-item__number">95%</div>
+              <div class="stat-item__label">Customer Satisfaction</div>
+            </div>
+            
+            <div class="stat-item">
+              <div class="stat-item__number">10k+</div>
+              <div class="stat-item__label">Transformations</div>
+            </div>
+            
+            <div class="stat-item">
+              <div class="stat-item__number">30</div>
+              <div class="stat-item__label">Days Average Results</div>
+            </div>
+            
+            <div class="stat-item">
+              <div class="stat-item__number">4.8★</div>
+              <div class="stat-item__label">Average Rating</div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    
+    {% comment %} Call to Action {% endcomment %}
+    {% if section.settings.show_cta and section.settings.cta_url != blank %}
+      <div class="fitness-testimonials__cta">
+        <div class="testimonial-cta">
+          <h3 class="testimonial-cta__title">
+            {{ section.settings.cta_title | default: 'Ready to Start Your Transformation?' }}
+          </h3>
+          <p class="testimonial-cta__description">
+            {{ section.settings.cta_description | default: 'Join thousands of satisfied customers who achieved their fitness goals' }}
+          </p>
+          <a 
+            href="{{ section.settings.cta_url }}"
+            class="btn btn--primary btn--large testimonial-cta__button"
+          >
+            {{ section.settings.cta_text | default: 'Shop Now' }}
+            {% render 'icon-sprite', name: 'chevron-right', size: 18 %}
+          </a>
+        </div>
+      </div>
+    {% endif %}
+    
+  </div>
+</section>
+
+{% comment %} Testimonial Filter JavaScript {% endcomment %}
+{% if filter_enabled %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const filters = document.querySelectorAll('.testimonial-filter');
+      const cards = document.querySelectorAll('[data-testimonial]');
+      
+      filters.forEach(filter => {
+        filter.addEventListener('click', function() {
+          const filterValue = this.dataset.filter;
+          
+          // Update active filter
+          filters.forEach(f => f.classList.remove('testimonial-filter--active'));
+          this.classList.add('testimonial-filter--active');
+          
+          // Filter cards
+          cards.forEach(card => {
+            const cardGoal = card.dataset.goalTag;
+            
+            if (filterValue === 'all' || cardGoal === filterValue) {
+              card.style.display = 'block';
+              card.classList.add('testimonial-card--visible');
+            } else {
+              card.style.display = 'none';
+              card.classList.remove('testimonial-card--visible');
+            }
+          });
+        });
+      });
+    });
+  </script>
+{% endif %}
+
+{% comment %} Schema Settings {% endcomment %}
+{% schema %}
+{
+  "name": "Fitness Testimonials",
+  "tag": "section",
+  "class": "section-fitness-testimonials",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Real Transformations"
+    },
+    {
+      "type": "textarea",
+      "id": "section_subtitle",
+      "label": "Section Subtitle",
+      "default": "See how our supplements helped customers achieve incredible results"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel", 
+          "label": "Carousel"
+        },
+        {
+          "value": "masonry",
+          "label": "Masonry"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "header",
+      "content": "Display Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_before_after",
+      "label": "Show Before/After Images",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "filter_by_goal",
+      "label": "Enable Goal Filtering",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "label": "Auto-rotate Carousel",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_statistics",
+      "label": "Show Statistics Section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Call to Action"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show Call to Action",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "CTA Title",
+      "default": "Ready to Start Your Transformation?"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_description",
+      "label": "CTA Description",
+      "default": "Join thousands of satisfied customers who achieved their fitness goals"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA URL"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Button Text",
+      "default": "Shop Now"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Customer Testimonial",
+      "settings": [
+        {
+          "type": "text",
+          "id": "customer_name",
+          "label": "Customer Name",
+          "default": "Sarah Johnson"
+        },
+        {
+          "type": "number",
+          "id": "customer_age",
+          "label": "Customer Age",
+          "default": 28
+        },
+        {
+          "type": "text",
+          "id": "customer_goal",
+          "label": "Fitness Goal",
+          "default": "Build Lean Muscle"
+        },
+        {
+          "type": "text",
+          "id": "transformation_time",
+          "label": "Transformation Time",
+          "default": "3 months"
+        },
+        {
+          "type": "textarea",
+          "id": "testimonial_text",
+          "label": "Testimonial Text",
+          "default": "I've never felt stronger or more confident. The results speak for themselves!"
+        },
+        {
+          "type": "image_picker",
+          "id": "before_image",
+          "label": "Before Image"
+        },
+        {
+          "type": "image_picker", 
+          "id": "after_image",
+          "label": "After Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "customer_photo",
+          "label": "Customer Photo"
+        },
+        {
+          "type": "text",
+          "id": "products_used",
+          "label": "Products Used",
+          "default": "Whey Protein, Creatine, Pre-Workout"
+        },
+        {
+          "type": "text",
+          "id": "results_achieved",
+          "label": "Results Achieved",
+          "default": "Lost 15lbs, Gained 8lbs muscle"
+        },
+        {
+          "type": "range",
+          "id": "star_rating",
+          "label": "Star Rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Verified Customer",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "featured",
+          "label": "Featured Testimonial",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "goal_tag",
+          "label": "Goal Category",
+          "options": [
+            {
+              "value": "muscle-gain",
+              "label": "Muscle Gain"
+            },
+            {
+              "value": "weight-loss", 
+              "label": "Weight Loss"
+            },
+            {
+              "value": "strength",
+              "label": "Strength"
+            },
+            {
+              "value": "endurance",
+              "label": "Endurance"
+            },
+            {
+              "value": "general",
+              "label": "General Fitness"
+            }
+          ],
+          "default": "general"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fitness Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "customer_name": "Sarah Johnson",
+            "customer_age": 28,
+            "customer_goal": "Build Lean Muscle", 
+            "transformation_time": "3 months",
+            "testimonial_text": "I've never felt stronger or more confident. The results speak for themselves!",
+            "products_used": "Whey Protein, Creatine, Pre-Workout",
+            "results_achieved": "Lost 15lbs, Gained 8lbs muscle",
+            "goal_tag": "muscle-gain",
+            "featured": true
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "customer_name": "Mike Rodriguez",
+            "customer_age": 35,
+            "customer_goal": "Weight Loss",
+            "transformation_time": "4 months", 
+            "testimonial_text": "Amazing products that actually work. Down 30 pounds and feeling great!",
+            "products_used": "Fat Burner, Protein, BCAA",
+            "results_achieved": "Lost 30lbs, Improved energy",
+            "goal_tag": "weight-loss"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "customer_name": "Jessica Chen",
+            "customer_age": 24,
+            "customer_goal": "Strength Training",
+            "transformation_time": "2 months",
+            "testimonial_text": "My deadlift went from 135lbs to 225lbs. These supplements are game changers!",
+            "products_used": "Creatine, Pre-Workout, Recovery",
+            "results_achieved": "90lb deadlift increase",
+            "goal_tag": "strength"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

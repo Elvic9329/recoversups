@@ -1,0 +1,405 @@
+{% comment %}
+  Transformation Card Component - RecoverSups Theme
+  
+  Customer transformation testimonial card with before/after images
+  Optimized for fitness results showcase and social proof
+  
+  Parameters:
+    - name: Customer name (required)
+    - age: Customer age
+    - goal: Fitness goal description
+    - time: Transformation timeframe
+    - testimonial: Customer testimonial text
+    - before_image: Before transformation image
+    - after_image: After transformation image
+    - customer_photo: Customer headshot/photo
+    - products: Products used in transformation
+    - results: Specific results achieved
+    - rating: Star rating (1-5)
+    - verified: Verified customer badge
+    - featured: Featured testimonial styling
+    - goal_tag: Goal category for filtering
+    - show_before_after: Display before/after images
+    - block_id: Unique block identifier
+    - index: Card index for animations
+    - layout: grid/carousel/masonry layout
+{% endcomment %}
+
+{% liquid
+  assign card_name = name | default: 'Customer'
+  assign card_age = age
+  assign card_goal = goal | default: 'Fitness Goal'
+  assign card_time = time | default: '3 months'
+  assign card_testimonial = testimonial | default: ''
+  assign card_before = before_image
+  assign card_after = after_image
+  assign card_photo = customer_photo
+  assign card_products = products | default: ''
+  assign card_results = results | default: ''
+  assign card_rating = rating | default: 5
+  assign card_verified = verified | default: false
+  assign card_featured = featured | default: false
+  assign card_goal_tag = goal_tag | default: 'general'
+  assign card_show_ba = show_before_after | default: true
+  assign card_id = block_id | default: 'transformation-card'
+  assign card_index = index | default: 1
+  assign card_layout = layout | default: 'grid'
+  
+  assign has_before_after = false
+  if card_before != blank and card_after != blank and card_show_ba
+    assign has_before_after = true
+  endif
+  
+  assign has_customer_photo = false
+  if card_photo != blank
+    assign has_customer_photo = true
+  endif
+  
+  assign products_list = card_products | split: ',' | compact
+  assign results_list = card_results | split: ',' | compact
+%}
+
+<div 
+  class="transformation-card transformation-card--{{ card_layout }} {% if card_featured %}transformation-card--featured{% endif %} {% if has_before_after %}transformation-card--with-comparison{% endif %}"
+  data-testimonial
+  data-goal-tag="{{ card_goal_tag }}"
+  data-block-id="{{ card_id }}"
+  data-index="{{ card_index }}"
+>
+  
+  {% comment %} Featured Badge {% endcomment %}
+  {% if card_featured %}
+    <div class="transformation-card__featured-badge">
+      {% render 'icon-sprite', name: 'star', size: 14 %}
+      <span>Featured</span>
+    </div>
+  {% endif %}
+  
+  {% comment %} Verified Badge {% endcomment %}
+  {% if card_verified %}
+    <div class="transformation-card__verified-badge">
+      {% render 'icon-sprite', name: 'shield-check', size: 16 %}
+      <span>Verified</span>
+    </div>
+  {% endif %}
+  
+  {% comment %} Before/After Images Section {% endcomment %}
+  {% if has_before_after %}
+    <div class="transformation-card__comparison">
+      <div class="image-comparison">
+        
+        <div class="comparison-image comparison-image--before">
+          {% assign before_alt = card_before.alt | default: card_name | append: ' before transformation' %}
+          <img 
+            src="{{ card_before | img_url: '400x500' }}"
+            srcset="{{ card_before | img_url: '200x250' }} 200w,
+                    {{ card_before | img_url: '400x500' }} 400w,
+                    {{ card_before | img_url: '600x750' }} 600w"
+            sizes="(max-width: 767px) 50vw, (max-width: 1024px) 25vw, 20vw"
+            alt="{{ before_alt }}"
+            class="comparison-image__img"
+            loading="lazy"
+            width="400"
+            height="500"
+          >
+          <div class="comparison-image__label comparison-label--before">
+            <span>Before</span>
+          </div>
+        </div>
+        
+        <div class="comparison-divider">
+          <div class="comparison-divider__line"></div>
+          <div class="comparison-divider__icon">
+            {% render 'icon-sprite', name: 'chevron-right', size: 20 %}
+          </div>
+        </div>
+        
+        <div class="comparison-image comparison-image--after">
+          {% assign after_alt = card_after.alt | default: card_name | append: ' after transformation' %}
+          <img 
+            src="{{ card_after | img_url: '400x500' }}"
+            srcset="{{ card_after | img_url: '200x250' }} 200w,
+                    {{ card_after | img_url: '400x500' }} 400w,
+                    {{ card_after | img_url: '600x750' }} 600w"
+            sizes="(max-width: 767px) 50vw, (max-width: 1024px) 25vw, 20vw"
+            alt="{{ after_alt }}"
+            class="comparison-image__img"
+            loading="lazy"
+            width="400"
+            height="500"
+          >
+          <div class="comparison-image__label comparison-label--after">
+            <span>After</span>
+          </div>
+        </div>
+        
+      </div>
+      
+      {% comment %} Transformation Time Badge {% endcomment %}
+      <div class="transformation-card__time-badge">
+        <span class="time-badge__text">{{ card_time }}</span>
+      </div>
+      
+    </div>
+  {% endif %}
+  
+  {% comment %} Card Content {% endcomment %}
+  <div class="transformation-card__content">
+    
+    {% comment %} Customer Header {% endcomment %}
+    <div class="transformation-card__header">
+      
+      {% comment %} Customer Photo {% endcomment %}
+      {% if has_customer_photo %}
+        <div class="customer-avatar">
+          {% assign photo_alt = card_photo.alt | default: card_name %}
+          <img 
+            src="{{ card_photo | img_url: '80x80' }}"
+            alt="{{ photo_alt }}"
+            class="customer-avatar__image"
+            loading="lazy"
+            width="80"
+            height="80"
+          >
+        </div>
+      {% else %}
+        <div class="customer-avatar customer-avatar--placeholder">
+          <div class="customer-avatar__initials">
+            {{ card_name | slice: 0 }}
+          </div>
+        </div>
+      {% endif %}
+      
+      {% comment %} Customer Info {% endcomment %}
+      <div class="customer-info">
+        <h3 class="customer-info__name">{{ card_name }}</h3>
+        {% if card_age %}
+          <p class="customer-info__age">Age {{ card_age }}</p>
+        {% endif %}
+        <p class="customer-info__goal">{{ card_goal }}</p>
+      </div>
+      
+    </div>
+    
+    {% comment %} Star Rating {% endcomment %}
+    {% if card_rating %}
+      <div class="transformation-card__rating">
+        <div class="star-rating">
+          {% for i in (1..5) %}
+            {% if i <= card_rating %}
+              {% render 'icon-sprite', name: 'star-filled', size: 16, class: 'star star--filled' %}
+            {% else %}
+              {% render 'icon-sprite', name: 'star', size: 16, class: 'star star--empty' %}
+            {% endif %}
+          {% endfor %}
+          <span class="star-rating__text">({{ card_rating }}/5)</span>
+        </div>
+      </div>
+    {% endif %}
+    
+    {% comment %} Testimonial Text {% endcomment %}
+    {% if card_testimonial != blank %}
+      <div class="transformation-card__testimonial">
+        <blockquote class="testimonial-quote">
+          <p class="testimonial-quote__text">"{{ card_testimonial }}"</p>
+        </blockquote>
+      </div>
+    {% endif %}
+    
+    {% comment %} Results Achieved {% endcomment %}
+    {% if results_list.size > 0 %}
+      <div class="transformation-card__results">
+        <h4 class="results__title">Results Achieved:</h4>
+        <ul class="results-list">
+          {% for result in results_list %}
+            <li class="results-list__item">
+              {% render 'icon-sprite', name: 'check-circle', size: 14, class: 'results-icon' %}
+              {{ result | strip }}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+    
+    {% comment %} Products Used {% endcomment %}
+    {% if products_list.size > 0 %}
+      <div class="transformation-card__products">
+        <h4 class="products__title">Products Used:</h4>
+        <div class="products-list">
+          {% for product in products_list %}
+            <span class="product-tag">{{ product | strip }}</span>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    
+    {% comment %} Goal Category Tag {% endcomment %}
+    <div class="transformation-card__goal-tag">
+      <span class="goal-tag goal-tag--{{ card_goal_tag }}">
+        {% case card_goal_tag %}
+          {% when 'muscle-gain' %}
+            {% render 'icon-sprite', name: 'muscle', size: 14 %}
+            Muscle Gain
+          {% when 'weight-loss' %}
+            {% render 'icon-sprite', name: 'scale', size: 14 %}
+            Weight Loss
+          {% when 'strength' %}
+            {% render 'icon-sprite', name: 'dumbbell', size: 14 %}
+            Strength
+          {% when 'endurance' %}
+            {% render 'icon-sprite', name: 'heart', size: 14 %}
+            Endurance
+          {% else %}
+            {% render 'icon-sprite', name: 'target', size: 14 %}
+            General Fitness
+        {% endcase %}
+      </span>
+    </div>
+    
+  </div>
+  
+  {% comment %} Hover Effect Overlay {% endcomment %}
+  <div class="transformation-card__hover-effect"></div>
+  
+</div>
+
+{% comment %} Schema for individual transformation card {% endcomment %}
+{% if template contains 'schema' %}
+  {% schema %}
+  {
+    "name": "Transformation Card",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Customer Information"
+      },
+      {
+        "type": "text",
+        "id": "name",
+        "label": "Customer Name",
+        "default": "Sarah Johnson"
+      },
+      {
+        "type": "number",
+        "id": "age",
+        "label": "Customer Age",
+        "default": 28
+      },
+      {
+        "type": "text",
+        "id": "goal",
+        "label": "Fitness Goal",
+        "default": "Build Lean Muscle"
+      },
+      {
+        "type": "text",
+        "id": "time",
+        "label": "Transformation Time",
+        "default": "3 months"
+      },
+      {
+        "type": "image_picker",
+        "id": "customer_photo",
+        "label": "Customer Photo"
+      },
+      {
+        "type": "header",
+        "content": "Transformation Images"
+      },
+      {
+        "type": "image_picker",
+        "id": "before_image",
+        "label": "Before Image"
+      },
+      {
+        "type": "image_picker",
+        "id": "after_image",
+        "label": "After Image"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_before_after",
+        "label": "Show Before/After Images",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Testimonial Content"
+      },
+      {
+        "type": "textarea",
+        "id": "testimonial",
+        "label": "Testimonial Text",
+        "default": "I've never felt stronger or more confident. The results speak for themselves!"
+      },
+      {
+        "type": "range",
+        "id": "rating",
+        "label": "Star Rating",
+        "min": 1,
+        "max": 5,
+        "step": 1,
+        "default": 5
+      },
+      {
+        "type": "text",
+        "id": "results",
+        "label": "Results Achieved",
+        "info": "Comma-separated list",
+        "default": "Lost 15lbs, Gained 8lbs muscle, Improved energy"
+      },
+      {
+        "type": "text",
+        "id": "products",
+        "label": "Products Used",
+        "info": "Comma-separated list",
+        "default": "Whey Protein, Creatine, Pre-Workout"
+      },
+      {
+        "type": "header",
+        "content": "Display Options"
+      },
+      {
+        "type": "checkbox",
+        "id": "verified",
+        "label": "Verified Customer",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "featured",
+        "label": "Featured Testimonial",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "goal_tag",
+        "label": "Goal Category",
+        "options": [
+          {
+            "value": "muscle-gain",
+            "label": "Muscle Gain"
+          },
+          {
+            "value": "weight-loss",
+            "label": "Weight Loss"
+          },
+          {
+            "value": "strength",
+            "label": "Strength"
+          },
+          {
+            "value": "endurance",
+            "label": "Endurance"
+          },
+          {
+            "value": "general",
+            "label": "General Fitness"
+          }
+        ],
+        "default": "general"
+      }
+    ]
+  }
+  {% endschema %}
+{% endif %}

@@ -1,0 +1,215 @@
+{% comment %}
+  Goal Card Component - RecoverSups Theme
+  
+  Reusable goal card for Shop by Goal section
+  Supports both grid and carousel layouts
+  
+  Parameters:
+    - title: Goal title (required)
+    - description: Goal description
+    - image: Goal image
+    - icon: Goal icon name
+    - url: Goal link URL
+    - color: Theme color for the card
+    - products_count: Number of products display
+    - block_id: Unique block identifier
+    - index: Card index for animations
+    - layout: grid/carousel layout
+{% endcomment %}
+
+{% liquid
+  assign card_title = title | default: 'Fitness Goal'
+  assign card_description = description | default: ''
+  assign card_image = image
+  assign card_icon = icon | default: 'muscle'
+  assign card_url = url | default: '#'
+  assign card_color = color | default: '#b62921'
+  assign card_products = products_count | default: '10+'
+  assign card_id = block_id | default: 'goal-card'
+  assign card_index = index | default: 1
+  assign card_layout = layout | default: 'grid'
+  
+  assign has_image = false
+  if card_image != blank
+    assign has_image = true
+  endif
+%}
+
+<div 
+  class="goal-card goal-card--{{ card_layout }} {% if has_image %}goal-card--with-image{% else %}goal-card--icon-only{% endif %}"
+  data-goal-card
+  data-block-id="{{ card_id }}"
+  data-index="{{ card_index }}"
+  style="--goal-color: {{ card_color }};"
+>
+  
+  {% if card_url != '#' and card_url != blank %}
+    <a href="{{ card_url }}" class="goal-card__link" aria-describedby="goal-{{ card_id }}-desc">
+  {% else %}
+    <div class="goal-card__link">
+  {% endif %}
+  
+    {% comment %} Card Media {% endcomment %}
+    <div class="goal-card__media">
+      
+      {% if has_image %}
+        {% comment %} Goal Image {% endcomment %}
+        <div class="goal-card__image-container">
+          {% assign image_alt = card_image.alt | default: card_title %}
+          
+          <img 
+            src="{{ card_image | img_url: '400x300' }}"
+            srcset="{{ card_image | img_url: '200x150' }} 200w,
+                    {{ card_image | img_url: '400x300' }} 400w,
+                    {{ card_image | img_url: '600x450' }} 600w"
+            sizes="(max-width: 767px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            alt="{{ image_alt }}"
+            class="goal-card__image"
+            loading="lazy"
+            width="400"
+            height="300"
+          >
+          
+          {% comment %} Image Overlay {% endcomment %}
+          <div class="goal-card__overlay"></div>
+        </div>
+      {% else %}
+        {% comment %} Icon Only Design {% endcomment %}
+        <div class="goal-card__icon-container">
+          <div class="goal-card__icon-bg">
+            {% render 'icon-sprite', 
+              name: card_icon, 
+              size: 48,
+              class: 'goal-card__icon'
+            %}
+          </div>
+        </div>
+      {% endif %}
+      
+      {% comment %} Products Count Badge {% endcomment %}
+      <div class="goal-card__badge">
+        <span class="goal-card__count">{{ card_products }}</span>
+        <span class="goal-card__count-label">products</span>
+      </div>
+      
+    </div>
+    
+    {% comment %} Card Content {% endcomment %}
+    <div class="goal-card__content">
+      
+      <div class="goal-card__header">
+        {% comment %} Goal Icon (for image cards) {% endcomment %}
+        {% if has_image %}
+          <div class="goal-card__title-icon">
+            {% render 'icon-sprite', 
+              name: card_icon, 
+              size: 24,
+              class: 'goal-card__mini-icon'
+            %}
+          </div>
+        {% endif %}
+        
+        <h3 class="goal-card__title">{{ card_title }}</h3>
+      </div>
+      
+      {% if card_description != blank %}
+        <p class="goal-card__description" id="goal-{{ card_id }}-desc">
+          {{ card_description }}
+        </p>
+      {% endif %}
+      
+      {% comment %} Call to Action {% endcomment %}
+      <div class="goal-card__cta">
+        <span class="goal-card__cta-text">Shop Now</span>
+        {% render 'icon-sprite', 
+          name: 'chevron-right', 
+          size: 16,
+          class: 'goal-card__cta-icon'
+        %}
+      </div>
+      
+    </div>
+    
+    {% comment %} Hover Effect Element {% endcomment %}
+    <div class="goal-card__hover-effect"></div>
+  
+  {% if card_url != '#' and card_url != blank %}
+    </a>
+  {% else %}
+    </div>
+  {% endif %}
+  
+</div>
+
+{% comment %} Schema for individual goal card (if used standalone) {% endcomment %}
+{% if template contains 'schema' %}
+  {% schema %}
+  {
+    "name": "Goal Card",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Goal Title",
+        "default": "Build Muscle"
+      },
+      {
+        "type": "textarea",
+        "id": "description",
+        "label": "Goal Description",
+        "default": "Premium protein and supplements for muscle growth"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Goal Image"
+      },
+      {
+        "type": "select",
+        "id": "icon",
+        "label": "Goal Icon",
+        "options": [
+          {
+            "value": "muscle",
+            "label": "Muscle"
+          },
+          {
+            "value": "energy",
+            "label": "Energy"
+          },
+          {
+            "value": "recovery",
+            "label": "Recovery"
+          },
+          {
+            "value": "endurance",
+            "label": "Endurance"
+          },
+          {
+            "value": "protein",
+            "label": "Protein"
+          }
+        ],
+        "default": "muscle"
+      },
+      {
+        "type": "url",
+        "id": "url",
+        "label": "Goal URL"
+      },
+      {
+        "type": "color",
+        "id": "color",
+        "label": "Theme Color",
+        "default": "#b62921"
+      },
+      {
+        "type": "text",
+        "id": "products_count",
+        "label": "Products Count",
+        "default": "25+"
+      }
+    ]
+  }
+  {% endschema %}
+{% endif %}

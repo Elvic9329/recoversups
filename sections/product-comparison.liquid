@@ -1,0 +1,395 @@
+{% comment %}
+  Product Comparison Section - RecoverSups Theme
+  
+  Side-by-side product comparison for up to 3 supplement products
+  Features detailed comparison table with specifications and add-to-cart functionality
+  
+  Settings:
+    - section_title: Main section heading
+    - section_subtitle: Descriptive subtitle
+    - max_products: Maximum products to compare (2-3)
+    - show_specifications: Show detailed specs comparison
+    - enable_sticky_headers: Sticky comparison headers
+    - comparison_style: table/cards comparison layout
+{% endcomment %}
+
+{% liquid
+  assign section_id = 'product-comparison-' | append: section.id
+  assign products_count = section.blocks.size
+  assign max_products = section.settings.max_products | default: 3
+  assign show_specs = section.settings.show_specifications | default: true
+  assign sticky_headers = section.settings.enable_sticky_headers | default: true
+  assign comparison_style = section.settings.comparison_style | default: 'table'
+  
+  assign limited_products = products_count | at_most: max_products
+%}
+
+<section 
+  id="{{ section_id }}"
+  class="product-comparison product-comparison--{{ comparison_style }} section-spacing"
+  data-section-type="product-comparison"
+  data-lazy-section
+  data-max-products="{{ max_products }}"
+  {% if section.settings.background_color %}
+    style="background-color: {{ section.settings.background_color }};"
+  {% endif %}
+>
+  <div class="page-width">
+    
+    {% comment %} Section Header {% endcomment %}
+    {% if section.settings.section_title != blank or section.settings.section_subtitle != blank %}
+      <div class="product-comparison__header section-header">
+        {% if section.settings.section_title != blank %}
+          <h2 class="product-comparison__title section-title">
+            {{ section.settings.section_title }}
+          </h2>
+        {% endif %}
+        
+        {% if section.settings.section_subtitle != blank %}
+          <p class="product-comparison__subtitle section-subtitle">
+            {{ section.settings.section_subtitle }}
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+    
+    {% comment %} Product Selector (for dynamic comparison) {% endcomment %}
+    {% if section.settings.enable_product_selector %}
+      <div class="product-comparison__selector">
+        <div class="comparison-selector">
+          <h3 class="comparison-selector__title">Choose Products to Compare</h3>
+          <div class="comparison-selector__products">
+            {% for i in (1..max_products) %}
+              <div class="product-slot" data-slot="{{ i }}">
+                <button 
+                  class="product-selector-btn"
+                  data-product-selector="{{ i }}"
+                  type="button"
+                >
+                  {% render 'icon-sprite', name: 'plus', size: 24 %}
+                  <span>Select Product {{ i }}</span>
+                </button>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    
+    {% comment %} Comparison Container {% endcomment %}
+    {% if products_count > 0 %}
+      <div class="product-comparison__container">
+        
+        {% if comparison_style == 'table' %}
+          {% comment %} Table Comparison Layout {% endcomment %}
+          {% render 'comparison-table',
+            products: section.blocks,
+            max_products: limited_products,
+            show_specifications: show_specs,
+            sticky_headers: sticky_headers,
+            section_id: section_id
+          %}
+          
+        {% else %}
+          {% comment %} Cards Comparison Layout {% endcomment %}
+          <div class="comparison-cards">
+            {% for block in section.blocks limit: limited_products %}
+              {% liquid
+                assign product_handle = block.settings.product_handle
+                assign product = all_products[product_handle]
+                assign featured = block.settings.featured | default: false
+                assign custom_specs = block.settings.custom_specifications
+              %}
+              
+              {% if product %}
+                <div 
+                  class="comparison-card {% if featured %}comparison-card--featured{% endif %}"
+                  data-product-id="{{ product.id }}"
+                  data-product-handle="{{ product.handle }}"
+                >
+                  
+                  {% comment %} Featured Badge {% endcomment %}
+                  {% if featured %}
+                    <div class="comparison-card__featured-badge">
+                      {% render 'icon-sprite', name: 'star', size: 14 %}
+                      <span>Best Value</span>
+                    </div>
+                  {% endif %}
+                  
+                  {% comment %} Product Image {% endcomment %}
+                  <div class="comparison-card__image">
+                    {% if product.featured_image %}
+                      <img 
+                        src="{{ product.featured_image | img_url: '300x300' }}"
+                        alt="{{ product.featured_image.alt | default: product.title }}"
+                        loading="lazy"
+                        width="300"
+                        height="300"
+                      >
+                    {% else %}
+                      <div class="comparison-card__placeholder">
+                        {% render 'icon-sprite', name: 'package', size: 48 %}
+                      </div>
+                    {% endif %}
+                  </div>
+                  
+                  {% comment %} Product Info {% endcomment %}
+                  <div class="comparison-card__info">
+                    <h3 class="comparison-card__title">{{ product.title }}</h3>
+                    <div class="comparison-card__price">
+                      <span class="price">{{ product.price | money }}</span>
+                      {% if product.compare_at_price > product.price %}
+                        <span class="price-compare">{{ product.compare_at_price | money }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                  
+                  {% comment %} Add to Cart {% endcomment %}
+                  <div class="comparison-card__cta">
+                    <form action="/cart/add" method="post" enctype="multipart/form-data">
+                      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                      <button 
+                        type="submit" 
+                        class="btn btn--primary comparison-card__add-btn"
+                        {% unless product.available %}disabled{% endunless %}
+                      >
+                        {% if product.available %}
+                          Add to Cart
+                        {% else %}
+                          Sold Out
+                        {% endif %}
+                      </button>
+                    </form>
+                  </div>
+                  
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+        
+      </div>
+    {% endif %}
+    
+    {% comment %} Comparison Actions {% endcomment %}
+    <div class="product-comparison__actions">
+      <div class="comparison-actions">
+        
+        <button 
+          type="button"
+          class="btn btn--secondary comparison-action-btn"
+          data-comparison-clear
+        >
+          {% render 'icon-sprite', name: 'x', size: 16 %}
+          Clear Comparison
+        </button>
+        
+        <button 
+          type="button"
+          class="btn btn--secondary comparison-action-btn"
+          data-comparison-print
+        >
+          {% render 'icon-sprite', name: 'printer', size: 16 %}
+          Print Comparison
+        </button>
+        
+        <button 
+          type="button"
+          class="btn btn--primary comparison-action-btn"
+          data-comparison-add-all
+        >
+          {% render 'icon-sprite', name: 'cart', size: 16 %}
+          Add All to Cart
+        </button>
+        
+      </div>
+    </div>
+    
+    {% comment %} Help Section {% endcomment %}
+    {% if section.settings.show_help_section %}
+      <div class="product-comparison__help">
+        <div class="comparison-help">
+          <h3 class="comparison-help__title">How to Choose the Right Supplement</h3>
+          <div class="comparison-help__content">
+            <div class="help-item">
+              <div class="help-item__icon">
+                {% render 'icon-sprite', name: 'target', size: 24 %}
+              </div>
+              <div class="help-item__content">
+                <h4>Define Your Goal</h4>
+                <p>Identify whether you want to build muscle, lose weight, or improve performance.</p>
+              </div>
+            </div>
+            
+            <div class="help-item">
+              <div class="help-item__icon">
+                {% render 'icon-sprite', name: 'check-circle', size: 24 %}
+              </div>
+              <div class="help-item__content">
+                <h4>Compare Ingredients</h4>
+                <p>Look at active ingredients, dosages, and additional nutrients included.</p>
+              </div>
+            </div>
+            
+            <div class="help-item">
+              <div class="help-item__icon">
+                {% render 'icon-sprite', name: 'star', size: 24 %}
+              </div>
+              <div class="help-item__content">
+                <h4>Check Reviews</h4>
+                <p>Read customer reviews and ratings to understand real-world results.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    
+  </div>
+</section>
+
+{% comment %} Comparison JavaScript {% endcomment %}
+<script src="{{ 'component-comparison.js' | asset_url }}" defer></script>
+
+{% comment %} Schema Settings {% endcomment %}
+{% schema %}
+{
+  "name": "Product Comparison",
+  "tag": "section",
+  "class": "section-product-comparison",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Compare Products"
+    },
+    {
+      "type": "textarea",
+      "id": "section_subtitle",
+      "label": "Section Subtitle",
+      "default": "Side-by-side comparison to help you choose the perfect supplement"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "Maximum Products to Compare",
+      "min": 2,
+      "max": 3,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "comparison_style",
+      "label": "Comparison Style",
+      "options": [
+        {
+          "value": "table",
+          "label": "Table Layout"
+        },
+        {
+          "value": "cards",
+          "label": "Cards Layout"
+        }
+      ],
+      "default": "table"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "header",
+      "content": "Display Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_specifications",
+      "label": "Show Detailed Specifications",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky_headers",
+      "label": "Enable Sticky Headers",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_product_selector",
+      "label": "Enable Dynamic Product Selection",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_help_section",
+      "label": "Show Help Section",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product to Compare",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product_handle",
+          "label": "Product"
+        },
+        {
+          "type": "checkbox",
+          "id": "featured",
+          "label": "Featured Product",
+          "default": false,
+          "info": "Highlight this product as recommended"
+        },
+        {
+          "type": "textarea",
+          "id": "custom_specifications",
+          "label": "Custom Specifications",
+          "info": "JSON format: {\"Protein per serving\": \"25g\", \"Flavor\": \"Vanilla\"}"
+        },
+        {
+          "type": "text",
+          "id": "highlight_feature",
+          "label": "Key Highlight",
+          "info": "Special feature to emphasize"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Comparison",
+      "blocks": [
+        {
+          "type": "product",
+          "settings": {
+            "featured": true,
+            "highlight_feature": "Best Seller"
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "highlight_feature": "Premium Quality"
+          }
+        },
+        {
+          "type": "product",
+          "settings": {
+            "highlight_feature": "Great Value"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,670 @@
+/*
+===============================================================================
+SECTION: FITNESS TESTIMONIALS - RecoverSups Theme
+Customer transformation testimonials with before/after showcase
+Social proof section optimized for supplement e-commerce
+===============================================================================
+*/
+
+/* === SECTION CONTAINER === */
+.fitness-testimonials {
+  --section-spacing: var(--rs-spacing-2xl, 3rem);
+  --grid-gap: var(--rs-spacing-xl, 2rem);
+  --carousel-gap: var(--rs-spacing-lg, 1.5rem);
+  
+  padding: var(--section-spacing) 0;
+  position: relative;
+  background: var(--rs-background, #ffffff);
+  overflow: hidden;
+}
+
+.fitness-testimonials--grid {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f8fafc 100%);
+}
+
+.fitness-testimonials--carousel {
+  background: var(--rs-background, #ffffff);
+  border-top: 2px solid var(--rs-border, #e2e8f0);
+  border-bottom: 2px solid var(--rs-border, #e2e8f0);
+}
+
+.fitness-testimonials--masonry {
+  background: linear-gradient(45deg, #fefce8 0%, #f0f9ff 100%);
+}
+
+/* === SECTION HEADER === */
+.fitness-testimonials__header {
+  text-align: center;
+  margin-bottom: var(--rs-spacing-2xl, 3rem);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.fitness-testimonials__title {
+  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  font-weight: 900;
+  color: var(--rs-foreground, #1a202c);
+  margin: 0 0 var(--rs-spacing-md, 1rem);
+  line-height: 1.1;
+  background: linear-gradient(135deg, var(--rs-primary, #b62921), #dc2626, #ea580c);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 300% 300%;
+  animation: gradientFlow 4s ease-in-out infinite;
+}
+
+@keyframes gradientFlow {
+  0%, 100% { background-position: 0% 50%; }
+  25% { background-position: 100% 50%; }
+  50% { background-position: 50% 100%; }
+  75% { background-position: 50% 0%; }
+}
+
+.fitness-testimonials__subtitle {
+  font-size: 1.375rem;
+  color: var(--rs-muted-foreground, #64748b);
+  margin: 0;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* === GOAL FILTERS === */
+.fitness-testimonials__filters {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--rs-spacing-xl, 2rem);
+  padding: 0 var(--rs-spacing-md, 1rem);
+}
+
+.testimonial-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rs-spacing-sm, 0.5rem);
+  justify-content: center;
+  align-items: center;
+  background: var(--rs-background, #ffffff);
+  padding: var(--rs-spacing-sm, 0.5rem);
+  border-radius: var(--rs-radius-full, 9999px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--rs-border, #e2e8f0);
+}
+
+.testimonial-filter {
+  padding: var(--rs-spacing-sm, 0.5rem) var(--rs-spacing-md, 1rem);
+  border: none;
+  border-radius: var(--rs-radius-full, 9999px);
+  background: transparent;
+  color: var(--rs-muted-foreground, #64748b);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--rs-transition-base, all 0.2s ease);
+  white-space: nowrap;
+}
+
+.testimonial-filter:hover {
+  background: var(--rs-muted, #f1f5f9);
+  color: var(--rs-foreground, #1a202c);
+}
+
+.testimonial-filter--active {
+  background: var(--rs-primary, #b62921);
+  color: var(--rs-primary-foreground, #ffffff);
+  box-shadow: 0 2px 8px rgba(182, 41, 33, 0.3);
+}
+
+.testimonial-filter--active:hover {
+  background: #a02318;
+}
+
+/* === TESTIMONIALS CONTAINER === */
+.fitness-testimonials__container {
+  position: relative;
+}
+
+/* === GRID LAYOUT === */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: var(--grid-gap);
+  padding: 0;
+}
+
+/* === CAROUSEL LAYOUT === */
+.testimonials-carousel {
+  display: flex;
+  gap: var(--carousel-gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 0 var(--rs-spacing-sm, 0.5rem) var(--rs-spacing-xl, 2rem) 0;
+  margin: 0 calc(-1 * var(--rs-spacing-sm, 0.5rem));
+}
+
+.testimonials-carousel::-webkit-scrollbar {
+  height: 8px;
+}
+
+.testimonials-carousel::-webkit-scrollbar-track {
+  background: var(--rs-muted, #f1f5f9);
+  border-radius: 4px;
+}
+
+.testimonials-carousel::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, var(--rs-primary, #b62921), #dc2626);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.testimonials-carousel::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #a02318, #b91c1c);
+}
+
+.testimonials-carousel .transformation-card {
+  flex: 0 0 380px;
+  scroll-snap-align: start;
+}
+
+/* === MASONRY LAYOUT === */
+.testimonials-masonry {
+  columns: auto;
+  column-width: 350px;
+  column-gap: var(--rs-spacing-lg, 1.5rem);
+  column-fill: balance;
+}
+
+.testimonials-masonry .transformation-card {
+  break-inside: avoid;
+  margin-bottom: var(--rs-spacing-lg, 1.5rem);
+  display: inline-block;
+  width: 100%;
+}
+
+/* === CAROUSEL NAVIGATION === */
+.fitness-testimonials__navigation {
+  display: flex;
+  justify-content: center;
+  gap: var(--rs-spacing-lg, 1.5rem);
+  margin-top: var(--rs-spacing-2xl, 3rem);
+}
+
+.carousel-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border: 2px solid var(--rs-border, #e2e8f0);
+  border-radius: 50%;
+  background: var(--rs-background, #ffffff);
+  color: var(--rs-foreground, #1a202c);
+  cursor: pointer;
+  transition: var(--rs-transition-base, all 0.3s ease);
+  font-size: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--rs-primary, #b62921), #dc2626);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.carousel-nav:hover::before {
+  opacity: 1;
+}
+
+.carousel-nav:hover {
+  color: var(--rs-primary-foreground, #ffffff);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(182, 41, 33, 0.4);
+  border-color: var(--rs-primary, #b62921);
+}
+
+.carousel-nav .icon {
+  position: relative;
+  z-index: 1;
+}
+
+.carousel-nav:active {
+  transform: translateY(-1px);
+}
+
+.carousel-nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-nav:disabled:hover {
+  border-color: var(--rs-border, #e2e8f0);
+  color: var(--rs-foreground, #1a202c);
+}
+
+.carousel-nav:disabled::before {
+  opacity: 0;
+}
+
+/* === STATISTICS SECTION === */
+.fitness-testimonials__stats {
+  margin-top: var(--rs-spacing-2xl, 3rem);
+  padding-top: var(--rs-spacing-2xl, 3rem);
+  border-top: 1px solid var(--rs-border, #e2e8f0);
+}
+
+.testimonial-stats {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.testimonial-stats__title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--rs-foreground, #1a202c);
+  margin: 0 0 var(--rs-spacing-xl, 2rem);
+}
+
+.testimonial-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--rs-spacing-xl, 2rem);
+}
+
+.stat-item {
+  text-align: center;
+  padding: var(--rs-spacing-xl, 2rem) var(--rs-spacing-lg, 1.5rem);
+  background: var(--rs-background, #ffffff);
+  border-radius: var(--rs-radius-xl, 0.75rem);
+  border: 1px solid var(--rs-border, #e2e8f0);
+  transition: var(--rs-transition-base, all 0.3s ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--rs-primary, #b62921), #dc2626, #ea580c);
+  border-radius: var(--rs-radius-xl, 0.75rem) var(--rs-radius-xl, 0.75rem) 0 0;
+}
+
+.stat-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+  border-color: var(--rs-primary, #b62921);
+}
+
+.stat-item__number {
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--rs-primary, #b62921);
+  line-height: 1;
+  margin-bottom: var(--rs-spacing-sm, 0.5rem);
+  background: linear-gradient(135deg, var(--rs-primary, #b62921), #dc2626);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-item__label {
+  font-size: 1rem;
+  color: var(--rs-muted-foreground, #64748b);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* === CALL TO ACTION === */
+.fitness-testimonials__cta {
+  margin-top: var(--rs-spacing-2xl, 3rem);
+  padding-top: var(--rs-spacing-2xl, 3rem);
+  border-top: 1px solid var(--rs-border, #e2e8f0);
+}
+
+.testimonial-cta {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  padding: var(--rs-spacing-2xl, 3rem);
+  background: linear-gradient(135deg, var(--rs-background, #ffffff), #f8fafc);
+  border-radius: var(--rs-radius-2xl, 1rem);
+  border: 1px solid var(--rs-border, #e2e8f0);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-cta__title {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: var(--rs-foreground, #1a202c);
+  margin: 0 0 var(--rs-spacing-md, 1rem);
+  line-height: 1.2;
+}
+
+.testimonial-cta__description {
+  font-size: 1.125rem;
+  color: var(--rs-muted-foreground, #64748b);
+  margin: 0 0 var(--rs-spacing-xl, 2rem);
+  line-height: 1.6;
+}
+
+.testimonial-cta__button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rs-spacing-sm, 0.5rem);
+  padding: var(--rs-spacing-lg, 1.5rem) var(--rs-spacing-xl, 2rem);
+  font-size: 1.125rem;
+  font-weight: 700;
+  border-radius: var(--rs-radius-lg, 0.5rem);
+  transition: var(--rs-transition-base, all 0.3s ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonial-cta__button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.8s ease;
+}
+
+.testimonial-cta__button:hover::before {
+  left: 100%;
+}
+
+.testimonial-cta__button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(182, 41, 33, 0.4);
+}
+
+.testimonial-cta__button .icon {
+  transition: transform 0.3s ease;
+}
+
+.testimonial-cta__button:hover .icon {
+  transform: translateX(4px);
+}
+
+/* === ANIMATIONS === */
+@keyframes testimonialSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.transformation-card {
+  animation: testimonialSlideIn 0.8s ease-out;
+  animation-fill-mode: both;
+}
+
+/* Staggered animation for grid items */
+.testimonials-grid .transformation-card:nth-child(1) { animation-delay: 0.1s; }
+.testimonials-grid .transformation-card:nth-child(2) { animation-delay: 0.2s; }
+.testimonials-grid .transformation-card:nth-child(3) { animation-delay: 0.3s; }
+.testimonials-grid .transformation-card:nth-child(4) { animation-delay: 0.4s; }
+.testimonials-grid .transformation-card:nth-child(5) { animation-delay: 0.5s; }
+.testimonials-grid .transformation-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* Filter transition animation */
+.transformation-card {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.transformation-card:not(.testimonial-card--visible) {
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+}
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 1200px) {
+  .testimonials-grid {
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: var(--rs-spacing-lg, 1.5rem);
+  }
+  
+  .testimonials-masonry {
+    column-width: 320px;
+  }
+}
+
+@media (max-width: 768px) {
+  .fitness-testimonials {
+    --section-spacing: var(--rs-spacing-xl, 2rem);
+  }
+  
+  .fitness-testimonials__title {
+    font-size: 2.25rem;
+  }
+  
+  .fitness-testimonials__subtitle {
+    font-size: 1.125rem;
+  }
+  
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: var(--rs-spacing-lg, 1.5rem);
+  }
+  
+  .testimonials-carousel {
+    gap: var(--rs-spacing-md, 1rem);
+  }
+  
+  .testimonials-carousel .transformation-card {
+    flex: 0 0 320px;
+  }
+  
+  .testimonials-masonry {
+    columns: 1;
+    column-width: auto;
+  }
+  
+  .testimonial-filters {
+    flex-direction: column;
+    gap: var(--rs-spacing-xs, 0.25rem);
+    padding: var(--rs-spacing-md, 1rem);
+    border-radius: var(--rs-radius-lg, 0.5rem);
+  }
+  
+  .testimonial-filter {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .carousel-nav {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .testimonial-stats__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--rs-spacing-lg, 1.5rem);
+  }
+  
+  .stat-item__number {
+    font-size: 2.25rem;
+  }
+  
+  .testimonial-cta {
+    padding: var(--rs-spacing-xl, 2rem) var(--rs-spacing-lg, 1.5rem);
+  }
+  
+  .testimonial-cta__title {
+    font-size: 1.5rem;
+  }
+  
+  .testimonial-cta__description {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .testimonials-carousel .transformation-card {
+    flex: 0 0 300px;
+  }
+  
+  .fitness-testimonials__navigation {
+    gap: var(--rs-spacing-md, 1rem);
+  }
+  
+  .carousel-nav {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .testimonial-stats__grid {
+    grid-template-columns: 1fr;
+    gap: var(--rs-spacing-md, 1rem);
+  }
+  
+  .stat-item {
+    padding: var(--rs-spacing-lg, 1.5rem) var(--rs-spacing-md, 1rem);
+  }
+  
+  .stat-item__number {
+    font-size: 2rem;
+  }
+  
+  .testimonial-cta__button {
+    padding: var(--rs-spacing-md, 1rem) var(--rs-spacing-lg, 1.5rem);
+    font-size: 1rem;
+  }
+}
+
+/* === ACCESSIBILITY === */
+@media (prefers-reduced-motion: reduce) {
+  .transformation-card,
+  .carousel-nav,
+  .testimonial-filter,
+  .stat-item,
+  .testimonial-cta__button,
+  .fitness-testimonials__title {
+    animation: none;
+    transition: none;
+  }
+  
+  .testimonials-carousel {
+    scroll-behavior: auto;
+  }
+  
+  .transformation-card:hover,
+  .carousel-nav:hover,
+  .stat-item:hover,
+  .testimonial-cta__button:hover {
+    transform: none;
+  }
+}
+
+/* === HIGH CONTRAST MODE === */
+@media (prefers-contrast: high) {
+  .fitness-testimonials {
+    border: 2px solid var(--rs-foreground, #1a202c);
+  }
+  
+  .testimonial-filters {
+    border: 2px solid var(--rs-foreground, #1a202c);
+  }
+  
+  .carousel-nav {
+    border-width: 3px;
+  }
+  
+  .stat-item {
+    border-width: 2px;
+  }
+}
+
+/* === DARK MODE SUPPORT === */
+@media (prefers-color-scheme: dark) {
+  .fitness-testimonials {
+    background: var(--rs-background, #0f172a);
+  }
+  
+  .fitness-testimonials--grid {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #0f172a 100%);
+  }
+  
+  .testimonial-filters {
+    background: var(--rs-card, #1e293b);
+    border-color: var(--rs-border, #334155);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+  
+  .carousel-nav {
+    background: var(--rs-card, #1e293b);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .carousel-nav:hover {
+    box-shadow: 0 8px 20px rgba(182, 41, 33, 0.5);
+  }
+  
+  .stat-item {
+    background: var(--rs-card, #1e293b);
+    border-color: var(--rs-border, #334155);
+  }
+  
+  .stat-item:hover {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  }
+  
+  .testimonial-cta {
+    background: linear-gradient(135deg, var(--rs-card, #1e293b), #334155);
+    border-color: var(--rs-border, #334155);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* === PRINT STYLES === */
+@media print {
+  .fitness-testimonials__navigation,
+  .fitness-testimonials__filters,
+  .carousel-nav {
+    display: none;
+  }
+  
+  .testimonials-carousel,
+  .testimonials-masonry {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    overflow: visible;
+    columns: auto;
+  }
+  
+  .transformation-card {
+    break-inside: avoid;
+    flex: none;
+  }
+  
+  .testimonial-cta__button {
+    display: none;
+  }
+}

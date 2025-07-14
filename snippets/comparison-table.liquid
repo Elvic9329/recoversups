@@ -1,0 +1,445 @@
+{% comment %}
+  Comparison Table Component - RecoverSups Theme
+  
+  Detailed table comparison for supplement products
+  Supports up to 3 products with comprehensive specifications
+  
+  Parameters:
+    - products: Array of product blocks to compare
+    - max_products: Maximum number of products to display
+    - show_specifications: Display detailed specifications
+    - sticky_headers: Enable sticky table headers
+    - section_id: Unique section identifier
+{% endcomment %}
+
+{% liquid
+  assign comparison_products = products | slice: 0, max_products
+  assign products_count = comparison_products.size
+  assign show_specs = show_specifications | default: true
+  assign sticky = sticky_headers | default: true
+  assign table_id = section_id | append: '-comparison-table'
+  
+  comment
+    Define standard supplement specifications to compare
+  endcomment
+  assign standard_specs = 'Protein per serving,Calories,Carbohydrates,Fat,Sugar,Sodium,Servings per container,Flavor options,Allergen info,Third-party tested' | split: ','
+%}
+
+{% if products_count > 0 %}
+  <div 
+    class="comparison-table-container"
+    data-comparison-table
+    data-sticky-headers="{{ sticky }}"
+  >
+    
+    <div class="comparison-table-wrapper">
+      <table 
+        id="{{ table_id }}"
+        class="comparison-table {% if sticky %}comparison-table--sticky{% endif %}"
+        data-max-products="{{ max_products }}"
+      >
+        
+        {% comment %} Table Header {% endcomment %}
+        <thead class="comparison-table__head">
+          <tr class="comparison-row comparison-row--header">
+            <th class="comparison-cell comparison-cell--feature">
+              <span class="feature-label">Features</span>
+            </th>
+            
+            {% for block in comparison_products %}
+              {% liquid
+                assign product_handle = block.settings.product_handle
+                assign product = all_products[product_handle]
+                assign featured = block.settings.featured | default: false
+              %}
+              
+              <th class="comparison-cell comparison-cell--product {% if featured %}comparison-cell--featured{% endif %}">
+                {% if product %}
+                  <div class="product-header">
+                    {% if featured %}
+                      <div class="product-header__badge">
+                        {% render 'icon-sprite', name: 'star', size: 14 %}
+                        <span>Recommended</span>
+                      </div>
+                    {% endif %}
+                    
+                    <div class="product-header__image">
+                      {% if product.featured_image %}
+                        <img 
+                          src="{{ product.featured_image | img_url: '150x150' }}"
+                          alt="{{ product.featured_image.alt | default: product.title }}"
+                          loading="lazy"
+                          width="150"
+                          height="150"
+                        >
+                      {% else %}
+                        <div class="product-header__placeholder">
+                          {% render 'icon-sprite', name: 'package', size: 32 %}
+                        </div>
+                      {% endif %}
+                    </div>
+                    
+                    <div class="product-header__info">
+                      <h3 class="product-header__title">{{ product.title }}</h3>
+                      {% if block.settings.highlight_feature %}
+                        <p class="product-header__highlight">{{ block.settings.highlight_feature }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% else %}
+                  <div class="product-header product-header--empty">
+                    <span class="product-header__empty-text">Product not found</span>
+                  </div>
+                {% endif %}
+              </th>
+            {% endfor %}
+          </tr>
+        </thead>
+        
+        {% comment %} Table Body {% endcomment %}
+        <tbody class="comparison-table__body">
+          
+          {% comment %} Price Row {% endcomment %}
+          <tr class="comparison-row comparison-row--price">
+            <td class="comparison-cell comparison-cell--feature">
+              <span class="feature-label">Price</span>
+            </td>
+            
+            {% for block in comparison_products %}
+              {% liquid
+                assign product_handle = block.settings.product_handle
+                assign product = all_products[product_handle]
+                assign featured = block.settings.featured | default: false
+              %}
+              
+              <td class="comparison-cell comparison-cell--value {% if featured %}comparison-cell--featured{% endif %}">
+                {% if product %}
+                  <div class="price-info">
+                    <span class="price-info__current">{{ product.price | money }}</span>
+                    {% if product.compare_at_price > product.price %}
+                      <span class="price-info__compare">{{ product.compare_at_price | money }}</span>
+                      {% assign savings = product.compare_at_price | minus: product.price %}
+                      {% assign savings_percent = savings | times: 100 | divided_by: product.compare_at_price %}
+                      <span class="price-info__savings">Save {{ savings_percent }}%</span>
+                    {% endif %}
+                  </div>
+                {% else %}
+                  <span class="value-empty">—</span>
+                {% endif %}
+              </td>
+            {% endfor %}
+          </tr>
+          
+          {% comment %} Rating Row {% endcomment %}
+          <tr class="comparison-row comparison-row--rating">
+            <td class="comparison-cell comparison-cell--feature">
+              <span class="feature-label">Customer Rating</span>
+            </td>
+            
+            {% for block in comparison_products %}
+              {% liquid
+                assign product_handle = block.settings.product_handle
+                assign product = all_products[product_handle]
+                assign featured = block.settings.featured | default: false
+                
+                comment
+                  Calculate average rating from product metafields or use default
+                endcomment
+                assign avg_rating = product.metafields.reviews.rating.value | default: 4.5
+                assign review_count = product.metafields.reviews.count.value | default: 0
+              %}
+              
+              <td class="comparison-cell comparison-cell--value {% if featured %}comparison-cell--featured{% endif %}">
+                {% if product %}
+                  <div class="rating-info">
+                    <div class="star-rating">
+                      {% for i in (1..5) %}
+                        {% if i <= avg_rating %}
+                          {% render 'icon-sprite', name: 'star-filled', size: 14, class: 'star star--filled' %}
+                        {% else %}
+                          {% render 'icon-sprite', name: 'star', size: 14, class: 'star star--empty' %}
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                    {% if review_count > 0 %}
+                      <span class="rating-info__count">({{ review_count }} reviews)</span>
+                    {% endif %}
+                  </div>
+                {% else %}
+                  <span class="value-empty">—</span>
+                {% endif %}
+              </td>
+            {% endfor %}
+          </tr>
+          
+          {% comment %} Availability Row {% endcomment %}
+          <tr class="comparison-row comparison-row--availability">
+            <td class="comparison-cell comparison-cell--feature">
+              <span class="feature-label">Availability</span>
+            </td>
+            
+            {% for block in comparison_products %}
+              {% liquid
+                assign product_handle = block.settings.product_handle
+                assign product = all_products[product_handle]
+                assign featured = block.settings.featured | default: false
+              %}
+              
+              <td class="comparison-cell comparison-cell--value {% if featured %}comparison-cell--featured{% endif %}">
+                {% if product %}
+                  <div class="availability-info">
+                    {% if product.available %}
+                      <span class="availability-status availability-status--in-stock">
+                        {% render 'icon-sprite', name: 'check-circle', size: 16 %}
+                        In Stock
+                      </span>
+                    {% else %}
+                      <span class="availability-status availability-status--out-of-stock">
+                        {% render 'icon-sprite', name: 'x-circle', size: 16 %}
+                        Out of Stock
+                      </span>
+                    {% endif %}
+                  </div>
+                {% else %}
+                  <span class="value-empty">—</span>
+                {% endif %}
+              </td>
+            {% endfor %}
+          </tr>
+          
+          {% comment %} Specifications Rows {% endcomment %}
+          {% if show_specs %}
+            {% for spec in standard_specs %}
+              <tr class="comparison-row comparison-row--spec">
+                <td class="comparison-cell comparison-cell--feature">
+                  <span class="feature-label">{{ spec }}</span>
+                </td>
+                
+                {% for block in comparison_products %}
+                  {% liquid
+                    assign product_handle = block.settings.product_handle
+                    assign product = all_products[product_handle]
+                    assign featured = block.settings.featured | default: false
+                    assign custom_specs = block.settings.custom_specifications
+                    
+                    comment
+                      Try to get specification from product metafields or custom specs
+                    endcomment
+                    assign spec_key = spec | handle
+                    assign spec_value = product.metafields.specifications[spec_key].value
+                    
+                    if custom_specs != blank and spec_value == blank
+                      assign custom_specs_obj = custom_specs | parse_json
+                      if custom_specs_obj
+                        assign spec_value = custom_specs_obj[spec]
+                      endif
+                    endif
+                  %}
+                  
+                  <td class="comparison-cell comparison-cell--value {% if featured %}comparison-cell--featured{% endif %}">
+                    {% if product and spec_value != blank %}
+                      <span class="spec-value">{{ spec_value }}</span>
+                    {% else %}
+                      <span class="value-empty">—</span>
+                    {% endif %}
+                  </td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+          {% endif %}
+          
+          {% comment %} Add to Cart Row {% endcomment %}
+          <tr class="comparison-row comparison-row--cta">
+            <td class="comparison-cell comparison-cell--feature">
+              <span class="feature-label">Action</span>
+            </td>
+            
+            {% for block in comparison_products %}
+              {% liquid
+                assign product_handle = block.settings.product_handle
+                assign product = all_products[product_handle]
+                assign featured = block.settings.featured | default: false
+              %}
+              
+              <td class="comparison-cell comparison-cell--value {% if featured %}comparison-cell--featured{% endif %}">
+                {% if product %}
+                  <div class="comparison-cta">
+                    <form action="/cart/add" method="post" enctype="multipart/form-data" class="comparison-form">
+                      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                      
+                      {% if product.variants.size > 1 %}
+                        <select 
+                          name="id" 
+                          class="comparison-variant-selector"
+                          data-product-variants="{{ product.handle }}"
+                        >
+                          {% for variant in product.variants %}
+                            <option 
+                              value="{{ variant.id }}"
+                              {% unless variant.available %}disabled{% endunless %}
+                            >
+                              {{ variant.title }}
+                              {% unless variant.available %} - Sold Out{% endunless %}
+                            </option>
+                          {% endfor %}
+                        </select>
+                      {% endif %}
+                      
+                      <button 
+                        type="submit"
+                        class="btn btn--primary comparison-add-btn"
+                        data-product-id="{{ product.id }}"
+                        {% unless product.available %}disabled{% endunless %}
+                      >
+                        {% if product.available %}
+                          {% render 'icon-sprite', name: 'cart', size: 16 %}
+                          Add to Cart
+                        {% else %}
+                          Sold Out
+                        {% endif %}
+                      </button>
+                    </form>
+                    
+                    <a 
+                      href="{{ product.url }}"
+                      class="btn btn--secondary comparison-view-btn"
+                    >
+                      {% render 'icon-sprite', name: 'eye', size: 16 %}
+                      View Details
+                    </a>
+                  </div>
+                {% else %}
+                  <span class="value-empty">—</span>
+                {% endif %}
+              </td>
+            {% endfor %}
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    
+    {% comment %} Mobile Comparison Cards (shown on small screens) {% endcomment %}
+    <div class="comparison-mobile">
+      <h3 class="comparison-mobile__title">Product Comparison</h3>
+      
+      {% for block in comparison_products %}
+        {% liquid
+          assign product_handle = block.settings.product_handle
+          assign product = all_products[product_handle]
+          assign featured = block.settings.featured | default: false
+        %}
+        
+        {% if product %}
+          <div class="comparison-mobile-card {% if featured %}comparison-mobile-card--featured{% endif %}">
+            
+            {% if featured %}
+              <div class="comparison-mobile-card__badge">
+                {% render 'icon-sprite', name: 'star', size: 14 %}
+                <span>Recommended</span>
+              </div>
+            {% endif %}
+            
+            <div class="comparison-mobile-card__header">
+              <div class="comparison-mobile-card__image">
+                {% if product.featured_image %}
+                  <img 
+                    src="{{ product.featured_image | img_url: '120x120' }}"
+                    alt="{{ product.featured_image.alt | default: product.title }}"
+                    loading="lazy"
+                    width="120"
+                    height="120"
+                  >
+                {% endif %}
+              </div>
+              
+              <div class="comparison-mobile-card__info">
+                <h4 class="comparison-mobile-card__title">{{ product.title }}</h4>
+                <div class="comparison-mobile-card__price">
+                  <span class="price">{{ product.price | money }}</span>
+                  {% if product.compare_at_price > product.price %}
+                    <span class="price-compare">{{ product.compare_at_price | money }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            
+            <div class="comparison-mobile-card__specs">
+              {% for spec in standard_specs limit: 5 %}
+                {% liquid
+                  assign spec_key = spec | handle
+                  assign spec_value = product.metafields.specifications[spec_key].value
+                  
+                  if block.settings.custom_specifications != blank and spec_value == blank
+                    assign custom_specs_obj = block.settings.custom_specifications | parse_json
+                    if custom_specs_obj
+                      assign spec_value = custom_specs_obj[spec]
+                    endif
+                  endif
+                %}
+                
+                {% if spec_value != blank %}
+                  <div class="spec-item">
+                    <span class="spec-item__label">{{ spec }}:</span>
+                    <span class="spec-item__value">{{ spec_value }}</span>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+            
+            <div class="comparison-mobile-card__cta">
+              <form action="/cart/add" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                <button 
+                  type="submit"
+                  class="btn btn--primary"
+                  {% unless product.available %}disabled{% endunless %}
+                >
+                  {% if product.available %}
+                    Add to Cart
+                  {% else %}
+                    Sold Out
+                  {% endif %}
+                </button>
+              </form>
+            </div>
+            
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    
+  </div>
+{% endif %}
+
+{% comment %} Schema for standalone usage {% endcomment %}
+{% if template contains 'schema' %}
+  {% schema %}
+  {
+    "name": "Comparison Table",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_specifications",
+        "label": "Show Detailed Specifications",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "sticky_headers",
+        "label": "Enable Sticky Headers",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "max_products",
+        "label": "Maximum Products",
+        "min": 2,
+        "max": 3,
+        "step": 1,
+        "default": 3
+      }
+    ]
+  }
+  {% endschema %}
+{% endif %}

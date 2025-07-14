@@ -310,7 +310,7 @@
 **Prioridad:** ALTA  
 **Status:** COMPLETADO
 
-### - [ ] **TASK-013**
+### - [x] **TASK-013**
 **ID:** SECTION-001  
 **Título:** Crear sección "Shop by Goal" para homepage  
 **Descripción:** Desarrollar sección visual que permita navegación por objetivos fitness con cards atractivos y conversión optimizada.  
@@ -325,7 +325,7 @@
 **Prioridad:** ALTA  
 **Prompt ID:** PROMPT-013
 
-### - [ ] **TASK-014**
+### - [x] **TASK-014**
 **ID:** SECTION-002  
 **Título:** Crear sección Product Bundles con packs estratégicos  
 **Descripción:** Implementar sección de packs y combos con descuentos, información de sinergia y add-all-to-cart functionality.  
@@ -341,7 +341,7 @@
 **Prioridad:** ALTA  
 **Prompt ID:** PROMPT-014
 
-### - [ ] **TASK-015**
+### - [x] **TASK-015**
 **ID:** SECTION-003  
 **Título:** Crear sección Fitness Testimonials con transformaciones  
 **Descripción:** Desarrollar sección de testimonios específicamente diseñada para mostrar transformaciones y resultados fitness.  
@@ -356,7 +356,7 @@
 **Prioridad:** MEDIA  
 **Prompt ID:** PROMPT-015
 
-### - [ ] **TASK-016**
+### - [x] **TASK-016**
 **ID:** SECTION-004  
 **Título:** Crear sección Product Comparison  
 **Descripción:** Implementar funcionalidad de comparación lado a lado de hasta 3 productos con tabla detallada.  

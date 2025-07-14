@@ -1,0 +1,374 @@
+{% comment %}
+  Product Bundles Section - RecoverSups Theme
+  
+  Strategic supplement packs using Bundler app integration
+  Compatible with Bundler app widgets and JavaScript API
+  
+  Settings:
+    - section_title: Bundle section heading
+    - section_subtitle: Bundle description
+    - layout: grid/carousel layout
+    - show_bundler_widgets: Show native Bundler widgets
+    - manual_bundles: Manual bundle configuration
+{% endcomment %}
+
+{% liquid
+  assign section_id = 'product-bundles-' | append: section.id
+  assign bundles_count = section.blocks.size
+  assign layout_class = section.settings.layout | default: 'grid'
+  assign show_savings = section.settings.show_savings | default: true
+  assign auto_rotate = section.settings.auto_rotate | default: false
+%}
+
+<section 
+  id="{{ section_id }}"
+  class="product-bundles product-bundles--{{ layout_class }} section-spacing"
+  data-section-type="product-bundles"
+  data-lazy-section
+  {% if section.settings.background_color %}
+    style="background-color: {{ section.settings.background_color }};"
+  {% endif %}
+>
+  <div class="page-width">
+    
+    {% comment %} Section Header {% endcomment %}
+    {% if section.settings.section_title != blank or section.settings.section_subtitle != blank %}
+      <div class="product-bundles__header section-header">
+        {% if section.settings.section_title != blank %}
+          <h2 class="product-bundles__title section-title">
+            {{ section.settings.section_title }}
+          </h2>
+        {% endif %}
+        
+        {% if section.settings.section_subtitle != blank %}
+          <p class="product-bundles__subtitle section-subtitle">
+            {{ section.settings.section_subtitle }}
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+    
+    {% comment %} Bundles Container {% endcomment %}
+    {% if bundles_count > 0 %}
+      <div class="product-bundles__container">
+        <div 
+          class="product-bundles__grid bundles-{{ layout_class }}"
+          {% if layout_class == 'carousel' %}
+            data-carousel="bundles"
+            data-slides-per-view="auto"
+            data-space-between="24"
+            {% if auto_rotate %}data-autoplay="5000"{% endif %}
+          {% endif %}
+        >
+          
+          {% for block in section.blocks %}
+            {% liquid
+              assign bundle_title = block.settings.bundle_title
+              assign bundle_subtitle = block.settings.bundle_subtitle
+              assign bundle_description = block.settings.bundle_description
+              assign bundle_image = block.settings.bundle_image
+              assign bundle_products = block.settings.bundle_products
+              assign bundle_price = block.settings.bundle_price
+              assign compare_price = block.settings.compare_price
+              assign bundle_benefits = block.settings.bundle_benefits
+              assign bundle_url = block.settings.bundle_url
+              assign cta_text = block.settings.cta_text | default: 'Add Bundle to Cart'
+              assign featured = block.settings.featured | default: false
+              
+              assign savings_amount = 0
+              assign savings_percent = 0
+              if compare_price and bundle_price
+                assign savings_amount = compare_price | minus: bundle_price
+                assign savings_percent = savings_amount | times: 100 | divided_by: compare_price
+              endif
+            %}
+            
+            {% render 'bundle-card',
+              title: bundle_title,
+              subtitle: bundle_subtitle,
+              description: bundle_description,
+              image: bundle_image,
+              products: bundle_products,
+              price: bundle_price,
+              compare_price: compare_price,
+              benefits: bundle_benefits,
+              url: bundle_url,
+              cta_text: cta_text,
+              featured: featured,
+              savings_amount: savings_amount,
+              savings_percent: savings_percent,
+              show_savings: show_savings,
+              block_id: block.id,
+              index: forloop.index,
+              layout: layout_class
+            %}
+            
+          {% endfor %}
+          
+        </div>
+        
+        {% comment %} Carousel Navigation {% endcomment %}
+        {% if layout_class == 'carousel' and bundles_count > 2 %}
+          <div class="product-bundles__navigation">
+            <button 
+              class="carousel-nav carousel-nav--prev"
+              data-carousel-prev="bundles"
+              aria-label="Previous bundles"
+            >
+              {% render 'icon-sprite', name: 'chevron-left', size: 20 %}
+            </button>
+            
+            <button 
+              class="carousel-nav carousel-nav--next"
+              data-carousel-next="bundles"
+              aria-label="Next bundles"
+            >
+              {% render 'icon-sprite', name: 'chevron-right', size: 20 %}
+            </button>
+          </div>
+          
+          {% comment %} Carousel Indicators {% endcomment %}
+          <div class="product-bundles__indicators">
+            {% for i in (1..bundles_count) %}
+              <button 
+                class="carousel-indicator {% if forloop.first %}is-active{% endif %}"
+                data-carousel-indicator="{{ forloop.index0 }}"
+                aria-label="Go to bundle {{ forloop.index }}"
+              ></button>
+            {% endfor %}
+          </div>
+        {% endif %}
+        
+      </div>
+    {% endif %}
+    
+    {% comment %} Bundle Benefits Section {% endcomment %}
+    {% if section.settings.show_bundle_benefits %}
+      <div class="product-bundles__benefits">
+        <div class="bundle-benefits">
+          <h3 class="bundle-benefits__title">Why Choose Bundles?</h3>
+          <div class="bundle-benefits__grid">
+            
+            <div class="bundle-benefit">
+              {% render 'icon-sprite', name: 'shield-check', size: 24, class: 'bundle-benefit__icon' %}
+              <div class="bundle-benefit__content">
+                <h4 class="bundle-benefit__title">Synergy Formulated</h4>
+                <p class="bundle-benefit__description">Products designed to work together for maximum results</p>
+              </div>
+            </div>
+            
+            <div class="bundle-benefit">
+              {% render 'icon-sprite', name: 'star', size: 24, class: 'bundle-benefit__icon' %}
+              <div class="bundle-benefit__content">
+                <h4 class="bundle-benefit__title">Better Value</h4>
+                <p class="bundle-benefit__description">Save up to 25% compared to buying individually</p>
+              </div>
+            </div>
+            
+            <div class="bundle-benefit">
+              {% render 'icon-sprite', name: 'check', size: 24, class: 'bundle-benefit__icon' %}
+              <div class="bundle-benefit__content">
+                <h4 class="bundle-benefit__title">Complete Solution</h4>
+                <p class="bundle-benefit__description">Everything you need for your fitness goals in one package</p>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    
+  </div>
+</section>
+
+{% comment %} Bundle JavaScript {% endcomment %}
+<script src="{{ 'component-bundle-card.js' | asset_url }}" defer></script>
+
+{% comment %} Schema Settings {% endcomment %}
+{% schema %}
+{
+  "name": "Product Bundles",
+  "tag": "section",
+  "class": "section-product-bundles",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Supplement Bundles"
+    },
+    {
+      "type": "textarea",
+      "id": "section_subtitle",
+      "label": "Section Subtitle",
+      "default": "Carefully curated packs for maximum results and savings"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "header",
+      "content": "Display Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_savings",
+      "label": "Show Savings Information",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "label": "Auto-rotate Carousel",
+      "default": false,
+      "info": "Only applies to carousel layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bundle_benefits",
+      "label": "Show Bundle Benefits Section",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "bundle",
+      "name": "Product Bundle",
+      "settings": [
+        {
+          "type": "text",
+          "id": "bundle_title",
+          "label": "Bundle Title",
+          "default": "Mass Gainer Stack"
+        },
+        {
+          "type": "text",
+          "id": "bundle_subtitle",
+          "label": "Bundle Subtitle",
+          "default": "For serious muscle building"
+        },
+        {
+          "type": "textarea",
+          "id": "bundle_description",
+          "label": "Bundle Description",
+          "default": "Complete muscle building solution with protein, creatine, and pre-workout"
+        },
+        {
+          "type": "image_picker",
+          "id": "bundle_image",
+          "label": "Bundle Image"
+        },
+        {
+          "type": "textarea",
+          "id": "bundle_products",
+          "label": "Bundle Products (JSON)",
+          "info": "JSON array of product handles: [\"whey-protein\", \"creatine-monohydrate\", \"pre-workout\"]",
+          "default": "[\"whey-protein\", \"creatine-monohydrate\"]"
+        },
+        {
+          "type": "number",
+          "id": "bundle_price",
+          "label": "Bundle Price (cents)",
+          "default": 8999
+        },
+        {
+          "type": "number",
+          "id": "compare_price",
+          "label": "Compare At Price (cents)",
+          "default": 11999
+        },
+        {
+          "type": "textarea",
+          "id": "bundle_benefits",
+          "label": "Bundle Benefits",
+          "default": "• Enhanced muscle growth\n• Improved workout performance\n• Faster recovery"
+        },
+        {
+          "type": "url",
+          "id": "bundle_url",
+          "label": "Bundle URL"
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "Call-to-Action Text",
+          "default": "Add Bundle to Cart"
+        },
+        {
+          "type": "checkbox",
+          "id": "featured",
+          "label": "Featured Bundle",
+          "default": false,
+          "info": "Highlight this bundle with special styling"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Bundles",
+      "blocks": [
+        {
+          "type": "bundle",
+          "settings": {
+            "bundle_title": "Mass Gainer Stack",
+            "bundle_subtitle": "For serious muscle building",
+            "bundle_description": "Complete muscle building solution with protein, creatine, and pre-workout",
+            "bundle_products": "[\"whey-protein\", \"creatine-monohydrate\", \"pre-workout\"]",
+            "bundle_price": 8999,
+            "compare_price": 11999,
+            "bundle_benefits": "• Enhanced muscle growth\n• Improved workout performance\n• Faster recovery",
+            "featured": true
+          }
+        },
+        {
+          "type": "bundle",
+          "settings": {
+            "bundle_title": "Fat Loss Combo",
+            "bundle_subtitle": "Lean and mean",
+            "bundle_description": "Fat burner and protein combo for lean muscle maintenance",
+            "bundle_products": "[\"fat-burner\", \"lean-protein\"]",
+            "bundle_price": 6999,
+            "compare_price": 8999,
+            "bundle_benefits": "• Accelerated fat loss\n• Preserve lean muscle\n• Boost metabolism"
+          }
+        },
+        {
+          "type": "bundle",
+          "settings": {
+            "bundle_title": "Recovery Pack",
+            "bundle_subtitle": "Bounce back faster",
+            "bundle_description": "Post-workout recovery essentials for optimal repair",
+            "bundle_products": "[\"bcaa\", \"glutamine\", \"post-workout\"]",
+            "bundle_price": 7499,
+            "compare_price": 9499,
+            "bundle_benefits": "• Faster muscle recovery\n• Reduced soreness\n• Enhanced repair"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

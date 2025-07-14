@@ -1,0 +1,311 @@
+{% comment %}
+  Bundle Card Component - RecoverSups Theme
+  
+  Compatible with Bundler app integration
+  Supports both Bundler app products and manual bundle configuration
+  
+  Parameters:
+    - title: Bundle title (required)
+    - subtitle: Bundle subtitle  
+    - description: Bundle description
+    - image: Bundle image
+    - products: Product handles array or Bundler product ID
+    - price: Bundle price
+    - compare_price: Original price for savings calculation
+    - benefits: Bundle benefits list
+    - url: Bundle URL or product handle
+    - cta_text: Call-to-action text
+    - featured: Featured bundle styling
+    - bundler_id: Bundler app bundle ID
+    - use_bundler: Use Bundler app integration
+    - block_id: Unique block identifier
+    - index: Card index
+    - layout: grid/carousel layout
+{% endcomment %}
+
+{% liquid
+  assign card_title = title | default: 'Supplement Bundle'
+  assign card_subtitle = subtitle | default: ''
+  assign card_description = description | default: ''
+  assign card_image = image
+  assign card_products = products
+  assign card_price = price
+  assign card_compare_price = compare_price
+  assign card_benefits = benefits | default: ''
+  assign card_url = url | default: '#'
+  assign card_cta = cta_text | default: 'Add Bundle to Cart'
+  assign card_featured = featured | default: false
+  assign card_bundler_id = bundler_id
+  assign card_use_bundler = use_bundler | default: true
+  assign card_id = block_id | default: 'bundle-card'
+  assign card_index = index | default: 1
+  assign card_layout = layout | default: 'grid'
+  
+  assign has_image = false
+  if card_image != blank
+    assign has_image = true
+  endif
+  
+  assign savings_amount = 0
+  assign savings_percent = 0
+  if card_compare_price and card_price
+    assign savings_amount = card_compare_price | minus: card_price
+    assign savings_percent = savings_amount | times: 100 | divided_by: card_compare_price
+  endif
+  
+  assign benefits_list = card_benefits | split: '•' | compact
+%}
+
+<div 
+  class="bundle-card bundle-card--{{ card_layout }} {% if card_featured %}bundle-card--featured{% endif %} {% if has_image %}bundle-card--with-image{% else %}bundle-card--text-only{% endif %}"
+  data-bundle-card
+  data-block-id="{{ card_id }}"
+  data-index="{{ card_index }}"
+  {% if card_bundler_id %}data-bundler-id="{{ card_bundler_id }}"{% endif %}
+  {% if card_use_bundler %}data-use-bundler="true"{% endif %}
+>
+  
+  {% comment %} Featured Badge {% endcomment %}
+  {% if card_featured %}
+    <div class="bundle-card__featured-badge">
+      {% render 'icon-sprite', name: 'star', size: 16 %}
+      <span>Most Popular</span>
+    </div>
+  {% endif %}
+  
+  {% if card_url != '#' and card_url != blank %}
+    <a href="{{ card_url }}" class="bundle-card__link" aria-describedby="bundle-{{ card_id }}-desc">
+  {% else %}
+    <div class="bundle-card__link">
+  {% endif %}
+  
+    {% comment %} Card Media {% endcomment %}
+    {% if has_image %}
+      <div class="bundle-card__media">
+        {% assign image_alt = card_image.alt | default: card_title %}
+        
+        <img 
+          src="{{ card_image | img_url: '500x400' }}"
+          srcset="{{ card_image | img_url: '250x200' }} 250w,
+                  {{ card_image | img_url: '500x400' }} 500w,
+                  {{ card_image | img_url: '750x600' }} 750w"
+          sizes="(max-width: 767px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          alt="{{ image_alt }}"
+          class="bundle-card__image"
+          loading="lazy"
+          width="500"
+          height="400"
+        >
+        
+        {% comment %} Savings Badge {% endcomment %}
+        {% if savings_percent > 0 %}
+          <div class="bundle-card__savings-badge">
+            Save {{ savings_percent }}%
+          </div>
+        {% endif %}
+        
+        {% comment %} Image Overlay {% endcomment %}
+        <div class="bundle-card__overlay"></div>
+      </div>
+    {% endif %}
+    
+    {% comment %} Card Content {% endcomment %}
+    <div class="bundle-card__content">
+      
+      {% comment %} Header {% endcomment %}
+      <div class="bundle-card__header">
+        <h3 class="bundle-card__title">{{ card_title }}</h3>
+        {% if card_subtitle != blank %}
+          <p class="bundle-card__subtitle">{{ card_subtitle }}</p>
+        {% endif %}
+      </div>
+      
+      {% comment %} Description {% endcomment %}
+      {% if card_description != blank %}
+        <p class="bundle-card__description" id="bundle-{{ card_id }}-desc">
+          {{ card_description }}
+        </p>
+      {% endif %}
+      
+      {% comment %} Benefits List {% endcomment %}
+      {% if benefits_list.size > 0 %}
+        <div class="bundle-card__benefits">
+          <ul class="bundle-benefits-list">
+            {% for benefit in benefits_list %}
+              {% unless benefit == blank %}
+                <li class="bundle-benefit-item">
+                  {% render 'icon-sprite', name: 'check', size: 14, class: 'bundle-benefit-icon' %}
+                  {{ benefit | strip }}
+                </li>
+              {% endunless %}
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      
+      {% comment %} Pricing Section {% endcomment %}
+      {% if card_price %}
+        <div class="bundle-card__pricing">
+          <div class="bundle-price">
+            <span class="bundle-price__current">{{ card_price | money }}</span>
+            {% if card_compare_price and card_compare_price > card_price %}
+              <span class="bundle-price__compare">{{ card_compare_price | money }}</span>
+            {% endif %}
+          </div>
+          
+          {% if savings_amount > 0 %}
+            <div class="bundle-savings">
+              <span class="bundle-savings__text">You save</span>
+              <span class="bundle-savings__amount">{{ savings_amount | money }}</span>
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+      
+      {% comment %} Bundler Widget Container {% endcomment %}
+      {% if card_use_bundler and card_bundler_id %}
+        <div 
+          class="bundle-card__bundler-widget"
+          data-bundler-widget
+          data-bundle-id="{{ card_bundler_id }}"
+        >
+          {% comment %} Bundler app will inject content here {% endcomment %}
+        </div>
+      {% endif %}
+      
+      {% comment %} Call to Action {% endcomment %}
+      <div class="bundle-card__cta">
+        {% if card_use_bundler and card_bundler_id %}
+          <button 
+            class="btn btn--primary bundle-card__add-btn"
+            data-bundler-add-to-cart="{{ card_bundler_id }}"
+            data-bundle-id="{{ card_bundler_id }}"
+          >
+            {{ card_cta }}
+            {% render 'icon-sprite', name: 'cart', size: 16 %}
+          </button>
+        {% else %}
+          <button 
+            class="btn btn--primary bundle-card__add-btn"
+            data-manual-bundle-add
+            data-products="{{ card_products }}"
+          >
+            {{ card_cta }}
+            {% render 'icon-sprite', name: 'cart', size: 16 %}
+          </button>
+        {% endif %}
+      </div>
+      
+    </div>
+    
+    {% comment %} Hover Effect {% endcomment %}
+    <div class="bundle-card__hover-effect"></div>
+  
+  {% if card_url != '#' and card_url != blank %}
+    </a>
+  {% else %}
+    </div>
+  {% endif %}
+  
+</div>
+
+{% comment %} Schema for individual bundle card {% endcomment %}
+{% if template contains 'schema' %}
+  {% schema %}
+  {
+    "name": "Bundle Card",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Bundle Information"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Bundle Title",
+        "default": "Mass Gainer Stack"
+      },
+      {
+        "type": "text",
+        "id": "subtitle",
+        "label": "Bundle Subtitle",
+        "default": "For serious muscle building"
+      },
+      {
+        "type": "textarea",
+        "id": "description",
+        "label": "Bundle Description",
+        "default": "Complete muscle building solution with protein, creatine, and pre-workout"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Bundle Image"
+      },
+      {
+        "type": "header",
+        "content": "Bundler App Integration"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_bundler",
+        "label": "Use Bundler App",
+        "default": true,
+        "info": "Enable integration with Bundler app"
+      },
+      {
+        "type": "text",
+        "id": "bundler_id",
+        "label": "Bundler Product ID",
+        "info": "Enter the Bundler app product ID for this bundle"
+      },
+      {
+        "type": "header",
+        "content": "Manual Configuration"
+      },
+      {
+        "type": "textarea",
+        "id": "products",
+        "label": "Product Handles (if not using Bundler)",
+        "info": "JSON array: [\"product-1\", \"product-2\"]",
+        "default": "[\"whey-protein\", \"creatine-monohydrate\"]"
+      },
+      {
+        "type": "number",
+        "id": "price",
+        "label": "Bundle Price (cents)",
+        "default": 8999
+      },
+      {
+        "type": "number",
+        "id": "compare_price",
+        "label": "Compare At Price (cents)",
+        "default": 11999
+      },
+      {
+        "type": "textarea",
+        "id": "benefits",
+        "label": "Bundle Benefits",
+        "default": "• Enhanced muscle growth\n• Improved workout performance\n• Faster recovery"
+      },
+      {
+        "type": "url",
+        "id": "url",
+        "label": "Bundle URL"
+      },
+      {
+        "type": "text",
+        "id": "cta_text",
+        "label": "Call-to-Action Text",
+        "default": "Add Bundle to Cart"
+      },
+      {
+        "type": "checkbox",
+        "id": "featured",
+        "label": "Featured Bundle",
+        "default": false
+      }
+    ]
+  }
+  {% endschema %}
+{% endif %}

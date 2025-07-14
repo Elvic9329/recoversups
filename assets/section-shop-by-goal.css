@@ -1,0 +1,286 @@
+/*
+===============================================================================
+SECTION: SHOP BY GOAL - RecoverSups Theme
+Visual fitness goal navigation section with optimized conversion design
+===============================================================================
+*/
+
+/* === SECTION CONTAINER === */
+.shop-by-goal {
+  --section-spacing: var(--rs-spacing-xl, 2rem);
+  --grid-gap: var(--rs-spacing-lg, 1.5rem);
+  --carousel-gap: var(--rs-spacing-md, 1rem);
+  
+  padding: var(--section-spacing) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.shop-by-goal--grid {
+  background: var(--rs-background, #ffffff);
+}
+
+.shop-by-goal--carousel {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+/* === SECTION HEADER === */
+.shop-by-goal__header {
+  text-align: center;
+  margin-bottom: var(--rs-spacing-xl, 2rem);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.shop-by-goal__title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--rs-foreground, #1a202c);
+  margin: 0 0 var(--rs-spacing-sm, 0.5rem);
+  line-height: 1.2;
+}
+
+.shop-by-goal__subtitle {
+  font-size: 1.125rem;
+  color: var(--rs-muted-foreground, #64748b);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* === GOALS CONTAINER === */
+.shop-by-goal__container {
+  position: relative;
+}
+
+/* === GRID LAYOUT === */
+.goal-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--grid-gap);
+  padding: 0;
+}
+
+/* === CAROUSEL LAYOUT === */
+.goal-cards-carousel {
+  display: flex;
+  gap: var(--carousel-gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 0 var(--rs-spacing-sm, 0.5rem) var(--rs-spacing-sm, 0.5rem) 0;
+  margin: 0 calc(-1 * var(--rs-spacing-sm, 0.5rem));
+}
+
+.goal-cards-carousel::-webkit-scrollbar {
+  height: 4px;
+}
+
+.goal-cards-carousel::-webkit-scrollbar-track {
+  background: var(--rs-border, #e2e8f0);
+  border-radius: 2px;
+}
+
+.goal-cards-carousel::-webkit-scrollbar-thumb {
+  background: var(--rs-primary, #b62921);
+  border-radius: 2px;
+}
+
+.goal-cards-carousel .goal-card {
+  flex: 0 0 280px;
+  scroll-snap-align: start;
+}
+
+/* === CAROUSEL NAVIGATION === */
+.shop-by-goal__navigation {
+  display: flex;
+  justify-content: center;
+  gap: var(--rs-spacing-sm, 0.5rem);
+  margin-top: var(--rs-spacing-lg, 1.5rem);
+}
+
+.carousel-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 2px solid var(--rs-border, #e2e8f0);
+  border-radius: 50%;
+  background: var(--rs-background, #ffffff);
+  color: var(--rs-foreground, #1a202c);
+  cursor: pointer;
+  transition: var(--rs-transition-base, all 0.2s ease);
+  font-size: 0;
+}
+
+.carousel-nav:hover {
+  border-color: var(--rs-primary, #b62921);
+  background: var(--rs-primary, #b62921);
+  color: var(--rs-primary-foreground, #ffffff);
+  transform: translateY(-2px);
+}
+
+.carousel-nav:active {
+  transform: translateY(0);
+}
+
+.carousel-nav:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.carousel-nav:disabled:hover {
+  border-color: var(--rs-border, #e2e8f0);
+  background: var(--rs-background, #ffffff);
+  color: var(--rs-foreground, #1a202c);
+}
+
+/* === VIEW ALL SECTION === */
+.shop-by-goal__footer {
+  text-align: center;
+  margin-top: var(--rs-spacing-xl, 2rem);
+  padding-top: var(--rs-spacing-lg, 1.5rem);
+  border-top: 1px solid var(--rs-border, #e2e8f0);
+}
+
+.shop-by-goal__view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rs-spacing-xs, 0.25rem);
+  padding: var(--rs-spacing-md, 1rem) var(--rs-spacing-lg, 1.5rem);
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--rs-radius-md, 0.375rem);
+  transition: var(--rs-transition-base, all 0.2s ease);
+  
+  /* Secondary button styles */
+  background: transparent;
+  color: var(--rs-primary, #b62921);
+  border: 2px solid var(--rs-primary, #b62921);
+}
+
+.shop-by-goal__view-all:hover {
+  background: var(--rs-primary, #b62921);
+  color: var(--rs-primary-foreground, #ffffff);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(182, 41, 33, 0.3);
+}
+
+.shop-by-goal__view-all .icon {
+  transition: transform 0.2s ease;
+}
+
+.shop-by-goal__view-all:hover .icon {
+  transform: translateX(4px);
+}
+
+/* === ANIMATIONS === */
+@keyframes goalCardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.goal-card {
+  animation: goalCardSlideIn 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+/* Staggered animation for grid items */
+.goal-cards-grid .goal-card:nth-child(1) { animation-delay: 0.1s; }
+.goal-cards-grid .goal-card:nth-child(2) { animation-delay: 0.2s; }
+.goal-cards-grid .goal-card:nth-child(3) { animation-delay: 0.3s; }
+.goal-cards-grid .goal-card:nth-child(4) { animation-delay: 0.4s; }
+.goal-cards-grid .goal-card:nth-child(5) { animation-delay: 0.5s; }
+.goal-cards-grid .goal-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* === RESPONSIVE DESIGN === */
+@media (max-width: 1024px) {
+  .goal-cards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--rs-spacing-md, 1rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .shop-by-goal {
+    --section-spacing: var(--rs-spacing-lg, 1.5rem);
+  }
+  
+  .shop-by-goal__title {
+    font-size: 1.75rem;
+  }
+  
+  .shop-by-goal__subtitle {
+    font-size: 1rem;
+  }
+  
+  .goal-cards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--rs-spacing-sm, 0.5rem);
+  }
+  
+  .goal-cards-carousel {
+    gap: var(--rs-spacing-sm, 0.5rem);
+  }
+  
+  .goal-cards-carousel .goal-card {
+    flex: 0 0 240px;
+  }
+  
+  .shop-by-goal__view-all {
+    padding: var(--rs-spacing-sm, 0.5rem) var(--rs-spacing-md, 1rem);
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .goal-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .goal-cards-carousel .goal-card {
+    flex: 0 0 200px;
+  }
+  
+  .shop-by-goal__header {
+    margin-bottom: var(--rs-spacing-lg, 1.5rem);
+  }
+}
+
+/* === ACCESSIBILITY === */
+@media (prefers-reduced-motion: reduce) {
+  .goal-card,
+  .carousel-nav,
+  .shop-by-goal__view-all {
+    animation: none;
+    transition: none;
+  }
+  
+  .goal-cards-carousel {
+    scroll-behavior: auto;
+  }
+}
+
+/* === PRINT STYLES === */
+@media print {
+  .shop-by-goal__navigation,
+  .carousel-nav {
+    display: none;
+  }
+  
+  .goal-cards-carousel {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    overflow: visible;
+  }
+}

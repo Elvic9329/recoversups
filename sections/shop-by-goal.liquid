@@ -1,0 +1,313 @@
+{% comment %}
+  Shop by Goal Section - RecoverSups Theme
+  
+  Visual section for fitness goal-based navigation
+  Optimized for conversion and supplements e-commerce
+  
+  Settings:
+    - section_title: Main section heading
+    - section_subtitle: Descriptive subtitle
+    - goals_layout: grid/carousel layout option
+    - show_view_all: Show "View All" button
+    - background_color: Section background
+{% endcomment %}
+
+{% liquid
+  assign section_id = 'shop-by-goal-' | append: section.id
+  assign goals_count = section.blocks.size
+  assign layout_class = section.settings.goals_layout | default: 'grid'
+%}
+
+<section 
+  id="{{ section_id }}"
+  class="shop-by-goal shop-by-goal--{{ layout_class }} section-spacing"
+  data-section-type="shop-by-goal"
+  data-lazy-section
+  {% if section.settings.background_color %}
+    style="background-color: {{ section.settings.background_color }};"
+  {% endif %}
+>
+  <div class="page-width">
+    
+    {% comment %} Section Header {% endcomment %}
+    {% if section.settings.section_title != blank or section.settings.section_subtitle != blank %}
+      <div class="shop-by-goal__header section-header">
+        {% if section.settings.section_title != blank %}
+          <h2 class="shop-by-goal__title section-title">
+            {{ section.settings.section_title }}
+          </h2>
+        {% endif %}
+        
+        {% if section.settings.section_subtitle != blank %}
+          <p class="shop-by-goal__subtitle section-subtitle">
+            {{ section.settings.section_subtitle }}
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+    
+    {% comment %} Goals Grid/Carousel {% endcomment %}
+    {% if goals_count > 0 %}
+      <div class="shop-by-goal__container">
+        <div 
+          class="shop-by-goal__grid goal-cards-{{ layout_class }}"
+          {% if layout_class == 'carousel' %}
+            data-carousel="goals"
+            data-slides-per-view="auto"
+            data-space-between="20"
+          {% endif %}
+        >
+          
+          {% for block in section.blocks %}
+            {% liquid
+              assign goal_title = block.settings.goal_title
+              assign goal_description = block.settings.goal_description
+              assign goal_image = block.settings.goal_image
+              assign goal_icon = block.settings.goal_icon
+              assign goal_url = block.settings.goal_url
+              assign goal_color = block.settings.goal_color | default: '#b62921'
+              assign products_count = block.settings.products_count | default: '50+'
+            %}
+            
+            {% render 'goal-card',
+              title: goal_title,
+              description: goal_description,
+              image: goal_image,
+              icon: goal_icon,
+              url: goal_url,
+              color: goal_color,
+              products_count: products_count,
+              block_id: block.id,
+              index: forloop.index,
+              layout: layout_class
+            %}
+            
+          {% endfor %}
+          
+        </div>
+        
+        {% comment %} Carousel Navigation {% endcomment %}
+        {% if layout_class == 'carousel' and goals_count > 3 %}
+          <div class="shop-by-goal__navigation">
+            <button 
+              class="carousel-nav carousel-nav--prev"
+              data-carousel-prev="goals"
+              aria-label="Previous goals"
+            >
+              {% render 'icon-sprite', name: 'chevron-left', size: 20 %}
+            </button>
+            
+            <button 
+              class="carousel-nav carousel-nav--next"
+              data-carousel-next="goals"
+              aria-label="Next goals"
+            >
+              {% render 'icon-sprite', name: 'chevron-right', size: 20 %}
+            </button>
+          </div>
+        {% endif %}
+        
+      </div>
+    {% endif %}
+    
+    {% comment %} View All Button {% endcomment %}
+    {% if section.settings.show_view_all and section.settings.view_all_url != blank %}
+      <div class="shop-by-goal__footer">
+        <a 
+          href="{{ section.settings.view_all_url }}"
+          class="btn btn--secondary shop-by-goal__view-all"
+        >
+          {{ section.settings.view_all_text | default: 'View All Products' }}
+          {% render 'icon-sprite', name: 'chevron-right', size: 16 %}
+        </a>
+      </div>
+    {% endif %}
+    
+  </div>
+</section>
+
+{% comment %} Schema Settings {% endcomment %}
+{% schema %}
+{
+  "name": "Shop by Goal",
+  "tag": "section",
+  "class": "section-shop-by-goal",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Settings"
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Section Title",
+      "default": "Shop by Your Goal"
+    },
+    {
+      "type": "textarea",
+      "id": "section_subtitle",
+      "label": "Section Subtitle",
+      "default": "Find the perfect supplements for your fitness journey"
+    },
+    {
+      "type": "select",
+      "id": "goals_layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "header",
+      "content": "View All Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show View All Button",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "view_all_url",
+      "label": "View All URL"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View All Button Text",
+      "default": "View All Products"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "goal",
+      "name": "Fitness Goal",
+      "settings": [
+        {
+          "type": "text",
+          "id": "goal_title",
+          "label": "Goal Title",
+          "default": "Build Muscle"
+        },
+        {
+          "type": "textarea",
+          "id": "goal_description",
+          "label": "Goal Description",
+          "default": "Premium protein and creatine for muscle growth"
+        },
+        {
+          "type": "image_picker",
+          "id": "goal_image",
+          "label": "Goal Image"
+        },
+        {
+          "type": "select",
+          "id": "goal_icon",
+          "label": "Goal Icon",
+          "options": [
+            {
+              "value": "muscle",
+              "label": "Muscle"
+            },
+            {
+              "value": "energy",
+              "label": "Energy"
+            },
+            {
+              "value": "recovery",
+              "label": "Recovery"
+            },
+            {
+              "value": "endurance",
+              "label": "Endurance"
+            },
+            {
+              "value": "protein",
+              "label": "Protein"
+            }
+          ],
+          "default": "muscle"
+        },
+        {
+          "type": "url",
+          "id": "goal_url",
+          "label": "Goal URL"
+        },
+        {
+          "type": "color",
+          "id": "goal_color",
+          "label": "Goal Color",
+          "default": "#b62921"
+        },
+        {
+          "type": "text",
+          "id": "products_count",
+          "label": "Products Count Display",
+          "default": "50+"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop by Goal",
+      "blocks": [
+        {
+          "type": "goal",
+          "settings": {
+            "goal_title": "Build Muscle",
+            "goal_description": "Premium protein and creatine for muscle growth",
+            "goal_icon": "muscle",
+            "goal_color": "#b62921",
+            "products_count": "25+"
+          }
+        },
+        {
+          "type": "goal",
+          "settings": {
+            "goal_title": "Boost Energy",
+            "goal_description": "Pre-workouts and energy supplements",
+            "goal_icon": "energy",
+            "goal_color": "#f59e0b",
+            "products_count": "18+"
+          }
+        },
+        {
+          "type": "goal",
+          "settings": {
+            "goal_title": "Faster Recovery",
+            "goal_description": "Post-workout recovery and repair",
+            "goal_icon": "recovery",
+            "goal_color": "#10b981",
+            "products_count": "15+"
+          }
+        },
+        {
+          "type": "goal",
+          "settings": {
+            "goal_title": "Improve Endurance",
+            "goal_description": "Stamina and performance enhancers",
+            "goal_icon": "endurance",
+            "goal_color": "#3b82f6",
+            "products_count": "12+"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
