@@ -36,6 +36,10 @@ Optimized loading order for performance
 @import url('./component-nutrition-table.css');
 @import url('./component-benefit-icons.css');
 @import url('./component-certification-badges.css');
+@import url('./component-goal-card.css');
+@import url('./component-bundle-card.css');
+@import url('./component-transformation-card.css');
+@import url('./component-comparison-table.css');
 
 /* === PAGE-SPECIFIC STYLES === */
 /* Page-specific styles (can be lazy-loaded) */
@@ -54,6 +58,10 @@ Optimized loading order for performance
 
 @import url('./section-category-grid.css');
 @import url('./section-featured-products.css');
+@import url('./section-shop-by-goal.css');
+@import url('./section-product-bundles.css');
+@import url('./section-fitness-testimonials.css');
+@import url('./section-product-comparison.css');
 
 /* === UTILITY CLASSES === */
 /* Utility and helper classes */

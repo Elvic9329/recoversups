@@ -4,7 +4,7 @@
  * @version 2.0.0
  */
 
-import { CartModule } from './module-cart.js';
+import CartManager from './cart-manager.js';
 import { NavigationModule } from './module-navigation.js';
 import { PerformanceOptimizer } from './performance-optimizations.js';
 
@@ -76,10 +76,8 @@ class RecoverSupsTheme {
     // Initialize performance optimizer first
     this.modules.performance = new PerformanceOptimizer();
     
-    // Initialize cart functionality
-    if (document.querySelector('.cart-drawer') || document.querySelector('[data-cart-toggle]')) {
-      this.modules.cart = new CartModule();
-    }
+    // Initialize cart functionality (CartManager is singleton, auto-initialized)
+    this.modules.cart = window.cartManager || new CartManager();
     
     // Initialize navigation
     if (document.querySelector('.header__nav')) {
