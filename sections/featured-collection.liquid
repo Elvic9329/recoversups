@@ -1,0 +1,242 @@
+{% comment %}
+Featured Collection Section - RecoverSups Theme
+Display products from a selected collection
+{% endcomment %}
+
+{%- liquid
+  assign products_to_display = section.settings.products_to_show
+  assign collection = collections[section.settings.collection] | default: collections.all
+  assign columns_mobile_int = section.settings.columns_mobile | plus: 0
+  assign show_mobile_slider = false
+  if section.settings.swipe_on_mobile and products_to_display > columns_mobile_int
+    assign show_mobile_slider = true
+  endif
+-%}
+
+<div class="featured-collection section-{{ section.id }}-padding">
+  <div class="page-width">
+    {%- unless section.settings.title == blank -%}
+      <div class="title-wrapper-with-link title-wrapper--self-padded-mobile title-wrapper--no-top-margin">
+        <h2 class="title {{ section.settings.heading_size }}">
+          {{ section.settings.title | escape }}
+        </h2>
+        {%- if section.settings.show_view_all and section.settings.collection != blank -%}
+          <a href="{{ collections[section.settings.collection].url }}" class="link underlined-link large-up-hide">
+            {{ 'sections.featured_collection.view_all' | t }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endunless -%}
+
+    {%- if section.settings.description != blank -%}
+      <div class="collection-hero__description rte">
+        {{ section.settings.description }}
+      </div>
+    {%- endif -%}
+
+    <div class="collection collection--loading" id="Collection-{{ section.id }}" data-id="{{ section.id }}">
+      {%- if section.settings.enable_quick_add -%}
+        {%- liquid
+          assign cart_drawer_enabled = settings.cart_type == 'drawer'
+        -%}
+        <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+        <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+        {%- if cart_drawer_enabled -%}
+          <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
+        {%- endif -%}
+      {%- endif -%}
+      
+      <div class="grid product-grid{% if collection.products_count < 4 %} product-grid--fewer-than-4{% endif %}{% if show_mobile_slider %} slider slider--mobile{% endif %} grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down{% if section.settings.swipe_on_mobile %} slider slider--tablet grid--peek{% endif %}">
+        {%- for product in collection.products limit: products_to_display -%}
+          <div class="grid__item{% if show_mobile_slider %} slider__slide{% endif %}">
+            {% render 'product-card',
+              product: product,
+              show_vendor: section.settings.show_vendor,
+              show_description: section.settings.show_description,
+              show_quick_add: section.settings.enable_quick_add,
+              section_id: section.id
+            %}
+          </div>
+        {%- else -%}
+          {%- for i in (1..4) -%}
+            <div class="grid__item">
+              {% render 'product-card-placeholder' %}
+            </div>
+          {%- endfor -%}
+        {%- endfor -%}
+      </div>
+      
+      {%- if show_mobile_slider -%}
+        <div class="slider-buttons no-js-hidden medium-hide">
+          <button type="button" class="slider-button slider-button--prev" name="previous" aria-label="{{ 'general.slider.previous_slide' | t }}">
+            {% render 'icon-caret' %}
+          </button>
+          <div class="slider-counter caption">
+            <span class="slider-counter--current">1</span>
+            <span aria-hidden="true"> / </span>
+            <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
+            <span class="slider-counter--total">{{ products_to_display }}</span>
+          </div>
+          <button type="button" class="slider-button slider-button--next" name="next" aria-label="{{ 'general.slider.next_slide' | t }}">
+            {% render 'icon-caret' %}
+          </button>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_view_all and section.settings.collection != blank -%}
+      <div class="center collection__view-all small-hide medium-hide">
+        <a href="{{ collections[section.settings.collection].url }}" class="button">
+          {{ 'sections.featured_collection.view_all' | t }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Featured collection",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "Medium"
+        },
+        {
+          "value": "h1",
+          "label": "Large"
+        }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "default": false,
+      "label": "Show collection description"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 2,
+      "default": 4,
+      "label": "Maximum products to show"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "default": 4,
+      "label": "Number of columns on desktop"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": true,
+      "label": "Show \"View all\" button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_quick_add",
+      "default": false,
+      "label": "Enable Quick Add"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "default": "2",
+      "label": "Number of columns on mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 column"
+        },
+        {
+          "value": "2",
+          "label": "2 columns"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "swipe_on_mobile",
+      "default": false,
+      "label": "Enable swipe on mobile"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "background-1",
+          "label": "Background 1"
+        },
+        {
+          "value": "background-2",
+          "label": "Background 2"
+        }
+      ],
+      "default": "background-1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured collection"
+    }
+  ]
+}
+{% endschema %}

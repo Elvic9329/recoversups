@@ -413,33 +413,8 @@
 {% endif %}
 
 {% comment %} Schema for standalone usage {% endcomment %}
-{% if template contains 'schema' %}
-  {% schema %}
-  {
-    "name": "Comparison Table",
-    "settings": [
-      {
-        "type": "checkbox",
-        "id": "show_specifications",
-        "label": "Show Detailed Specifications",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "sticky_headers",
-        "label": "Enable Sticky Headers",
-        "default": true
-      },
-      {
-        "type": "range",
-        "id": "max_products",
-        "label": "Maximum Products",
-        "min": 2,
-        "max": 3,
-        "step": 1,
-        "default": 3
-      }
-    ]
-  }
-  {% endschema %}
-{% endif %}
+{% comment %}
+Comparison Table Component - RecoverSups Theme
+Reusable snippet for product comparison functionality.
+Configuration handled by parent section schema.
+{% endcomment %}

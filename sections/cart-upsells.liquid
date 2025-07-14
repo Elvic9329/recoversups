@@ -31,7 +31,7 @@
           
           case section.settings.upsell_type
             when 'related'
-              comment 'Get related products based on cart contents'
+              {%- comment -%}Get related products based on cart contents{%- endcomment -%}
               assign first_cart_product = cart.items.first.product
               if first_cart_product.related_products.size > 0
                 assign related_products = first_cart_product.related_products
@@ -41,7 +41,7 @@
               assign upsell_products = related_products | where: 'available', true
               
             when 'complementary'
-              comment 'Show complementary supplements based on fitness goals'
+              {%- comment -%}Show complementary supplements based on fitness goals{%- endcomment -%}
               assign fitness_goals = cart.items | map: 'product' | map: 'metafields.goals.primary.value' | compact | uniq
               if fitness_goals.size > 0
                 assign primary_goal = fitness_goals.first
@@ -73,7 +73,7 @@
               assign upsell_products = collections.supplements.products
           endcase
           
-          comment 'Filter out products already in cart'
+          {%- comment -%}Filter out products already in cart{%- endcomment -%}
           assign filtered_products = blank
           for product in upsell_products
             unless cart_product_ids contains product.id

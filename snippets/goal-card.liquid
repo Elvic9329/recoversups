@@ -142,74 +142,8 @@
 </div>
 
 {% comment %} Schema for individual goal card (if used standalone) {% endcomment %}
-{% if template contains 'schema' %}
-  {% schema %}
-  {
-    "name": "Goal Card",
-    "settings": [
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Goal Title",
-        "default": "Build Muscle"
-      },
-      {
-        "type": "textarea",
-        "id": "description",
-        "label": "Goal Description",
-        "default": "Premium protein and supplements for muscle growth"
-      },
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Goal Image"
-      },
-      {
-        "type": "select",
-        "id": "icon",
-        "label": "Goal Icon",
-        "options": [
-          {
-            "value": "muscle",
-            "label": "Muscle"
-          },
-          {
-            "value": "energy",
-            "label": "Energy"
-          },
-          {
-            "value": "recovery",
-            "label": "Recovery"
-          },
-          {
-            "value": "endurance",
-            "label": "Endurance"
-          },
-          {
-            "value": "protein",
-            "label": "Protein"
-          }
-        ],
-        "default": "muscle"
-      },
-      {
-        "type": "url",
-        "id": "url",
-        "label": "Goal URL"
-      },
-      {
-        "type": "color",
-        "id": "color",
-        "label": "Theme Color",
-        "default": "#b62921"
-      },
-      {
-        "type": "text",
-        "id": "products_count",
-        "label": "Products Count",
-        "default": "25+"
-      }
-    ]
-  }
-  {% endschema %}
-{% endif %}
+{% comment %}
+Goal Card Component - RecoverSups Theme
+Reusable snippet for fitness goal displays.
+Configuration handled by parent section schema.
+{% endcomment %}

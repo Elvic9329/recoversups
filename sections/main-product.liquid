@@ -123,7 +123,7 @@
               {% when 'price' %}
                 <div class="product__block product__block--price" {{ block.shopify_attributes }}>
                   <div class="price-wrapper" data-price-wrapper>
-                    <div class="price price--large price--{{ product.price_varies | | 'regular' }}" 
+                    <div class="price price--large price--{% if product.price_varies %}variable{% else %}regular{% endif %}" 
                          data-price="{{ product.selected_or_first_available_variant.price }}">
                       
                       <div class="price__container">
