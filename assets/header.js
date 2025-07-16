@@ -80,14 +80,14 @@
         header.classList.remove('scrolled');
       }
 
-      // Hide/show header on scroll (optional - can be enabled)
-      if (currentScrollY > lastScrollY && currentScrollY > headerHeight) {
-        // Scrolling down
-        header.style.transform = 'translateY(-100%)';
-      } else {
-        // Scrolling up
-        header.style.transform = 'translateY(0)';
-      }
+      // Hide/show header on scroll (disabled - header should always be visible)
+      // if (currentScrollY > lastScrollY && currentScrollY > headerHeight) {
+      //   // Scrolling down
+      //   header.style.transform = 'translateY(-100%)';
+      // } else {
+      //   // Scrolling up
+      //   header.style.transform = 'translateY(0)';
+      // }
 
       lastScrollY = currentScrollY;
       isScrolling = false;

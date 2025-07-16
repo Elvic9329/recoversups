@@ -232,58 +232,6 @@
 {% section 'instagram-feed' %}
 
 {% comment %}
-  Schema for homepage sections customization
+  Homepage template - uses sections defined in theme settings
+  Schema configuration is handled by individual sections
 {% endcomment %}
-{% schema %}
-{
-  "name": "Homepage",
-  "settings": [
-    {
-      "type": "header",
-      "content": "Homepage Layout"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_hero",
-      "label": "Show Hero Section",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_categories",
-      "label": "Show Category Grid",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_featured_products",
-      "label": "Show Featured Products",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_newsletter",
-      "label": "Show Newsletter Signup",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_testimonials",
-      "label": "Show Testimonials",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "show_brand_story",
-      "label": "Show Brand Story",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "show_instagram",
-      "label": "Show Instagram Feed",
-      "default": false
-    }
-  ]
-}
-{% endschema %}

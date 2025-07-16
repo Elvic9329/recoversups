@@ -103,6 +103,9 @@
   {{ content_for_header }}
   
   <!-- Theme JSON-LD Structured Data -->
+  {%- liquid
+    assign search_url_template = request.origin | append: routes.search_url | append: '?q={search_term_string}'
+  -%}
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -114,7 +117,7 @@
         "@type": "SearchAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": {{ request.origin | append: routes.search_url | append: "?q={search_term_string}" | json }}
+          "urlTemplate": {{ search_url_template | json }}
         },
         "query-input": "required name=search_term_string"
       }
@@ -132,9 +135,14 @@
     document.documentElement.classList.remove('no-js');
     document.documentElement.classList.add('js');
     
-    // Dark mode detection
-    if (localStorage.getItem('rs-theme') === 'dark' || (!localStorage.getItem('rs-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    // Dark mode detection - Always start in light mode unless explicitly set to dark
+    if (localStorage.getItem('rs-theme') === 'dark') {
       document.documentElement.classList.add('dark');
+    } else {
+      // Ensure light mode is set if no preference exists
+      if (!localStorage.getItem('rs-theme')) {
+        localStorage.setItem('rs-theme', 'light');
+      }
     }
     
     // Progressive enhancement and performance tracking
