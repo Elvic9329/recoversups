@@ -1,323 +1,132 @@
 {% comment %}
-  Cart Upsells Section - RecoverSups Theme
-  
-  Intelligent product recommendations based on cart contents
-  Optimized for supplement stacking and cross-selling
+Cart Upsells Section - RecoverSups Theme
+Display recommended products in cart drawer and cart page
 {% endcomment %}
 
 {% if cart.item_count > 0 %}
-  <div class="cart-upsells" data-section="{{ section.id }}">
-    <div class="page-width">
-      
+<div class="cart-upsells section-{{ section.id }}-padding">
+  <div class="page-width">
+    
+    <!-- Section Header -->
+    <div class="cart-upsells__header">
       {% if section.settings.heading != blank %}
-        <div class="cart-upsells__header">
-          <h2 class="cart-upsells__title {{ section.settings.heading_size }}">
-            {{ section.settings.heading }}
-          </h2>
-          {% if section.settings.show_description and section.settings.description != blank %}
-            <p class="cart-upsells__description">
-              {{ section.settings.description }}
-            </p>
-          {% endif %}
+        <h2 class="cart-upsells__heading {{ section.settings.heading_size }}">
+          {{ section.settings.heading }}
+        </h2>
+        
+        {% if section.settings.show_description and section.settings.description != blank %}
+          <div class="cart-upsells__description rte">
+            {{ section.settings.description }}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+    
+    <!-- Upsell Products Grid -->
+    <div class="cart-upsells__products" data-upsell-products>
+      
+      {% liquid
+        assign upsell_products = blank
+        assign cart_product_ids = cart.items | map: 'product_id'
+        
+        case section.settings.upsell_type
+          when 'related'
+            assign first_cart_product = cart.items.first.product
+            if first_cart_product.related_products.size > 0
+              assign related_products = first_cart_product.related_products
+            else
+              assign related_products = collections.supplements.products
+            endif
+            assign upsell_products = related_products | where: 'available', true
+            
+          when 'complementary'
+            assign fitness_goals = cart.items | map: 'product' | map: 'metafields.goals.primary.value' | compact | uniq
+            if fitness_goals.size > 0
+              assign primary_goal = fitness_goals.first
+              case primary_goal
+                when 'muscle'
+                  assign upsell_products = collections.muscle-building.products
+                when 'energy'
+                  assign upsell_products = collections.energy-boost.products
+                when 'recovery'
+                  assign upsell_products = collections.recovery.products
+                when 'endurance'
+                  assign upsell_products = collections.endurance.products
+                when 'weight-loss'
+                  assign upsell_products = collections.weight-loss.products
+                else
+                  assign upsell_products = collections.supplements.products
+              endcase
+            else
+              assign upsell_products = collections.supplements.products
+            endif
+            
+          when 'bestsellers'
+            assign upsell_products = collections.bestsellers.products
+            
+          when 'trending'
+            assign upsell_products = collections.trending.products
+            
+          else
+            assign upsell_products = collections.supplements.products
+        endcase
+        
+        assign filtered_products = blank
+        for product in upsell_products
+          unless cart_product_ids contains product.id
+            assign filtered_products = filtered_products | append: product | append: ','
+          endunless
+        endfor
+        
+        assign final_products = filtered_products | split: ',' | compact
+      %}
+      
+      {% if final_products.size > 0 %}
+        <div class="upsell-products-grid" 
+             style="--grid-desktop-columns: {{ section.settings.columns_desktop }};">
+          
+          {% for product in final_products limit: section.settings.products_to_show %}
+            <div class="upsell-product-item">
+              {% render 'product-card',
+                 product: product,
+                 show_vendor: section.settings.show_vendor,
+                 show_rating: section.settings.show_rating,
+                 show_quick_add: section.settings.show_quick_add,
+                 show_benefits: true,
+                 show_fitness_goals: true,
+                 card_style: 'minimal',
+                 image_size: 'medium'
+              %}
+            </div>
+          {% endfor %}
+          
+        </div>
+        
+        <!-- View All Button -->
+        {% if section.settings.show_view_all %}
+          <div class="cart-upsells__view-all">
+            <a href="/collections/{{ section.settings.upsell_type | default: 'supplements' }}" 
+               class="button button--secondary">
+              {{ section.settings.view_all_text | default: 'View All Supplements' }}
+            </a>
+          </div>
+        {% endif %}
+        
+      {% else %}
+        <!-- Fallback when no products available -->
+        <div class="cart-upsells__empty">
+          <p class="cart-upsells__empty-text">
+            {{ section.settings.empty_text | default: 'Discover more products in our collection' }}
+          </p>
+          <a href="/collections/all" class="button button--primary">
+            Shop All Products
+          </a>
         </div>
       {% endif %}
       
-      <!-- Upsell Products Grid -->
-      <div class="cart-upsells__products" data-upsell-products>
-        
-        {% liquid
-          assign upsell_products = blank
-          assign cart_product_ids = cart.items | map: 'product_id'
-          
-          case section.settings.upsell_type
-            when 'related'
-              {%- comment -%}Get related products based on cart contents{%- endcomment -%}
-              assign first_cart_product = cart.items.first.product
-              if first_cart_product.related_products.size > 0
-                assign related_products = first_cart_product.related_products
-              else
-                assign related_products = collections.supplements.products
-              endif
-              assign upsell_products = related_products | where: 'available', true
-              
-            when 'complementary'
-              {%- comment -%}Show complementary supplements based on fitness goals{%- endcomment -%}
-              assign fitness_goals = cart.items | map: 'product' | map: 'metafields.goals.primary.value' | compact | uniq
-              if fitness_goals.size > 0
-                assign primary_goal = fitness_goals.first
-                case primary_goal
-                  when 'muscle'
-                    assign upsell_products = collections.protein.products | concat: collections.creatine.products
-                  when 'energy'
-                    assign upsell_products = collections.pre-workout.products | concat: collections.caffeine.products
-                  when 'recovery'
-                    assign upsell_products = collections.post-workout.products | concat: collections.sleep.products
-                  when 'endurance'
-                    assign upsell_products = collections.endurance.products | concat: collections.electrolytes.products
-                  when 'weight'
-                    assign upsell_products = collections.fat-burners.products | concat: collections.appetite-suppressants.products
-                  else
-                    assign upsell_products = collections.bestsellers.products
-                endcase
-              else
-                assign upsell_products = collections.bestsellers.products
-              endif
-              
-            when 'trending'
-              assign upsell_products = collections.trending.products
-              
-            when 'bestsellers'
-              assign upsell_products = collections.bestsellers.products
-              
-            else
-              assign upsell_products = collections.supplements.products
-          endcase
-          
-          {%- comment -%}Filter out products already in cart{%- endcomment -%}
-          assign filtered_products = blank
-          for product in upsell_products
-            unless cart_product_ids contains product.id
-              assign filtered_products = filtered_products | append: product | append: ','
-            endunless
-          endfor
-          
-          assign final_products = filtered_products | split: ',' | compact
-        %}
-        
-        {% if final_products.size > 0 %}
-          <div class="upsell-products-grid" 
-               style="--grid-desktop-columns: {{ section.settings.columns_desktop }};">
-            
-            {% for product in final_products limit: section.settings.products_to_show %}
-              <div class="upsell-product-item">
-                {% render 'product-card',
-                   product: product,
-                   show_vendor: section.settings.show_vendor,
-                   show_rating: section.settings.show_rating,
-                   show_quick_add: section.settings.show_quick_add,
-                   show_benefits: true,
-                   show_fitness_goals: true,
-                   card_style: 'upsell',
-                   section_id: section.id %}
-              </div>
-            {% endfor %}
-            
-          </div>
-          
-          <!-- Stack Builder CTA -->
-          <div class="cart-upsells__cta">
-            <div class="stack-builder-prompt">
-              <h3 class="stack-prompt__title">Build the Perfect Stack</h3>
-              <p class="stack-prompt__text">
-                Get personalized supplement recommendations based on your goals and current products.
-              </p>
-              <a href="/pages/stack-builder" class="btn btn--secondary">
-                Try Stack Builder
-              </a>
-            </div>
-          </div>
-          
-        {% else %}
-          
-          <!-- Fallback: Popular Products -->
-          <div class="upsell-products-grid" 
-               style="--grid-desktop-columns: {{ section.settings.columns_desktop }};">
-            
-            {% for product in collections.popular.products limit: section.settings.products_to_show %}
-              {% unless cart_product_ids contains product.id %}
-                <div class="upsell-product-item">
-                  {% render 'product-card',
-                     product: product,
-                     show_vendor: section.settings.show_vendor,
-                     show_rating: section.settings.show_rating,
-                     show_quick_add: section.settings.show_quick_add,
-                     show_benefits: true,
-                     show_fitness_goals: true,
-                     card_style: 'upsell',
-                     section_id: section.id %}
-                </div>
-              {% endunless %}
-            {% endfor %}
-            
-          </div>
-          
-        {% endif %}
-        
-        <!-- Supplement Education -->
-        <div class="cart-upsells__education">
-          <div class="supplement-education">
-            <div class="education-content">
-              <h3 class="education__title">Why Stack Supplements?</h3>
-              <div class="education__benefits">
-                <div class="education-benefit">
-                  <span class="benefit-icon">⚡</span>
-                  <div class="benefit-content">
-                    <h4>Synergistic Effects</h4>
-                    <p>Combining supplements can enhance their individual benefits</p>
-                  </div>
-                </div>
-                <div class="education-benefit">
-                  <span class="benefit-icon">🎯</span>
-                  <div class="benefit-content">
-                    <h4>Targeted Results</h4>
-                    <p>Address multiple aspects of your fitness goals simultaneously</p>
-                  </div>
-                </div>
-                <div class="education-benefit">
-                  <span class="benefit-icon">💰</span>
-                  <div class="benefit-content">
-                    <h4>Better Value</h4>
-                    <p>Bundle discounts and free shipping on larger orders</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-      
     </div>
   </div>
-  
-  <!-- Dynamic Upsell Logic -->
-  <script>
-    class CartUpsells {
-      constructor() {
-        this.upsellContainer = document.querySelector('[data-upsell-products]');
-        this.cartItems = {{ cart.items | json }};
-        
-        this.init();
-      }
-      
-      init() {
-        this.enhanceUpsellRecommendations();
-        this.bindQuickAddEvents();
-      }
-      
-      enhanceUpsellRecommendations() {
-        // Analyze cart contents for better recommendations
-        const cartGoals = this.extractFitnessGoals();
-        const cartCategories = this.extractCategories();
-        
-        // Send analytics event for recommendation optimization
-        if (window.gtag) {
-          gtag('event', 'view_cart_upsells', {
-            'event_category': 'ecommerce',
-            'cart_goals': cartGoals,
-            'cart_categories': cartCategories,
-            'cart_value': {{ cart.total_price }}
-          });
-        }
-        
-        // Highlight synergistic products
-        this.highlightSynergisticProducts(cartGoals);
-      }
-      
-      extractFitnessGoals() {
-        const goals = new Set();
-        this.cartItems.forEach(item => {
-          if (item.product.metafields && item.product.metafields.goals) {
-            goals.add(item.product.metafields.goals.primary);
-          }
-        });
-        return Array.from(goals);
-      }
-      
-      extractCategories() {
-        const categories = new Set();
-        this.cartItems.forEach(item => {
-          if (item.product.type) {
-            categories.add(item.product.type);
-          }
-        });
-        return Array.from(categories);
-      }
-      
-      highlightSynergisticProducts(goals) {
-        const productCards = this.upsellContainer.querySelectorAll('.product-card');
-        
-        productCards.forEach(card => {
-          const productGoal = card.dataset.fitnessGoal;
-          if (goals.includes(productGoal)) {
-            card.classList.add('product-card--synergistic');
-            
-            // Add synergy badge
-            const synergyBadge = document.createElement('div');
-            synergyBadge.className = 'product-synergy-badge';
-            synergyBadge.innerHTML = '⚡ Perfect Match';
-            card.appendChild(synergyBadge);
-          }
-        });
-      }
-      
-      bindQuickAddEvents() {
-        this.upsellContainer.addEventListener('click', (event) => {
-          const quickAddBtn = event.target.closest('[data-product-quick-add]');
-          if (quickAddBtn) {
-            this.handleQuickAdd(quickAddBtn);
-          }
-        });
-      }
-      
-      async handleQuickAdd(button) {
-        const productId = button.dataset.productId;
-        const variantId = button.dataset.variantId;
-        
-        button.disabled = true;
-        button.textContent = 'Adding...';
-        
-        try {
-          const response = await fetch('/cart/add.js', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              id: variantId,
-              quantity: 1
-            })
-          });
-          
-          if (response.ok) {
-            button.textContent = 'Added!';
-            button.classList.add('btn--success');
-            
-            // Update cart count in header
-            document.dispatchEvent(new CustomEvent('cart:updated'));
-            
-            setTimeout(() => {
-              button.textContent = 'Add to Cart';
-              button.classList.remove('btn--success');
-              button.disabled = false;
-            }, 2000);
-          } else {
-            throw new Error('Failed to add product');
-          }
-        } catch (error) {
-          console.error('Quick add error:', error);
-          button.textContent = 'Error';
-          button.classList.add('btn--error');
-          
-          setTimeout(() => {
-            button.textContent = 'Add to Cart';
-            button.classList.remove('btn--error');
-            button.disabled = false;
-          }, 2000);
-        }
-      }
-    }
-    
-    // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
-        new CartUpsells();
-      });
-    } else {
-      new CartUpsells();
-    }
-  </script>
-  
+</div>
 {% endif %}
 
 {% schema %}
@@ -328,96 +137,151 @@
   "settings": [
     {
       "type": "header",
-      "content": "Upsell Content"
+      "content": "Section Settings"
     },
     {
       "type": "text",
       "id": "heading",
-      "default": "Complete Your Stack",
-      "label": "Heading"
+      "label": "Section Heading",
+      "default": "Complete Your Stack"
     },
     {
       "type": "select",
       "id": "heading_size",
+      "label": "Heading Size",
       "options": [
-        { "value": "h1", "label": "Extra Large" },
-        { "value": "h2", "label": "Large" },
-        { "value": "h3", "label": "Medium" }
+        {
+          "value": "h1",
+          "label": "Large"
+        },
+        {
+          "value": "h2", 
+          "label": "Medium"
+        },
+        {
+          "value": "h3",
+          "label": "Small"
+        }
       ],
-      "default": "h2",
-      "label": "Heading size"
-    },
-    {
-      "type": "textarea",
-      "id": "description",
-      "default": "Add these supplements to maximize your results",
-      "label": "Description"
+      "default": "h2"
     },
     {
       "type": "checkbox",
       "id": "show_description",
-      "default": true,
-      "label": "Show description"
+      "label": "Show Description",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Add these supplements to maximize your results"
     },
     {
       "type": "header",
-      "content": "Product Selection"
+      "content": "Upsell Logic"
     },
     {
       "type": "select",
       "id": "upsell_type",
+      "label": "Upsell Type",
       "options": [
-        { "value": "related", "label": "Related Products" },
-        { "value": "complementary", "label": "Complementary Supplements" },
-        { "value": "trending", "label": "Trending Products" },
-        { "value": "bestsellers", "label": "Best Sellers" }
+        {
+          "value": "related",
+          "label": "Related Products"
+        },
+        {
+          "value": "complementary",
+          "label": "Complementary (by fitness goals)"
+        },
+        {
+          "value": "bestsellers",
+          "label": "Bestsellers"
+        },
+        {
+          "value": "trending",
+          "label": "Trending"
+        }
       ],
-      "default": "complementary",
-      "label": "Upsell strategy"
+      "default": "related"
     },
     {
       "type": "range",
       "id": "products_to_show",
+      "label": "Products to Show",
       "min": 2,
-      "max": 12,
+      "max": 8,
       "step": 1,
-      "default": 4,
-      "label": "Products to show"
+      "default": 4
     },
     {
       "type": "range",
       "id": "columns_desktop",
+      "label": "Columns on Desktop",
       "min": 2,
-      "max": 5,
+      "max": 6,
       "step": 1,
-      "default": 4,
-      "label": "Number of columns on desktop"
+      "default": 4
     },
     {
       "type": "header",
-      "content": "Product Cards"
+      "content": "Product Display"
     },
     {
       "type": "checkbox",
       "id": "show_vendor",
-      "default": false,
-      "label": "Show product vendor"
+      "label": "Show Vendor",
+      "default": false
     },
     {
       "type": "checkbox",
       "id": "show_rating",
-      "default": true,
-      "label": "Show product rating"
+      "label": "Show Rating",
+      "default": true
     },
     {
       "type": "checkbox",
       "id": "show_quick_add",
-      "default": true,
-      "label": "Enable quick add"
+      "label": "Show Quick Add",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show View All Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View All Button Text",
+      "default": "View All Supplements"
+    },
+    {
+      "type": "text",
+      "id": "empty_text",
+      "label": "Empty State Text",
+      "default": "Discover more products in our collection"
     },
     {
       "type": "header",
-      "content": "Section Padding"
+      "content": "Section Design"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "options": [
+        {
+          "value": "background-1",
+          "label": "Background 1"
+        },
+        {
+          "value": "background-2", 
+          "label": "Background 2"
+        }
+      ],
+      "default": "background-1"
     },
     {
       "type": "range",
@@ -426,7 +290,7 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "label": "Top padding",
+      "label": "Padding top",
       "default": 36
     },
     {
@@ -436,18 +300,8 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "label": "Bottom padding",
+      "label": "Padding bottom",
       "default": 36
-    },
-    {
-      "type": "header",
-      "content": "Color"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color scheme",
-      "default": "background-1"
     }
   ]
 }

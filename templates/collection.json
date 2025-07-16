@@ -38,20 +38,24 @@
     },
     "supplement-guide": {
       "type": "rich-text",
-      "blocks": [
-        {
+      "blocks": {
+        "heading_1": {
           "type": "heading",
           "settings": {
             "heading": "Supplement Selection Guide",
             "heading_size": "h2"
           }
         },
-        {
+        "text_1": {
           "type": "text",
           "settings": {
             "text": "<h3>How to Choose the Right Supplements<\/h3><p>Our supplement collection is carefully curated to support your fitness goals. Use our smart filters to find products based on your specific objectives, dietary requirements, and preferred ingredients.<\/p><h3>Quality Assurance<\/h3><p>All products are third-party tested for purity and potency. Look for our certification badges to identify products that meet the highest quality standards.<\/p>"
           }
         }
+      },
+      "block_order": [
+        "heading_1",
+        "text_1"
       ],
       "settings": {
         "desktop_content_position": "center",
@@ -67,7 +71,7 @@
       "settings": {
         "title": "Trending Supplements",
         "heading_size": "h2",
-        "description": "Most popular products this month",
+        "description": "<p>Most popular products this month</p>",
         "show_description": false,
         "description_style": "body",
         "collection": "trending",

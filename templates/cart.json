@@ -32,20 +32,24 @@
     },
     "shipping-info": {
       "type": "rich-text",
-      "blocks": [
-        {
+      "blocks": {
+        "heading_1": {
           "type": "heading",
           "settings": {
             "heading": "Shipping & Returns",
             "heading_size": "h3"
           }
         },
-        {
+        "text_1": {
           "type": "text",
           "settings": {
             "text": "<div class=\"shipping-benefits\"><div class=\"shipping-benefit\"><strong>Free Shipping</strong><br>On orders over $75</div><div class=\"shipping-benefit\"><strong>Fast Delivery</strong><br>2-3 business days</div><div class=\"shipping-benefit\"><strong>Easy Returns</strong><br>30-day return policy</div><div class=\"shipping-benefit\"><strong>Secure Checkout</strong><br>SSL encrypted payments</div></div>"
           }
         }
+      },
+      "block_order": [
+        "heading_1",
+        "text_1"
       ],
       "settings": {
         "desktop_content_position": "center",
@@ -58,47 +62,53 @@
     },
     "trust-signals": {
       "type": "multicolumn",
-      "blocks": [
-        {
+      "blocks": {
+        "column_1": {
           "type": "column",
           "settings": {
             "image": "shopify:\/\/shop_images\/nsf-certified.png",
             "title": "NSF Certified",
-            "text": "Third-party tested for sport and quality assurance",
+            "text": "<p>Third-party tested for sport and quality assurance</p>",
             "link_label": "",
             "link": ""
           }
         },
-        {
+        "column_2": {
           "type": "column", 
           "settings": {
             "image": "shopify:\/\/shop_images\/money-back-guarantee.png",
             "title": "Money Back Guarantee",
-            "text": "Not satisfied? Get your money back within 30 days",
+            "text": "<p>Not satisfied? Get your money back within 30 days</p>",
             "link_label": "",
             "link": ""
           }
         },
-        {
+        "column_3": {
           "type": "column",
           "settings": {
             "image": "shopify:\/\/shop_images\/expert-formulated.png",
             "title": "Expert Formulated",
-            "text": "Developed by nutrition scientists and fitness experts",
+            "text": "<p>Developed by nutrition scientists and fitness experts</p>",
             "link_label": "",
             "link": ""
           }
         },
-        {
+        "column_4": {
           "type": "column",
           "settings": {
             "image": "shopify:\/\/shop_images\/secure-checkout.png",
             "title": "Secure Checkout",
-            "text": "Your payment information is always protected",
+            "text": "<p>Your payment information is always protected</p>",
             "link_label": "",
             "link": ""
           }
         }
+      },
+      "block_order": [
+        "column_1",
+        "column_2", 
+        "column_3",
+        "column_4"
       ],
       "settings": {
         "title": "Why Choose RecoverSups?",

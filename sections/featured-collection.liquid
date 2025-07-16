@@ -36,9 +36,10 @@ Display products from a selected collection
 
     <div class="collection collection--loading" id="Collection-{{ section.id }}" data-id="{{ section.id }}">
       {%- if section.settings.enable_quick_add -%}
-        {%- liquid
-          assign cart_drawer_enabled = settings.cart_type == 'drawer'
-        -%}
+        {%- assign cart_drawer_enabled = false -%}
+        {%- if settings.cart_type == 'drawer' -%}
+          {%- assign cart_drawer_enabled = true -%}
+        {%- endif -%}
         <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
         <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
         {%- if cart_drawer_enabled -%}

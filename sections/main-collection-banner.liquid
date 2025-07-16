@@ -1,0 +1,136 @@
+{% comment %}
+Main Collection Banner Section - RecoverSups Theme
+Banner display for collection pages
+{% endcomment %}
+
+{%- liquid
+  assign full_width = '100vw'
+  assign widths = '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+  
+  if section.settings.image_height == 'adapt' and collection.image
+    assign image_height = collection.image.height | divided_by: collection.image.width | times: 100
+  endif
+-%}
+
+<div class="collection-hero{% if section.settings.show_collection_description and collection.description != blank %} collection-hero--with-description{% endif %}{% unless collection.image and section.settings.show_collection_image %} collection-hero--no-image{% endunless %} page-width{% if section.settings.show_collection_image and collection.image %} section-{{ section.id }}-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+  {%- if section.settings.show_collection_image and collection.image -%}
+    <div class="collection-hero__image-container media{% if section.settings.image_height == 'adapt' %} media--adapt{% else %} media--{{ section.settings.image_height }}{% endif %}{% if collection.image %} media--landscape{% endif %}"
+         {% if section.settings.image_height == 'adapt' %}style="padding-bottom: {{ image_height }}%;"{% endif %}>
+      <img
+        srcset="{%- if collection.image.width >= 375 -%}{{ collection.image | image_url: width: 375 }} 375w,{%- endif -%}
+                {%- if collection.image.width >= 750 -%}{{ collection.image | image_url: width: 750 }} 750w,{%- endif -%}
+                {%- if collection.image.width >= 1100 -%}{{ collection.image | image_url: width: 1100 }} 1100w,{%- endif -%}
+                {%- if collection.image.width >= 1500 -%}{{ collection.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+                {%- if collection.image.width >= 1780 -%}{{ collection.image | image_url: width: 1780 }} 1780w,{%- endif -%}
+                {%- if collection.image.width >= 2000 -%}{{ collection.image | image_url: width: 2000 }} 2000w,{%- endif -%}
+                {%- if collection.image.width >= 3840 -%}{{ collection.image | image_url: width: 3840 }} 3840w,{%- endif -%}
+                {{ collection.image | image_url }} {{ collection.image.width }}w"
+        src="{{ collection.image | image_url: width: 1500 }}"
+        sizes="{{ full_width }}"
+        alt="{{ collection.image.alt }}"
+        width="{{ collection.image.width }}"
+        height="{{ collection.image.height }}"
+        loading="eager"
+      >
+    </div>
+  {%- endif -%}
+  
+  <div class="collection-hero__text-wrapper">
+    <div class="collection-hero__title">
+      <h1 class="collection-hero__title">
+        {%- liquid
+          if collection.id
+            echo collection.title | escape
+          else
+            echo 'collections.general.catalog_title' | t
+          endif
+        -%}
+      </h1>
+    </div>
+    
+    {%- if section.settings.show_collection_description and collection.description != blank -%}
+      <div class="collection-hero__description rte">{{ collection.description }}</div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection banner",
+  "tag": "section",
+  "class": "section collection-banner-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.collection-banner.settings.paragraph.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "default": true,
+      "label": "t:sections.collection-banner.settings.show_collection_description.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "default": false,
+      "label": "t:sections.collection-banner.settings.show_collection_image.label",
+      "info": "t:sections.collection-banner.settings.show_collection_image.info"
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:sections.collection-banner.settings.image_height.options__1.label"
+        },
+        {
+          "value": "small",
+          "label": "t:sections.collection-banner.settings.image_height.options__2.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.collection-banner.settings.image_height.options__3.label"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.collection-banner.settings.image_height.options__4.label"
+        }
+      ],
+      "default": "medium",
+      "label": "t:sections.collection-banner.settings.image_height.label",
+      "info": "t:sections.collection-banner.settings.image_height.info"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "background-1",
+          "label": "t:sections.all.colors.background_1.label"
+        },
+        {
+          "value": "background-2",
+          "label": "t:sections.all.colors.background_2.label"
+        },
+        {
+          "value": "inverse",
+          "label": "t:sections.all.colors.inverse.label"
+        },
+        {
+          "value": "accent-1",
+          "label": "t:sections.all.colors.accent_1.label"
+        },
+        {
+          "value": "accent-2",
+          "label": "t:sections.all.colors.accent_2.label"
+        }
+      ],
+      "default": "background-1",
+      "label": "t:sections.all.colors.label",
+      "info": "t:sections.collection-banner.settings.color_scheme.info"
+    }
+  ]
+}
+{% endschema %}
