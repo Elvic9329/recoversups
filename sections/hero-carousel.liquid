@@ -1,0 +1,183 @@
+<div class="hero-carousel">
+  <div class="hero-carousel__wrapper">
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'slide' %}
+          <div class="hero-carousel__slide" {{ block.shopify_attributes }}>
+            {% if block.settings.image %}
+              <div class="hero-carousel__image">
+                <img src="{{ block.settings.image | img_url: '1920x800' }}" 
+                     alt="{{ block.settings.title }}" 
+                     loading="lazy">
+              </div>
+            {% endif %}
+            
+            <div class="hero-carousel__content">
+              <div class="container">
+                {% if block.settings.title %}
+                  <h2 class="hero-carousel__title">{{ block.settings.title }}</h2>
+                {% endif %}
+                
+                {% if block.settings.subtitle %}
+                  <p class="hero-carousel__subtitle">{{ block.settings.subtitle }}</p>
+                {% endif %}
+                
+                {% if block.settings.button_text and block.settings.button_link %}
+                  <a href="{{ block.settings.button_link }}" class="btn btn-primary hero-carousel__button">
+                    {{ block.settings.button_text }}
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+      {% endcase %}
+    {% endfor %}
+  </div>
+  
+  {% if section.blocks.size > 1 %}
+    <div class="hero-carousel__controls">
+      <button class="hero-carousel__prev" aria-label="Previous slide">&lsaquo;</button>
+      <button class="hero-carousel__next" aria-label="Next slide">&rsaquo;</button>
+    </div>
+    
+    <div class="hero-carousel__indicators">
+      {% for block in section.blocks %}
+        <button class="hero-carousel__indicator" data-slide="{{ forloop.index0 }}"></button>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const carousel = document.querySelector('.hero-carousel');
+  if (!carousel) return;
+  
+  const slides = carousel.querySelectorAll('.hero-carousel__slide');
+  const prevButton = carousel.querySelector('.hero-carousel__prev');
+  const nextButton = carousel.querySelector('.hero-carousel__next');
+  const indicators = carousel.querySelectorAll('.hero-carousel__indicator');
+  
+  let currentSlide = 0;
+  
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.style.display = i === index ? 'block' : 'none';
+    });
+    
+    indicators.forEach((indicator, i) => {
+      indicator.classList.toggle('active', i === index);
+    });
+  }
+  
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    showSlide(currentSlide);
+  }
+  
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    showSlide(currentSlide);
+  }
+  
+  if (prevButton) prevButton.addEventListener('click', prevSlide);
+  if (nextButton) nextButton.addEventListener('click', nextSlide);
+  
+  indicators.forEach((indicator, index) => {
+    indicator.addEventListener('click', () => {
+      currentSlide = index;
+      showSlide(currentSlide);
+    });
+  });
+  
+  // Auto-advance slides
+  if (slides.length > 1) {
+    setInterval(nextSlide, {{ section.settings.autoplay_speed | default: 5000 }});
+  }
+  
+  // Initialize
+  showSlide(0);
+});
+</script>
+
+{% schema %}
+{
+  "name": "Hero Carousel",
+  "class": "section-hero-carousel",
+  "settings": [
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Autoplay speed (seconds)",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "unit": "s"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dots",
+      "label": "Show navigation dots",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Slide image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Slide title",
+          "default": "Slide Title"
+        },
+        {
+          "type": "textarea",
+          "id": "subtitle",
+          "label": "Slide subtitle",
+          "default": "Slide description"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button text",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Carousel",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "title": "Premium Supplements",
+            "subtitle": "Fuel your fitness journey with our premium supplements",
+            "button_text": "Shop Now"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

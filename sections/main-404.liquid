@@ -1,0 +1,32 @@
+<div class="page-404">
+  <div class="container">
+    <div class="page-404__content">
+      <h1 class="page-404__title">{{ 'general.404.title' | t }}</h1>
+      <p class="page-404__message">{{ 'general.404.subtext' | t }}</p>
+      <a href="{{ routes.root_url }}" class="btn btn-primary">
+        {{ 'general.404.link' | t }}
+      </a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "404 Page",
+  "class": "section-404",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Page Not Found"
+    },
+    {
+      "type": "textarea",
+      "id": "message",
+      "label": "Message",
+      "default": "The page you are looking for cannot be found."
+    }
+  ]
+}
+{% endschema %}

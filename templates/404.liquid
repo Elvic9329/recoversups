@@ -3,21 +3,6 @@
   Displayed when a page cannot be found
 {% endcomment %}
 
-<div class="error-page">
-  <div class="error-page__content">
-    <div class="error-page__header">
-      <h1 class="error-page__title">404</h1>
-      <p class="error-page__subtitle">{{ 'general.404.title' | t }}</p>
-    </div>
-    
-    <div class="error-page__body">
-      <p class="error-page__text">{{ 'general.404.subtext' | t }}</p>
-      
-      <div class="error-page__actions">
-        <a href="{{ routes.root_url }}" class="btn btn-primary">
-          {{ 'general.404.link' | t }}
-        </a>
-      </div>
-    </div>
-  </div>
+<div class="error-404">
+  {% section 'main-404' %}
 </div>

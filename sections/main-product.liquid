@@ -1,0 +1,86 @@
+<div class="product">
+  <div class="container">
+    <div class="product__wrapper">
+      <div class="product__media">
+        {% if product.media.size > 0 %}
+          <div class="product__media-gallery">
+            {% for media in product.media %}
+              {% case media.media_type %}
+                {% when 'image' %}
+                  <div class="product__media-item">
+                    <img src="{{ media | img_url: '600x600' }}" 
+                         alt="{{ media.alt | escape }}" 
+                         loading="lazy">
+                  </div>
+                {% when 'video' %}
+                  <div class="product__media-item">
+                    {{ media | media_tag: autoplay: true, loop: true, muted: true }}
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="product__details">
+        <h1 class="product__title">{{ product.title }}</h1>
+        
+        <div class="product__vendor">
+          {% if product.vendor != blank %}
+            <span>{{ product.vendor }}</span>
+          {% endif %}
+        </div>
+
+        <div class="product__price">
+          {% if product.compare_at_price > product.price %}
+            <span class="product__price-compare">
+              {{ product.compare_at_price | money }}
+            </span>
+            <span class="product__price-sale">
+              {{ product.price | money }}
+            </span>
+          {% else %}
+            <span class="product__price-regular">
+              {{ product.price | money }}
+            </span>
+          {% endif %}
+        </div>
+
+        {% if product.description != blank %}
+          <div class="product__description">
+            {{ product.description }}
+          </div>
+        {% endif %}
+
+        {% render 'product-form', product: product %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product",
+  "class": "section-product",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show product vendor",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sku",
+      "label": "Show SKU",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share_buttons",
+      "label": "Show share buttons",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

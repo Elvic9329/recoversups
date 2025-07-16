@@ -1,0 +1,101 @@
+{% if recommendations.products_count > 0 %}
+<div class="related-products">
+  <div class="container">
+    <h2 class="related-products__title">{{ section.settings.title }}</h2>
+    
+    <div class="related-products__grid">
+      {% for product in recommendations.products limit: section.settings.products_to_show %}
+        <div class="related-products__item">
+          <a href="{{ product.url }}" class="related-products__link">
+            {% if product.featured_image %}
+              <div class="related-products__image">
+                <img src="{{ product.featured_image | img_url: '300x300' }}" 
+                     alt="{{ product.title }}" 
+                     loading="lazy">
+              </div>
+            {% endif %}
+            
+            <div class="related-products__content">
+              <h3 class="related-products__product-title">{{ product.title }}</h3>
+              
+              <div class="related-products__price">
+                {% if product.compare_at_price > product.price %}
+                  <span class="related-products__price-compare">
+                    {{ product.compare_at_price | money }}
+                  </span>
+                  <span class="related-products__price-sale">
+                    {{ product.price | money }}
+                  </span>
+                {% else %}
+                  <span class="related-products__price-regular">
+                    {{ product.price | money }}
+                  </span>
+                {% endif %}
+              </div>
+              
+              {% if product.available %}
+                <button class="btn btn-primary related-products__add-to-cart">
+                  Add to Cart
+                </button>
+              {% else %}
+                <button class="btn btn-secondary" disabled>
+                  Sold Out
+                </button>
+              {% endif %}
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const productId = {{ product.id }};
+  const sectionId = '{{ section.id }}';
+  
+  fetch(`${window.Shopify.routes.root}recommendations/products.json?product_id=${productId}&limit=${section.settings.products_to_show}`)
+    .then(response => response.json())
+    .then(data => {
+      // Update recommendations if needed
+    });
+});
+</script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Related Products",
+  "class": "section-related-products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "You may also like"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show product vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show product rating",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

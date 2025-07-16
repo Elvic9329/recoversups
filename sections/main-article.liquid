@@ -1,0 +1,52 @@
+<article class="article">
+  <div class="container">
+    <header class="article__header">
+      <h1 class="article__title">{{ article.title }}</h1>
+      <div class="article__meta">
+        <time datetime="{{ article.created_at | date: '%Y-%m-%d' }}">
+          {{ article.created_at | date: '%B %d, %Y' }}
+        </time>
+        <span class="article__author">{{ article.author }}</span>
+      </div>
+    </header>
+
+    <div class="article__content">
+      {{ article.content }}
+    </div>
+
+    <footer class="article__footer">
+      <div class="article__tags">
+        {% for tag in article.tags %}
+          <span class="article__tag">{{ tag }}</span>
+        {% endfor %}
+      </div>
+    </footer>
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Article",
+  "class": "section-article",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Show tags",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

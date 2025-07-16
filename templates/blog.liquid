@@ -4,50 +4,5 @@
 {% endcomment %}
 
 <div class="blog-template">
-  <header class="blog-header">
-    <h1 class="blog-title">{{ blog.title }}</h1>
-    {% if blog.description != blank %}
-      <p class="blog-description">{{ blog.description }}</p>
-    {% endif %}
-  </header>
-
-  <div class="blog-articles">
-    {% for article in blog.articles %}
-      <article class="blog-article">
-        <header class="blog-article__header">
-          <h2 class="blog-article__title">
-            <a href="{{ article.url }}">{{ article.title }}</a>
-          </h2>
-          <div class="blog-article__meta">
-            <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
-              {{ article.published_at | date: '%B %d, %Y' }}
-            </time>
-            {% if article.author %}
-              <span class="blog-article__author">{{ 'blogs.article.by_author' | t: author: article.author }}</span>
-            {% endif %}
-          </div>
-        </header>
-
-        <div class="blog-article__content">
-          {% if article.excerpt != blank %}
-            <p>{{ article.excerpt }}</p>
-          {% else %}
-            <p>{{ article.content | strip_html | truncate: 150 }}</p>
-          {% endif %}
-        </div>
-
-        <footer class="blog-article__footer">
-          <a href="{{ article.url }}" class="blog-article__read-more">
-            {{ 'blogs.article.read_more' | t }}
-          </a>
-        </footer>
-      </article>
-    {% endfor %}
-  </div>
-
-  {% if paginate.pages > 1 %}
-    <nav class="blog-pagination">
-      {{ paginate | default_pagination }}
-    </nav>
-  {% endif %}
+  {% section 'main-blog' %}
 </div>

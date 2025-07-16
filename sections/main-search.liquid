@@ -1,0 +1,85 @@
+<div class="search">
+  <div class="container">
+    <header class="search__header">
+      <h1 class="search__title">Search</h1>
+      
+      <form class="search__form" action="{{ routes.search_url }}" method="get">
+        <input type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search products...">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+    </header>
+
+    {% if search.performed %}
+      <div class="search__results">
+        {% if search.results_count > 0 %}
+          <p class="search__results-count">
+            {{ search.results_count }} {{ search.results_count | pluralize: 'result', 'results' }} for "{{ search.terms }}"
+          </p>
+
+          <div class="search__grid">
+            {% for item in search.results %}
+              {% case item.object_type %}
+                {% when 'product' %}
+                  <div class="search__product">
+                    <a href="{{ item.url }}">
+                      {% if item.featured_image %}
+                        <img src="{{ item.featured_image | img_url: '300x300' }}" alt="{{ item.title }}">
+                      {% endif %}
+                      <h3>{{ item.title }}</h3>
+                      <p>{{ item.price | money }}</p>
+                    </a>
+                  </div>
+                {% when 'article' %}
+                  <div class="search__article">
+                    <a href="{{ item.url }}">
+                      <h3>{{ item.title }}</h3>
+                      <p>{{ item.excerpt | strip_html | truncate: 100 }}</p>
+                    </a>
+                  </div>
+                {% when 'page' %}
+                  <div class="search__page">
+                    <a href="{{ item.url }}">
+                      <h3>{{ item.title }}</h3>
+                      <p>{{ item.content | strip_html | truncate: 100 }}</p>
+                    </a>
+                  </div>
+              {% endcase %}
+            {% endfor %}
+          </div>
+
+          {% if paginate.pages > 1 %}
+            {% render 'pagination', paginate: paginate %}
+          {% endif %}
+        {% else %}
+          <p class="search__no-results">
+            No results found for "{{ search.terms }}". Try different keywords.
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Search",
+  "class": "section-search",
+  "settings": [
+    {
+      "type": "range",
+      "id": "results_per_page",
+      "label": "Results per page",
+      "min": 12,
+      "max": 48,
+      "step": 4,
+      "default": 24
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_vendor",
+      "label": "Show product vendor",
+      "default": false
+    }
+  ]
+}
+{% endschema %}
