@@ -1,0 +1,382 @@
+/**
+ * RecoverSups Typography Mixins
+ * SCSS mixins for consistent typography using design tokens
+ */
+
+/* ========================================
+   TYPOGRAPHY MIXINS
+======================================== */
+
+/* Base Typography Mixin */
+@mixin rs-text-base {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-base);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+}
+
+/* Heading Mixins */
+@mixin rs-text-h1 {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-bold);
+  font-size: var(--rs-font-size-4xl);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-tight);
+  color: var(--rs-color-foreground);
+  
+  @media (min-width: 768px) {
+    font-size: var(--rs-font-size-5xl);
+  }
+}
+
+@mixin rs-text-h2 {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-bold);
+  font-size: var(--rs-font-size-3xl);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-tight);
+  color: var(--rs-color-foreground);
+  
+  @media (min-width: 768px) {
+    font-size: var(--rs-font-size-4xl);
+  }
+}
+
+@mixin rs-text-h3 {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-semibold);
+  font-size: var(--rs-font-size-2xl);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  
+  @media (min-width: 768px) {
+    font-size: var(--rs-font-size-3xl);
+  }
+}
+
+@mixin rs-text-h4 {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-semibold);
+  font-size: var(--rs-font-size-xl);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  
+  @media (min-width: 768px) {
+    font-size: var(--rs-font-size-2xl);
+  }
+}
+
+@mixin rs-text-h5 {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-lg);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  
+  @media (min-width: 768px) {
+    font-size: var(--rs-font-size-xl);
+  }
+}
+
+@mixin rs-text-h6 {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-base);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  
+  @media (min-width: 768px) {
+    font-size: var(--rs-font-size-lg);
+  }
+}
+
+/* Body Text Mixins */
+@mixin rs-text-body {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-base);
+  line-height: var(--rs-line-height-relaxed);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+}
+
+@mixin rs-text-body-large {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-lg);
+  line-height: var(--rs-line-height-relaxed);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+}
+
+@mixin rs-text-body-small {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-muted-foreground);
+}
+
+/* Caption and Label Mixins */
+@mixin rs-text-caption {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-xs);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-wide);
+  color: var(--rs-color-muted-foreground);
+}
+
+@mixin rs-text-label {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+}
+
+/* Special Typography for Supplements */
+@mixin rs-text-nutrition-header {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-bold);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-wide);
+  text-transform: uppercase;
+  color: var(--rs-color-primary-foreground);
+}
+
+@mixin rs-text-nutrition-value {
+  font-family: var(--rs-font-mono);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+}
+
+@mixin rs-text-price {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-bold);
+  font-size: var(--rs-font-size-xl);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-tight);
+  color: var(--rs-color-primary);
+}
+
+@mixin rs-text-price-compare {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-muted-foreground);
+  text-decoration: line-through;
+}
+
+/* Button Text Mixins */
+@mixin rs-text-button {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-normal);
+  text-transform: none;
+}
+
+@mixin rs-text-button-large {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-base);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-normal);
+  text-transform: none;
+}
+
+/* Link Mixins */
+@mixin rs-text-link {
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: var(--rs-color-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: var(--rs-transition-colors);
+  
+  &:hover {
+    color: var(--rs-color-accent);
+    text-decoration-thickness: 2px;
+  }
+  
+  &:focus {
+    outline: 2px solid var(--rs-color-ring);
+    outline-offset: 2px;
+    border-radius: var(--rs-radius-sm);
+  }
+}
+
+@mixin rs-text-link-subtle {
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: var(--rs-color-muted-foreground);
+  text-decoration: none;
+  transition: var(--rs-transition-colors);
+  
+  &:hover {
+    color: var(--rs-color-primary);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+  
+  &:focus {
+    outline: 2px solid var(--rs-color-ring);
+    outline-offset: 2px;
+    border-radius: var(--rs-radius-sm);
+  }
+}
+
+/* ========================================
+   RESPONSIVE TYPOGRAPHY MIXINS
+======================================== */
+
+/* Responsive text scaling */
+@mixin rs-text-responsive($mobile-size, $desktop-size) {
+  font-size: $mobile-size;
+  
+  @media (min-width: 768px) {
+    font-size: $desktop-size;
+  }
+}
+
+/* Fluid typography (clamp-based) */
+@mixin rs-text-fluid($min-size, $max-size, $min-vw: 320px, $max-vw: 1200px) {
+  font-size: clamp(#{$min-size}, #{$min-size} + (#{$max-size} - #{$min-size}) * ((100vw - #{$min-vw}) / (#{$max-vw} - #{$min-vw})), #{$max-size});
+}
+
+/* ========================================
+   UTILITY MIXINS
+======================================== */
+
+/* Text truncation */
+@mixin rs-text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Multi-line text truncation */
+@mixin rs-text-truncate-lines($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Text selection styling */
+@mixin rs-text-selection {
+  &::selection {
+    background-color: var(--rs-color-primary);
+    color: var(--rs-color-primary-foreground);
+  }
+}
+
+/* Screen reader only text */
+@mixin rs-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ========================================
+   SUPPLEMENT-SPECIFIC MIXINS
+======================================== */
+
+/* Supplement goal text */
+@mixin rs-text-goal {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-semibold);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-wide);
+  text-transform: uppercase;
+  color: var(--rs-color-accent);
+}
+
+/* Ingredient name styling */
+@mixin rs-text-ingredient {
+  font-family: var(--rs-font-serif);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-base);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  font-style: italic;
+  color: var(--rs-color-foreground);
+}
+
+/* Dosage instruction text */
+@mixin rs-text-dosage {
+  font-family: var(--rs-font-mono);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  background-color: var(--rs-color-muted);
+  color: var(--rs-color-foreground);
+  padding: var(--rs-spacing-1) var(--rs-spacing-2);
+  border-radius: var(--rs-radius-sm);
+}
+
+/* Warning text for supplements */
+@mixin rs-text-warning {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-xs);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-warning);
+  background-color: var(--rs-color-warning);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ========================================
+   ACCESSIBILITY MIXINS
+======================================== */
+
+/* High contrast mode adaptations */
+@mixin rs-text-high-contrast {
+  @media (prefers-contrast: high) {
+    font-weight: var(--rs-font-weight-bold);
+    text-shadow: none;
+  }
+}
+
+/* Reduced motion adaptations */
+@mixin rs-text-reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    animation: none;
+  }
+}

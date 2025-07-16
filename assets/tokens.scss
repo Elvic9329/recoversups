@@ -1,0 +1,324 @@
+/**
+ * RecoverSups Design Tokens
+ * CSS Custom Properties with --rs- prefix
+ * Optimized for performance, accessibility, and brand consistency
+ */
+
+/* ========================================
+   ROOT TOKENS - Light Theme (Default)
+======================================== */
+
+:root {
+  
+  /* ===== COLOR SYSTEM ===== */
+  
+  /* Primary Colors */
+  --rs-color-primary: #b62921;           /* Brand red */
+  --rs-color-primary-foreground: #ffffff; /* Text on primary */
+  --rs-color-secondary: #2c3e50;         /* Brand navy */
+  --rs-color-secondary-foreground: #f7fafc; /* Text on secondary */
+  
+  /* Semantic Colors */
+  --rs-color-background: #ffffff;        /* Page background */
+  --rs-color-foreground: #1a202c;        /* Primary text */
+  --rs-color-card: #f7fafc;             /* Card background */
+  --rs-color-card-foreground: #1a202c;   /* Card text */
+  --rs-color-muted: #e2e8f0;            /* Subtle elements */
+  --rs-color-muted-foreground: #718096;  /* Muted text */
+  --rs-color-accent: #e74c3c;           /* Accent elements */
+  --rs-color-accent-foreground: #ffffff; /* Text on accent */
+  
+  /* Status Colors */
+  --rs-color-destructive: #e53e3e;       /* Error/danger */
+  --rs-color-destructive-foreground: #f7fafc; /* Error text */
+  --rs-color-success: #10b981;           /* Success states */
+  --rs-color-success-foreground: #ffffff; /* Success text */
+  --rs-color-warning: #f59e0b;           /* Warning states */
+  --rs-color-warning-foreground: #1a202c; /* Warning text */
+  --rs-color-info: #3b82f6;             /* Information */
+  --rs-color-info-foreground: #ffffff;   /* Info text */
+  
+  /* Interactive Colors */
+  --rs-color-border: #cbd5e0;           /* Borders */
+  --rs-color-input: #e2e8f0;            /* Form inputs */
+  --rs-color-ring: #b62921;             /* Focus rings */
+  
+  /* ===== TYPOGRAPHY SYSTEM ===== */
+  
+  /* Font Families */
+  --rs-font-sans: Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --rs-font-serif: Lora, Georgia, "Times New Roman", serif;
+  --rs-font-mono: Menlo, Monaco, "Fira Code", "Courier New", monospace;
+  
+  /* Font Weights */
+  --rs-font-weight-light: 300;
+  --rs-font-weight-normal: 400;
+  --rs-font-weight-medium: 500;
+  --rs-font-weight-semibold: 600;
+  --rs-font-weight-bold: 700;
+  --rs-font-weight-extrabold: 800;
+  
+  /* Font Sizes */
+  --rs-font-size-xs: 0.75rem;    /* 12px */
+  --rs-font-size-sm: 0.875rem;   /* 14px */
+  --rs-font-size-base: 1rem;     /* 16px */
+  --rs-font-size-lg: 1.125rem;   /* 18px */
+  --rs-font-size-xl: 1.25rem;    /* 20px */
+  --rs-font-size-2xl: 1.5rem;    /* 24px */
+  --rs-font-size-3xl: 1.875rem;  /* 30px */
+  --rs-font-size-4xl: 2.25rem;   /* 36px */
+  --rs-font-size-5xl: 3rem;      /* 48px */
+  
+  /* Line Heights */
+  --rs-line-height-tight: 1.25;
+  --rs-line-height-normal: 1.5;
+  --rs-line-height-relaxed: 1.625;
+  --rs-line-height-loose: 2;
+  
+  /* Letter Spacing */
+  --rs-tracking-normal: -0.025em;
+  --rs-tracking-tight: calc(var(--rs-tracking-normal) - 0.025em);
+  --rs-tracking-tighter: calc(var(--rs-tracking-normal) - 0.05em);
+  --rs-tracking-wide: calc(var(--rs-tracking-normal) + 0.025em);
+  --rs-tracking-wider: calc(var(--rs-tracking-normal) + 0.05em);
+  --rs-tracking-widest: calc(var(--rs-tracking-normal) + 0.1em);
+  
+  /* ===== SPACING SYSTEM ===== */
+  
+  /* Base Spacing Unit */
+  --rs-spacing: 0.25rem; /* 4px base unit */
+  
+  /* Spacing Scale */
+  --rs-spacing-px: 1px;
+  --rs-spacing-0: 0;
+  --rs-spacing-1: calc(var(--rs-spacing) * 1);    /* 4px */
+  --rs-spacing-2: calc(var(--rs-spacing) * 2);    /* 8px */
+  --rs-spacing-3: calc(var(--rs-spacing) * 3);    /* 12px */
+  --rs-spacing-4: calc(var(--rs-spacing) * 4);    /* 16px */
+  --rs-spacing-5: calc(var(--rs-spacing) * 5);    /* 20px */
+  --rs-spacing-6: calc(var(--rs-spacing) * 6);    /* 24px */
+  --rs-spacing-8: calc(var(--rs-spacing) * 8);    /* 32px */
+  --rs-spacing-10: calc(var(--rs-spacing) * 10);  /* 40px */
+  --rs-spacing-12: calc(var(--rs-spacing) * 12);  /* 48px */
+  --rs-spacing-16: calc(var(--rs-spacing) * 16);  /* 64px */
+  --rs-spacing-20: calc(var(--rs-spacing) * 20);  /* 80px */
+  --rs-spacing-24: calc(var(--rs-spacing) * 24);  /* 96px */
+  --rs-spacing-32: calc(var(--rs-spacing) * 32);  /* 128px */
+  
+  /* Semantic Spacing */
+  --rs-spacing-xs: var(--rs-spacing-1);   /* 4px */
+  --rs-spacing-sm: var(--rs-spacing-2);   /* 8px */
+  --rs-spacing-md: var(--rs-spacing-4);   /* 16px */
+  --rs-spacing-lg: var(--rs-spacing-6);   /* 24px */
+  --rs-spacing-xl: var(--rs-spacing-8);   /* 32px */
+  --rs-spacing-2xl: var(--rs-spacing-12); /* 48px */
+  --rs-spacing-3xl: var(--rs-spacing-16); /* 64px */
+  
+  /* ===== BORDER RADIUS SYSTEM ===== */
+  
+  /* Base Radius */
+  --rs-radius: 0.5rem; /* 8px base radius */
+  
+  /* Radius Scale */
+  --rs-radius-none: 0;
+  --rs-radius-sm: calc(var(--rs-radius) - 4px);  /* 4px */
+  --rs-radius-md: calc(var(--rs-radius) - 2px);  /* 6px */
+  --rs-radius-lg: var(--rs-radius);              /* 8px */
+  --rs-radius-xl: calc(var(--rs-radius) + 4px);  /* 12px */
+  --rs-radius-2xl: calc(var(--rs-radius) + 8px); /* 16px */
+  --rs-radius-full: 9999px;
+  
+  /* ===== SHADOW SYSTEM ===== */
+  
+  /* Shadow Definitions */
+  --rs-shadow-2xs: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.05);
+  --rs-shadow-xs: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.05);
+  --rs-shadow-sm: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.10), 0.1rem 1px 2px -0.9px hsl(0 0% 0% / 0.10);
+  --rs-shadow: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.10), 0.1rem 1px 2px -0.9px hsl(0 0% 0% / 0.10);
+  --rs-shadow-md: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.10), 0.1rem 2px 4px -0.9px hsl(0 0% 0% / 0.10);
+  --rs-shadow-lg: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.10), 0.1rem 4px 6px -0.9px hsl(0 0% 0% / 0.10);
+  --rs-shadow-xl: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.10), 0.1rem 8px 10px -0.9px hsl(0 0% 0% / 0.10);
+  --rs-shadow-2xl: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.25);
+  
+  /* Semantic Shadows */
+  --rs-shadow-button: var(--rs-shadow-sm);
+  --rs-shadow-card: var(--rs-shadow-md);
+  --rs-shadow-modal: var(--rs-shadow-xl);
+  --rs-shadow-dropdown: var(--rs-shadow-lg);
+  
+  /* ===== BREAKPOINT SYSTEM ===== */
+  
+  /* Breakpoint Values */
+  --rs-breakpoint-sm: 640px;   /* Small devices */
+  --rs-breakpoint-md: 768px;   /* Medium devices */
+  --rs-breakpoint-lg: 1024px;  /* Large devices */
+  --rs-breakpoint-xl: 1280px;  /* Extra large devices */
+  --rs-breakpoint-2xl: 1536px; /* 2X large devices */
+  
+  /* ===== Z-INDEX SYSTEM ===== */
+  
+  /* Z-Index Layers */
+  --rs-z-index-hide: -1;
+  --rs-z-index-auto: auto;
+  --rs-z-index-base: 0;
+  --rs-z-index-docked: 10;
+  --rs-z-index-dropdown: 1000;
+  --rs-z-index-sticky: 1100;
+  --rs-z-index-banner: 1200;
+  --rs-z-index-overlay: 1300;
+  --rs-z-index-modal: 1400;
+  --rs-z-index-popover: 1500;
+  --rs-z-index-skipLink: 1600;
+  --rs-z-index-tooltip: 1700;
+  --rs-z-index-toast: 1800;
+  
+  /* ===== ANIMATION & TRANSITION SYSTEM ===== */
+  
+  /* Transition Durations */
+  --rs-transition-fastest: 50ms;
+  --rs-transition-faster: 100ms;
+  --rs-transition-fast: 150ms;
+  --rs-transition-normal: 200ms;
+  --rs-transition-slow: 300ms;
+  --rs-transition-slower: 500ms;
+  --rs-transition-slowest: 1000ms;
+  
+  /* Transition Easing */
+  --rs-ease-linear: linear;
+  --rs-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --rs-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --rs-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --rs-ease-back: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* Common Transitions */
+  --rs-transition-all: all var(--rs-transition-normal) var(--rs-ease-in-out);
+  --rs-transition-colors: color var(--rs-transition-fast) var(--rs-ease-in-out),
+                         background-color var(--rs-transition-fast) var(--rs-ease-in-out),
+                         border-color var(--rs-transition-fast) var(--rs-ease-in-out);
+  --rs-transition-opacity: opacity var(--rs-transition-normal) var(--rs-ease-in-out);
+  --rs-transition-transform: transform var(--rs-transition-normal) var(--rs-ease-in-out);
+  
+  /* ===== GRID SYSTEM ===== */
+  
+  /* Container Max Widths */
+  --rs-container-sm: 640px;
+  --rs-container-md: 768px;
+  --rs-container-lg: 1024px;
+  --rs-container-xl: 1280px;
+  --rs-container-2xl: 1536px;
+  
+  /* Grid Columns */
+  --rs-grid-cols-1: repeat(1, minmax(0, 1fr));
+  --rs-grid-cols-2: repeat(2, minmax(0, 1fr));
+  --rs-grid-cols-3: repeat(3, minmax(0, 1fr));
+  --rs-grid-cols-4: repeat(4, minmax(0, 1fr));
+  --rs-grid-cols-5: repeat(5, minmax(0, 1fr));
+  --rs-grid-cols-6: repeat(6, minmax(0, 1fr));
+  --rs-grid-cols-12: repeat(12, minmax(0, 1fr));
+  
+  /* Grid Gap */
+  --rs-gap-0: 0;
+  --rs-gap-1: var(--rs-spacing-1);
+  --rs-gap-2: var(--rs-spacing-2);
+  --rs-gap-3: var(--rs-spacing-3);
+  --rs-gap-4: var(--rs-spacing-4);
+  --rs-gap-6: var(--rs-spacing-6);
+  --rs-gap-8: var(--rs-spacing-8);
+  --rs-gap-12: var(--rs-spacing-12);
+  --rs-gap-16: var(--rs-spacing-16);
+}
+
+/* ========================================
+   DARK THEME TOKENS
+======================================== */
+
+.dark {
+  --rs-color-background: #1a1a1a;
+  --rs-color-foreground: #f7fafc;
+  --rs-color-card: #2d3748;
+  --rs-color-card-foreground: #e2e8f0;
+  --rs-color-muted: #4a5568;
+  --rs-color-muted-foreground: #a0aec0;
+  --rs-color-border: #4a5568;
+  --rs-color-input: #4a5568;
+  
+  /* Adjusted shadows for dark theme */
+  --rs-shadow-2xs: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.3);
+  --rs-shadow-xs: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.3);
+  --rs-shadow-sm: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.4), 0.1rem 1px 2px -0.9px hsl(0 0% 0% / 0.4);
+  --rs-shadow: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.4), 0.1rem 1px 2px -0.9px hsl(0 0% 0% / 0.4);
+  --rs-shadow-md: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.4), 0.1rem 2px 4px -0.9px hsl(0 0% 0% / 0.4);
+  --rs-shadow-lg: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.4), 0.1rem 4px 6px -0.9px hsl(0 0% 0% / 0.4);
+  --rs-shadow-xl: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.4), 0.1rem 8px 10px -0.9px hsl(0 0% 0% / 0.4);
+  --rs-shadow-2xl: 0.1rem 0.1rem 0.5rem 0.1rem hsl(0 0% 0% / 0.6);
+}
+
+/* ========================================
+   ACCESSIBILITY & MEDIA QUERIES
+======================================== */
+
+/* High Contrast Support */
+@media (prefers-contrast: high) {
+  :root {
+    --rs-color-border: #000000;
+    --rs-color-ring: #000000;
+  }
+  
+  .dark {
+    --rs-color-border: #ffffff;
+    --rs-color-ring: #ffffff;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --rs-transition-fastest: 0ms;
+    --rs-transition-faster: 0ms;
+    --rs-transition-fast: 0ms;
+    --rs-transition-normal: 0ms;
+    --rs-transition-slow: 0ms;
+    --rs-transition-slower: 0ms;
+    --rs-transition-slowest: 0ms;
+  }
+}
+
+/* ========================================
+   PERFORMANCE OPTIMIZATIONS
+======================================== */
+
+/* Force hardware acceleration for frequently changed properties */
+.rs-gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+}
+
+/* Optimize font rendering */
+:root {
+  font-display: swap;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   UTILITY TOKEN COMBINATIONS
+======================================== */
+
+/* Common spacing combinations */
+:root {
+  --rs-spacing-section: var(--rs-spacing-16);      /* 64px for sections */
+  --rs-spacing-component: var(--rs-spacing-8);     /* 32px for components */
+  --rs-spacing-element: var(--rs-spacing-4);       /* 16px for elements */
+  --rs-spacing-content: var(--rs-spacing-6);       /* 24px for content */
+}
+
+/* Common typography combinations */
+:root {
+  --rs-text-h1: var(--rs-font-size-4xl) / var(--rs-line-height-tight) var(--rs-font-sans);
+  --rs-text-h2: var(--rs-font-size-3xl) / var(--rs-line-height-tight) var(--rs-font-sans);
+  --rs-text-h3: var(--rs-font-size-2xl) / var(--rs-line-height-normal) var(--rs-font-sans);
+  --rs-text-h4: var(--rs-font-size-xl) / var(--rs-line-height-normal) var(--rs-font-sans);
+  --rs-text-body: var(--rs-font-size-base) / var(--rs-line-height-relaxed) var(--rs-font-sans);
+  --rs-text-caption: var(--rs-font-size-sm) / var(--rs-line-height-normal) var(--rs-font-sans);
+}

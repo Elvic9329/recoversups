@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RecoverSups - Design Tokens Examples</title>
+    <style>
+        /* Import the design tokens */
+        @import url('../assets/tokens.scss');
+        
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--rs-font-sans);
+            background-color: var(--rs-color-background);
+            color: var(--rs-color-foreground);
+            line-height: var(--rs-line-height-normal);
+            padding: var(--rs-spacing-lg);
+        }
+        
+        /* Container */
+        .container {
+            max-width: var(--rs-container-xl);
+            margin: 0 auto;
+            padding: 0 var(--rs-spacing-md);
+        }
+        
+        /* Section spacing */
+        .section {
+            margin-bottom: var(--rs-spacing-3xl);
+            padding: var(--rs-spacing-xl);
+            background-color: var(--rs-color-card);
+            border-radius: var(--rs-radius-xl);
+            box-shadow: var(--rs-shadow-card);
+        }
+        
+        /* Typography Examples */
+        .heading-1 {
+            font-size: var(--rs-font-size-4xl);
+            font-weight: var(--rs-font-weight-bold);
+            line-height: var(--rs-line-height-tight);
+            letter-spacing: var(--rs-tracking-tight);
+            color: var(--rs-color-foreground);
+            margin-bottom: var(--rs-spacing-lg);
+        }
+        
+        .heading-2 {
+            font-size: var(--rs-font-size-3xl);
+            font-weight: var(--rs-font-weight-semibold);
+            line-height: var(--rs-line-height-normal);
+            color: var(--rs-color-primary);
+            margin-bottom: var(--rs-spacing-md);
+        }
+        
+        .heading-3 {
+            font-size: var(--rs-font-size-2xl);
+            font-weight: var(--rs-font-weight-medium);
+            line-height: var(--rs-line-height-normal);
+            color: var(--rs-color-secondary);
+            margin-bottom: var(--rs-spacing-sm);
+        }
+        
+        .body-text {
+            font-size: var(--rs-font-size-base);
+            line-height: var(--rs-line-height-relaxed);
+            color: var(--rs-color-foreground);
+            margin-bottom: var(--rs-spacing-md);
+        }
+        
+        .caption-text {
+            font-size: var(--rs-font-size-sm);
+            color: var(--rs-color-muted-foreground);
+            letter-spacing: var(--rs-tracking-wide);
+        }
+        
+        /* Button Examples */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--rs-spacing-3) var(--rs-spacing-6);
+            border-radius: var(--rs-radius-lg);
+            font-family: var(--rs-font-sans);
+            font-weight: var(--rs-font-weight-medium);
+            font-size: var(--rs-font-size-sm);
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: var(--rs-transition-all);
+            margin: var(--rs-spacing-2) var(--rs-spacing-2) var(--rs-spacing-2) 0;
+        }
+        
+        .btn-primary {
+            background-color: var(--rs-color-primary);
+            color: var(--rs-color-primary-foreground);
+            box-shadow: var(--rs-shadow-button);
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: var(--rs-shadow-lg);
+        }
+        
+        .btn-secondary {
+            background-color: var(--rs-color-secondary);
+            color: var(--rs-color-secondary-foreground);
+            box-shadow: var(--rs-shadow-button);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--rs-color-primary);
+            border: 2px solid var(--rs-color-border);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--rs-color-primary);
+            color: var(--rs-color-primary-foreground);
+            border-color: var(--rs-color-primary);
+        }
+        
+        /* Card Examples */
+        .card {
+            background-color: var(--rs-color-card);
+            border: 1px solid var(--rs-color-border);
+            border-radius: var(--rs-radius-lg);
+            padding: var(--rs-spacing-lg);
+            box-shadow: var(--rs-shadow-card);
+            margin-bottom: var(--rs-spacing-md);
+            transition: var(--rs-transition-all);
+        }
+        
+        .card:hover {
+            box-shadow: var(--rs-shadow-lg);
+            transform: translateY(-2px);
+        }
+        
+        .card-header {
+            margin-bottom: var(--rs-spacing-md);
+        }
+        
+        .card-title {
+            font-size: var(--rs-font-size-lg);
+            font-weight: var(--rs-font-weight-semibold);
+            color: var(--rs-color-foreground);
+            margin-bottom: var(--rs-spacing-sm);
+        }
+        
+        .card-content {
+            color: var(--rs-color-muted-foreground);
+            line-height: var(--rs-line-height-relaxed);
+        }
+        
+        /* Product Card Example */
+        .product-card {
+            background-color: var(--rs-color-card);
+            border: 1px solid var(--rs-color-border);
+            border-radius: var(--rs-radius-xl);
+            overflow: hidden;
+            box-shadow: var(--rs-shadow-card);
+            transition: var(--rs-transition-all);
+        }
+        
+        .product-card:hover {
+            box-shadow: var(--rs-shadow-xl);
+            transform: translateY(-4px);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--rs-color-primary), var(--rs-color-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--rs-color-primary-foreground);
+            font-size: var(--rs-font-size-xl);
+            font-weight: var(--rs-font-weight-bold);
+        }
+        
+        .product-info {
+            padding: var(--rs-spacing-lg);
+        }
+        
+        .product-title {
+            font-size: var(--rs-font-size-lg);
+            font-weight: var(--rs-font-weight-semibold);
+            color: var(--rs-color-foreground);
+            margin-bottom: var(--rs-spacing-sm);
+        }
+        
+        .product-description {
+            font-size: var(--rs-font-size-sm);
+            color: var(--rs-color-muted-foreground);
+            line-height: var(--rs-line-height-relaxed);
+            margin-bottom: var(--rs-spacing-md);
+        }
+        
+        .product-price {
+            font-size: var(--rs-font-size-xl);
+            font-weight: var(--rs-font-weight-bold);
+            color: var(--rs-color-primary);
+            margin-bottom: var(--rs-spacing-md);
+        }
+        
+        .product-price-compare {
+            font-size: var(--rs-font-size-sm);
+            color: var(--rs-color-muted-foreground);
+            text-decoration: line-through;
+            margin-left: var(--rs-spacing-2);
+        }
+        
+        /* Nutrition Facts Example */
+        .nutrition-facts {
+            background-color: var(--rs-color-card);
+            border: 2px solid var(--rs-color-border);
+            border-radius: var(--rs-radius-lg);
+            overflow: hidden;
+            margin-bottom: var(--rs-spacing-lg);
+        }
+        
+        .nutrition-header {
+            background-color: var(--rs-color-primary);
+            color: var(--rs-color-primary-foreground);
+            padding: var(--rs-spacing-md);
+            font-weight: var(--rs-font-weight-bold);
+            font-size: var(--rs-font-size-sm);
+            text-transform: uppercase;
+            letter-spacing: var(--rs-tracking-wide);
+        }
+        
+        .nutrition-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--rs-spacing-sm) var(--rs-spacing-md);
+            border-bottom: 1px solid var(--rs-color-border);
+        }
+        
+        .nutrition-row:last-child {
+            border-bottom: none;
+        }
+        
+        .nutrition-label {
+            font-size: var(--rs-font-size-sm);
+            color: var(--rs-color-foreground);
+        }
+        
+        .nutrition-value {
+            font-family: var(--rs-font-mono);
+            font-weight: var(--rs-font-weight-medium);
+            color: var(--rs-color-foreground);
+        }
+        
+        /* Form Examples */
+        .form-group {
+            margin-bottom: var(--rs-spacing-lg);
+        }
+        
+        .form-label {
+            display: block;
+            font-size: var(--rs-font-size-sm);
+            font-weight: var(--rs-font-weight-medium);
+            color: var(--rs-color-foreground);
+            margin-bottom: var(--rs-spacing-sm);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: var(--rs-spacing-3);
+            background-color: var(--rs-color-input);
+            border: 2px solid var(--rs-color-border);
+            border-radius: var(--rs-radius-lg);
+            font-size: var(--rs-font-size-base);
+            color: var(--rs-color-foreground);
+            transition: var(--rs-transition-colors);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--rs-color-ring);
+            box-shadow: 0 0 0 3px var(--rs-color-ring);
+        }
+        
+        /* Status Examples */
+        .status-success {
+            background-color: var(--rs-color-success);
+            color: var(--rs-color-success-foreground);
+            padding: var(--rs-spacing-sm) var(--rs-spacing-md);
+            border-radius: var(--rs-radius-lg);
+            font-size: var(--rs-font-size-sm);
+            font-weight: var(--rs-font-weight-medium);
+            margin: var(--rs-spacing-sm) 0;
+        }
+        
+        .status-warning {
+            background-color: var(--rs-color-warning);
+            color: var(--rs-color-warning-foreground);
+            padding: var(--rs-spacing-sm) var(--rs-spacing-md);
+            border-radius: var(--rs-radius-lg);
+            font-size: var(--rs-font-size-sm);
+            font-weight: var(--rs-font-weight-medium);
+            margin: var(--rs-spacing-sm) 0;
+        }
+        
+        .status-error {
+            background-color: var(--rs-color-destructive);
+            color: var(--rs-color-destructive-foreground);
+            padding: var(--rs-spacing-sm) var(--rs-spacing-md);
+            border-radius: var(--rs-radius-lg);
+            font-size: var(--rs-font-size-sm);
+            font-weight: var(--rs-font-weight-medium);
+            margin: var(--rs-spacing-sm) 0;
+        }
+        
+        /* Grid Examples */
+        .grid {
+            display: grid;
+            gap: var(--rs-gap-4);
+            margin-bottom: var(--rs-spacing-lg);
+        }
+        
+        .grid-2 {
+            grid-template-columns: var(--rs-grid-cols-2);
+        }
+        
+        .grid-3 {
+            grid-template-columns: var(--rs-grid-cols-3);
+        }
+        
+        .grid-item {
+            background-color: var(--rs-color-muted);
+            padding: var(--rs-spacing-md);
+            border-radius: var(--rs-radius-lg);
+            text-align: center;
+            color: var(--rs-color-foreground);
+        }
+        
+        /* Dark Mode Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: var(--rs-spacing-lg);
+            right: var(--rs-spacing-lg);
+            background-color: var(--rs-color-secondary);
+            color: var(--rs-color-secondary-foreground);
+            border: none;
+            padding: var(--rs-spacing-sm) var(--rs-spacing-md);
+            border-radius: var(--rs-radius-full);
+            cursor: pointer;
+            font-size: var(--rs-font-size-sm);
+            font-weight: var(--rs-font-weight-medium);
+            box-shadow: var(--rs-shadow-lg);
+            z-index: var(--rs-z-index-sticky);
+            transition: var(--rs-transition-all);
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .grid-3 {
+                grid-template-columns: var(--rs-grid-cols-1);
+            }
+            
+            .grid-2 {
+                grid-template-columns: var(--rs-grid-cols-1);
+            }
+            
+            .heading-1 {
+                font-size: var(--rs-font-size-3xl);
+            }
+            
+            .container {
+                padding: 0 var(--rs-spacing-sm);
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+    
+    <div class="container">
+        <h1 class="heading-1">RecoverSups Design System</h1>
+        <p class="body-text">Ejemplos de uso del sistema de design tokens para la tienda de suplementos premium RecoverSups.pe</p>
+        
+        <!-- Typography Section -->
+        <section class="section">
+            <h2 class="heading-2">Sistema de Tipografía</h2>
+            <h3 class="heading-3">Jerarquía de Títulos</h3>
+            <h1 style="font-size: var(--rs-font-size-4xl); font-weight: var(--rs-font-weight-bold);">H1 - Título Principal</h1>
+            <h2 style="font-size: var(--rs-font-size-3xl); font-weight: var(--rs-font-weight-semibold);">H2 - Título Secundario</h2>
+            <h3 style="font-size: var(--rs-font-size-2xl); font-weight: var(--rs-font-weight-medium);">H3 - Subtítulo</h3>
+            <p class="body-text">Texto del cuerpo con line-height optimizado para lectura en pantallas de suplementos.</p>
+            <p class="caption-text">Texto de caption para información adicional y metadatos.</p>
+        </section>
+        
+        <!-- Button Section -->
+        <section class="section">
+            <h2 class="heading-2">Sistema de Botones</h2>
+            <div>
+                <button class="btn btn-primary">Comprar Ahora</button>
+                <button class="btn btn-secondary">Ver Detalles</button>
+                <button class="btn btn-outline">Añadir a Lista</button>
+            </div>
+        </section>
+        
+        <!-- Card Section -->
+        <section class="section">
+            <h2 class="heading-2">Sistema de Tarjetas</h2>
+            
+            <div class="grid grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Tarjeta Básica</h3>
+                    </div>
+                    <div class="card-content">
+                        Esta es una tarjeta básica usando los tokens de color, espaciado y sombras del sistema.
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        Whey Protein
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Proteína Whey Isolate</h3>
+                        <p class="product-description">Proteína de suero de leche de alta calidad para el desarrollo muscular.</p>
+                        <div style="display: flex; align-items: center;">
+                            <span class="product-price">S/ 89.90</span>
+                            <span class="product-price-compare">S/ 109.90</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: var(--rs-spacing-sm);">
+                            Añadir al Carrito
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Nutrition Facts Section -->
+        <section class="section">
+            <h2 class="heading-2">Información Nutricional</h2>
+            <div class="nutrition-facts" style="max-width: 400px;">
+                <div class="nutrition-header">
+                    Datos Nutricionales
+                </div>
+                <div class="nutrition-row">
+                    <span class="nutrition-label">Porción:</span>
+                    <span class="nutrition-value">30g (1 scoop)</span>
+                </div>
+                <div class="nutrition-row">
+                    <span class="nutrition-label">Proteína:</span>
+                    <span class="nutrition-value">25g</span>
+                </div>
+                <div class="nutrition-row">
+                    <span class="nutrition-label">Carbohidratos:</span>
+                    <span class="nutrition-value">2g</span>
+                </div>
+                <div class="nutrition-row">
+                    <span class="nutrition-label">Grasas:</span>
+                    <span class="nutrition-value">0.5g</span>
+                </div>
+                <div class="nutrition-row">
+                    <span class="nutrition-label">Calorías:</span>
+                    <span class="nutrition-value">110 kcal</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Form Section -->
+        <section class="section">
+            <h2 class="heading-2">Sistema de Formularios</h2>
+            <form>
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input class="form-input" type="email" id="email" placeholder="tu@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="objetivo">Objetivo de Entrenamiento</label>
+                    <select class="form-input" id="objetivo">
+                        <option>Ganancia Muscular</option>
+                        <option>Pérdida de Peso</option>
+                        <option>Resistencia</option>
+                        <option>Fuerza</option>
+                    </select>
+                </div>
+                
+                <button class="btn btn-primary" type="submit">Suscribirse</button>
+            </form>
+        </section>
+        
+        <!-- Status Messages Section -->
+        <section class="section">
+            <h2 class="heading-2">Estados y Mensajes</h2>
+            <div class="status-success">✅ Producto añadido al carrito exitosamente</div>
+            <div class="status-warning">⚠️ Stock limitado: solo quedan 3 unidades</div>
+            <div class="status-error">❌ Error al procesar el pago. Intenta nuevamente.</div>
+        </section>
+        
+        <!-- Grid System Section -->
+        <section class="section">
+            <h2 class="heading-2">Sistema de Grid</h2>
+            <h3 class="heading-3">Grid de 3 Columnas</h3>
+            <div class="grid grid-3">
+                <div class="grid-item">Proteínas</div>
+                <div class="grid-item">Pre-entrenos</div>
+                <div class="grid-item">Creatinas</div>
+                <div class="grid-item">Aminoácidos</div>
+                <div class="grid-item">Vitaminas</div>
+                <div class="grid-item">Quemadores</div>
+            </div>
+        </section>
+        
+        <!-- Spacing Section -->
+        <section class="section">
+            <h2 class="heading-2">Sistema de Espaciado</h2>
+            <div style="display: flex; flex-direction: column; gap: var(--rs-spacing-md);">
+                <div style="background-color: var(--rs-color-primary); height: 20px; width: var(--rs-spacing-4); border-radius: var(--rs-radius-sm);"></div>
+                <div style="background-color: var(--rs-color-primary); height: 20px; width: var(--rs-spacing-8); border-radius: var(--rs-radius-sm);"></div>
+                <div style="background-color: var(--rs-color-primary); height: 20px; width: var(--rs-spacing-16); border-radius: var(--rs-radius-sm);"></div>
+                <div style="background-color: var(--rs-color-primary); height: 20px; width: var(--rs-spacing-32); border-radius: var(--rs-radius-sm);"></div>
+            </div>
+            <p class="caption-text" style="margin-top: var(--rs-spacing-md);">
+                4px, 8px, 16px, 32px, 64px - Sistema basado en múltiplos de 4px
+            </p>
+        </section>
+        
+        <!-- Color System Section -->
+        <section class="section">
+            <h2 class="heading-2">Sistema de Colores</h2>
+            <div class="grid grid-3">
+                <div style="background-color: var(--rs-color-primary); color: var(--rs-color-primary-foreground); padding: var(--rs-spacing-md); border-radius: var(--rs-radius-lg); text-align: center;">
+                    Primary
+                </div>
+                <div style="background-color: var(--rs-color-secondary); color: var(--rs-color-secondary-foreground); padding: var(--rs-spacing-md); border-radius: var(--rs-radius-lg); text-align: center;">
+                    Secondary
+                </div>
+                <div style="background-color: var(--rs-color-accent); color: var(--rs-color-accent-foreground); padding: var(--rs-spacing-md); border-radius: var(--rs-radius-lg); text-align: center;">
+                    Accent
+                </div>
+                <div style="background-color: var(--rs-color-success); color: var(--rs-color-success-foreground); padding: var(--rs-spacing-md); border-radius: var(--rs-radius-lg); text-align: center;">
+                    Success
+                </div>
+                <div style="background-color: var(--rs-color-warning); color: var(--rs-color-warning-foreground); padding: var(--rs-spacing-md); border-radius: var(--rs-radius-lg); text-align: center;">
+                    Warning
+                </div>
+                <div style="background-color: var(--rs-color-destructive); color: var(--rs-color-destructive-foreground); padding: var(--rs-spacing-md); border-radius: var(--rs-radius-lg); text-align: center;">
+                    Error
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const button = document.querySelector('.theme-toggle');
+            
+            if (body.classList.contains('dark')) {
+                body.classList.remove('dark');
+                button.textContent = '🌙 Dark Mode';
+            } else {
+                body.classList.add('dark');
+                button.textContent = '☀️ Light Mode';
+            }
+        }
+        
+        // Add some interactivity to demonstrate hover states
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click handlers to buttons for demonstration
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Add temporary feedback
+                    const originalText = this.textContent;
+                    this.textContent = '✓ Clicked!';
+                    this.style.transform = 'scale(0.95)';
+                    
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                        this.style.transform = 'scale(1)';
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
