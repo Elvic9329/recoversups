@@ -1,0 +1,618 @@
+/**
+ * RecoverSups Typography Components
+ * Typography utility classes using design tokens and mixins
+ */
+
+/* ========================================
+   TYPOGRAPHY UTILITIES USING MIXINS
+======================================== */
+
+/* Heading Classes */
+.text-h1 {
+  @include rs-text-h1;
+}
+
+.text-h2 {
+  @include rs-text-h2;
+}
+
+.text-h3 {
+  @include rs-text-h3;
+}
+
+.text-h4 {
+  @include rs-text-h4;
+}
+
+.text-h5 {
+  @include rs-text-h5;
+}
+
+.text-h6 {
+  @include rs-text-h6;
+}
+
+/* Body Text Classes */
+.text-body {
+  @include rs-text-body;
+}
+
+.text-body-large {
+  @include rs-text-body-large;
+}
+
+.text-body-small {
+  @include rs-text-body-small;
+}
+
+/* Caption and Label Classes */
+.text-caption {
+  @include rs-text-caption;
+}
+
+.text-label {
+  @include rs-text-label;
+}
+
+/* Link Classes */
+.text-link {
+  @include rs-text-link;
+}
+
+.text-link-subtle {
+  @include rs-text-link-subtle;
+}
+
+/* Button Text Classes */
+.text-button {
+  @include rs-text-button;
+}
+
+.text-button-large {
+  @include rs-text-button-large;
+}
+
+/* ========================================
+   SUPPLEMENT-SPECIFIC TYPOGRAPHY
+======================================== */
+
+/* Nutrition Facts Typography */
+.text-nutrition-header {
+  @include rs-text-nutrition-header;
+}
+
+.text-nutrition-value {
+  @include rs-text-nutrition-value;
+}
+
+/* Pricing Typography */
+.text-price {
+  @include rs-text-price;
+}
+
+.text-price-compare {
+  @include rs-text-price-compare;
+}
+
+/* Goal and Ingredient Typography */
+.text-goal {
+  @include rs-text-goal;
+}
+
+.text-ingredient {
+  @include rs-text-ingredient;
+}
+
+.text-dosage {
+  @include rs-text-dosage;
+}
+
+.text-warning {
+  @include rs-text-warning;
+}
+
+/* ========================================
+   TYPOGRAPHY UTILITIES
+======================================== */
+
+/* Font Families */
+.font-sans {
+  font-family: var(--rs-font-sans);
+}
+
+.font-serif {
+  font-family: var(--rs-font-serif);
+}
+
+.font-mono {
+  font-family: var(--rs-font-mono);
+}
+
+/* Font Weights */
+.font-light {
+  font-weight: var(--rs-font-weight-light);
+}
+
+.font-normal {
+  font-weight: var(--rs-font-weight-normal);
+}
+
+.font-medium {
+  font-weight: var(--rs-font-weight-medium);
+}
+
+.font-semibold {
+  font-weight: var(--rs-font-weight-semibold);
+}
+
+.font-bold {
+  font-weight: var(--rs-font-weight-bold);
+}
+
+.font-extrabold {
+  font-weight: var(--rs-font-weight-extrabold);
+}
+
+/* Font Sizes */
+.text-xs {
+  font-size: var(--rs-font-size-xs);
+}
+
+.text-sm {
+  font-size: var(--rs-font-size-sm);
+}
+
+.text-base {
+  font-size: var(--rs-font-size-base);
+}
+
+.text-lg {
+  font-size: var(--rs-font-size-lg);
+}
+
+.text-xl {
+  font-size: var(--rs-font-size-xl);
+}
+
+.text-2xl {
+  font-size: var(--rs-font-size-2xl);
+}
+
+.text-3xl {
+  font-size: var(--rs-font-size-3xl);
+}
+
+.text-4xl {
+  font-size: var(--rs-font-size-4xl);
+}
+
+.text-5xl {
+  font-size: var(--rs-font-size-5xl);
+}
+
+/* Line Heights */
+.leading-tight {
+  line-height: var(--rs-line-height-tight);
+}
+
+.leading-normal {
+  line-height: var(--rs-line-height-normal);
+}
+
+.leading-relaxed {
+  line-height: var(--rs-line-height-relaxed);
+}
+
+.leading-loose {
+  line-height: var(--rs-line-height-loose);
+}
+
+/* Letter Spacing */
+.tracking-normal {
+  letter-spacing: var(--rs-tracking-normal);
+}
+
+.tracking-tight {
+  letter-spacing: var(--rs-tracking-tight);
+}
+
+.tracking-tighter {
+  letter-spacing: var(--rs-tracking-tighter);
+}
+
+.tracking-wide {
+  letter-spacing: var(--rs-tracking-wide);
+}
+
+.tracking-wider {
+  letter-spacing: var(--rs-tracking-wider);
+}
+
+.tracking-widest {
+  letter-spacing: var(--rs-tracking-widest);
+}
+
+/* Text Alignment */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+/* Text Transform */
+.uppercase {
+  text-transform: uppercase;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.normal-case {
+  text-transform: none;
+}
+
+/* Text Decoration */
+.underline {
+  text-decoration: underline;
+}
+
+.line-through {
+  text-decoration: line-through;
+}
+
+.no-underline {
+  text-decoration: none;
+}
+
+/* ========================================
+   TEXT COLORS
+======================================== */
+
+.text-foreground {
+  color: var(--rs-color-foreground);
+}
+
+.text-muted {
+  color: var(--rs-color-muted-foreground);
+}
+
+.text-primary {
+  color: var(--rs-color-primary);
+}
+
+.text-secondary {
+  color: var(--rs-color-secondary);
+}
+
+.text-accent {
+  color: var(--rs-color-accent);
+}
+
+.text-success {
+  color: var(--rs-color-success);
+}
+
+.text-warning {
+  color: var(--rs-color-warning);
+}
+
+.text-destructive {
+  color: var(--rs-color-destructive);
+}
+
+.text-info {
+  color: var(--rs-color-info);
+}
+
+/* ========================================
+   TEXT UTILITY MIXINS
+======================================== */
+
+/* Text Truncation */
+.text-truncate {
+  @include rs-text-truncate;
+}
+
+.text-truncate-2 {
+  @include rs-text-truncate-lines(2);
+}
+
+.text-truncate-3 {
+  @include rs-text-truncate-lines(3);
+}
+
+.text-truncate-4 {
+  @include rs-text-truncate-lines(4);
+}
+
+/* Text Selection */
+.text-selection {
+  @include rs-text-selection;
+}
+
+/* Screen Reader Only */
+.sr-only {
+  @include rs-sr-only;
+}
+
+/* ========================================
+   RESPONSIVE TYPOGRAPHY
+======================================== */
+
+/* Responsive Heading Utilities */
+.text-responsive-h1 {
+  @include rs-text-responsive(var(--rs-font-size-3xl), var(--rs-font-size-5xl));
+  font-weight: var(--rs-font-weight-bold);
+  line-height: var(--rs-line-height-tight);
+}
+
+.text-responsive-h2 {
+  @include rs-text-responsive(var(--rs-font-size-2xl), var(--rs-font-size-4xl));
+  font-weight: var(--rs-font-weight-bold);
+  line-height: var(--rs-line-height-tight);
+}
+
+.text-responsive-h3 {
+  @include rs-text-responsive(var(--rs-font-size-xl), var(--rs-font-size-3xl));
+  font-weight: var(--rs-font-weight-semibold);
+  line-height: var(--rs-line-height-normal);
+}
+
+/* Fluid Typography */
+.text-fluid-display {
+  @include rs-text-fluid(var(--rs-font-size-4xl), var(--rs-font-size-5xl));
+  font-weight: var(--rs-font-weight-bold);
+  line-height: var(--rs-line-height-tight);
+}
+
+.text-fluid-title {
+  @include rs-text-fluid(var(--rs-font-size-2xl), var(--rs-font-size-4xl));
+  font-weight: var(--rs-font-weight-semibold);
+  line-height: var(--rs-line-height-tight);
+}
+
+/* ========================================
+   TYPOGRAPHY COMPONENTS
+======================================== */
+
+/* Display Text */
+.display-1 {
+  font-size: var(--rs-font-size-5xl);
+  font-weight: var(--rs-font-weight-bold);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-tighter);
+  
+  @media (max-width: 768px) {
+    font-size: var(--rs-font-size-4xl);
+  }
+}
+
+.display-2 {
+  font-size: var(--rs-font-size-4xl);
+  font-weight: var(--rs-font-weight-bold);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-tight);
+  
+  @media (max-width: 768px) {
+    font-size: var(--rs-font-size-3xl);
+  }
+}
+
+/* Lead Text */
+.lead {
+  font-size: var(--rs-font-size-lg);
+  font-weight: var(--rs-font-weight-normal);
+  line-height: var(--rs-line-height-relaxed);
+  color: var(--rs-color-muted-foreground);
+}
+
+/* Blockquote */
+.blockquote {
+  font-size: var(--rs-font-size-lg);
+  font-style: italic;
+  line-height: var(--rs-line-height-relaxed);
+  border-left: 4px solid var(--rs-color-primary);
+  padding-left: var(--rs-spacing-lg);
+  margin: var(--rs-spacing-lg) 0;
+  color: var(--rs-color-muted-foreground);
+}
+
+.blockquote-footer {
+  font-size: var(--rs-font-size-sm);
+  font-style: normal;
+  color: var(--rs-color-muted-foreground);
+  margin-top: var(--rs-spacing-sm);
+  
+  &::before {
+    content: '— ';
+  }
+}
+
+/* Code and Pre */
+.code {
+  font-family: var(--rs-font-mono);
+  font-size: var(--rs-font-size-sm);
+  background-color: var(--rs-color-muted);
+  color: var(--rs-color-foreground);
+  padding: var(--rs-spacing-1) var(--rs-spacing-2);
+  border-radius: var(--rs-radius-sm);
+}
+
+.pre {
+  font-family: var(--rs-font-mono);
+  font-size: var(--rs-font-size-sm);
+  background-color: var(--rs-color-muted);
+  color: var(--rs-color-foreground);
+  padding: var(--rs-spacing-md);
+  border-radius: var(--rs-radius-lg);
+  overflow-x: auto;
+  line-height: var(--rs-line-height-relaxed);
+}
+
+/* ========================================
+   SUPPLEMENT-SPECIFIC COMPONENTS
+======================================== */
+
+/* Product Title Hierarchy */
+.product-title {
+  @include rs-text-h2;
+  color: var(--rs-color-foreground);
+  margin-bottom: var(--rs-spacing-sm);
+}
+
+.product-subtitle {
+  @include rs-text-body-large;
+  color: var(--rs-color-muted-foreground);
+  margin-bottom: var(--rs-spacing-md);
+}
+
+/* Supplement Badge Text */
+.supplement-badge {
+  font-family: var(--rs-font-sans);
+  font-size: var(--rs-font-size-xs);
+  font-weight: var(--rs-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--rs-tracking-wide);
+  padding: var(--rs-spacing-1) var(--rs-spacing-2);
+  border-radius: var(--rs-radius-full);
+  background-color: var(--rs-color-accent);
+  color: var(--rs-color-accent-foreground);
+}
+
+/* Ingredient List Text */
+.ingredient-list {
+  font-family: var(--rs-font-serif);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-relaxed);
+  color: var(--rs-color-foreground);
+  
+  .ingredient-name {
+    @include rs-text-ingredient;
+  }
+  
+  .ingredient-amount {
+    @include rs-text-nutrition-value;
+    font-weight: var(--rs-font-weight-medium);
+  }
+}
+
+/* Dosage Instructions */
+.dosage-instructions {
+  background-color: var(--rs-color-card);
+  border: 2px solid var(--rs-color-border);
+  border-radius: var(--rs-radius-lg);
+  padding: var(--rs-spacing-md);
+  
+  .dosage-title {
+    @include rs-text-label;
+    margin-bottom: var(--rs-spacing-sm);
+    color: var(--rs-color-primary);
+  }
+  
+  .dosage-text {
+    @include rs-text-dosage;
+  }
+}
+
+/* Warning Text */
+.supplement-warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  border: 1px solid var(--rs-color-warning);
+  border-radius: var(--rs-radius-lg);
+  padding: var(--rs-spacing-md);
+  
+  .warning-title {
+    @include rs-text-label;
+    color: var(--rs-color-warning);
+    margin-bottom: var(--rs-spacing-sm);
+  }
+  
+  .warning-text {
+    @include rs-text-warning;
+    font-size: var(--rs-font-size-sm);
+  }
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+======================================== */
+
+@media (max-width: 640px) {
+  .display-1,
+  .display-2 {
+    text-align: center;
+  }
+  
+  .blockquote {
+    padding-left: var(--rs-spacing-md);
+  }
+  
+  .text-responsive-mobile-center {
+    text-align: center;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY ENHANCEMENTS
+======================================== */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .text-muted {
+    color: var(--rs-color-foreground);
+  }
+  
+  .lead {
+    color: var(--rs-color-foreground);
+  }
+  
+  .blockquote {
+    border-left-width: 6px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .text-link,
+  .text-link-subtle {
+    transition: none;
+  }
+}
+
+/* ========================================
+   PRINT STYLES
+======================================== */
+
+@media print {
+  .text-primary,
+  .text-secondary,
+  .text-accent {
+    color: black !important;
+  }
+  
+  .text-link {
+    color: black !important;
+    text-decoration: underline !important;
+  }
+  
+  .supplement-badge {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid black !important;
+  }
+}

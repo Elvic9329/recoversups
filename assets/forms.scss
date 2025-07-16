@@ -1,0 +1,575 @@
+/**
+ * RecoverSups Form Components
+ * Form controls and validation using design tokens
+ */
+
+/* ========================================
+   BASE FORM STYLES
+======================================== */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rs-spacing-lg);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rs-spacing-sm);
+  position: relative;
+}
+
+.form-group-horizontal {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--rs-spacing-md);
+  
+  .form-label {
+    margin-bottom: 0;
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+}
+
+/* ========================================
+   FORM LABELS
+======================================== */
+
+.form-label {
+  @include rs-text-label;
+  display: block;
+  margin-bottom: var(--rs-spacing-sm);
+  
+  &.required::after {
+    content: ' *';
+    color: var(--rs-color-destructive);
+  }
+  
+  &.optional::after {
+    content: ' (opcional)';
+    color: var(--rs-color-muted-foreground);
+    font-weight: var(--rs-font-weight-normal);
+    font-size: var(--rs-font-size-xs);
+  }
+}
+
+.form-label-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--rs-spacing-2);
+  margin-bottom: 0;
+  cursor: pointer;
+  
+  &:hover {
+    color: var(--rs-color-primary);
+  }
+}
+
+/* ========================================
+   INPUT CONTROLS
+======================================== */
+
+.form-input {
+  width: 100%;
+  padding: var(--rs-spacing-3);
+  background-color: var(--rs-color-input);
+  border: 2px solid var(--rs-color-border);
+  border-radius: var(--rs-radius-lg);
+  font-family: var(--rs-font-sans);
+  font-size: var(--rs-font-size-base);
+  font-weight: var(--rs-font-weight-normal);
+  line-height: var(--rs-line-height-normal);
+  color: var(--rs-color-foreground);
+  transition: var(--rs-transition-colors);
+  outline: none;
+  
+  &::placeholder {
+    color: var(--rs-color-muted-foreground);
+  }
+  
+  &:focus {
+    border-color: var(--rs-color-ring);
+    box-shadow: 0 0 0 3px rgba(182, 41, 33, 0.1);
+  }
+  
+  &:hover:not(:focus):not(:disabled) {
+    border-color: var(--rs-color-primary);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: var(--rs-color-muted);
+  }
+  
+  &.error {
+    border-color: var(--rs-color-destructive);
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+    }
+  }
+  
+  &.success {
+    border-color: var(--rs-color-success);
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+  }
+}
+
+/* Input Sizes */
+.form-input-sm {
+  padding: var(--rs-spacing-2) var(--rs-spacing-3);
+  font-size: var(--rs-font-size-sm);
+  border-radius: var(--rs-radius-md);
+}
+
+.form-input-lg {
+  padding: var(--rs-spacing-4) var(--rs-spacing-5);
+  font-size: var(--rs-font-size-lg);
+  border-radius: var(--rs-radius-xl);
+}
+
+/* ========================================
+   SELECT CONTROLS
+======================================== */
+
+.form-select {
+  @extend .form-input;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right var(--rs-spacing-3) center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: calc(var(--rs-spacing-8) + var(--rs-spacing-3));
+  cursor: pointer;
+  
+  &:focus {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23b62921' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  }
+}
+
+.form-select-multiple {
+  @extend .form-input;
+  padding-right: var(--rs-spacing-3);
+  min-height: 120px;
+  
+  option {
+    padding: var(--rs-spacing-1) var(--rs-spacing-2);
+  }
+}
+
+/* ========================================
+   TEXTAREA CONTROLS
+======================================== */
+
+.form-textarea {
+  @extend .form-input;
+  resize: vertical;
+  min-height: 120px;
+  line-height: var(--rs-line-height-relaxed);
+  
+  &.form-textarea-sm {
+    min-height: 80px;
+  }
+  
+  &.form-textarea-lg {
+    min-height: 160px;
+  }
+  
+  &.form-textarea-fixed {
+    resize: none;
+  }
+}
+
+/* ========================================
+   CHECKBOX AND RADIO CONTROLS
+======================================== */
+
+.form-checkbox,
+.form-radio {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--rs-color-border);
+  background-color: var(--rs-color-input);
+  transition: var(--rs-transition-colors);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  
+  &:focus {
+    outline: 2px solid var(--rs-color-ring);
+    outline-offset: 2px;
+  }
+  
+  &:hover:not(:disabled) {
+    border-color: var(--rs-color-primary);
+  }
+  
+  &:checked {
+    background-color: var(--rs-color-primary);
+    border-color: var(--rs-color-primary);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.form-checkbox {
+  border-radius: var(--rs-radius-sm);
+  
+  &:checked::after {
+    content: '';
+    position: absolute;
+    top: 1px;
+    left: 5px;
+    width: 6px;
+    height: 10px;
+    border: solid var(--rs-color-primary-foreground);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+}
+
+.form-radio {
+  border-radius: var(--rs-radius-full);
+  
+  &:checked::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--rs-color-primary-foreground);
+    border-radius: var(--rs-radius-full);
+  }
+}
+
+/* Checkbox and Radio Groups */
+.form-checkbox-group,
+.form-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rs-spacing-sm);
+}
+
+.form-checkbox-group-inline,
+.form-radio-group-inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--rs-spacing-md);
+}
+
+/* ========================================
+   INPUT GROUPS AND ADDONS
+======================================== */
+
+.form-input-group {
+  display: flex;
+  position: relative;
+  
+  .form-input {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .form-input-addon {
+    display: flex;
+    align-items: center;
+    padding: var(--rs-spacing-3);
+    background-color: var(--rs-color-muted);
+    border: 2px solid var(--rs-color-border);
+    color: var(--rs-color-muted-foreground);
+    white-space: nowrap;
+    font-size: var(--rs-font-size-sm);
+    
+    &:first-child {
+      border-right: none;
+      border-top-left-radius: var(--rs-radius-lg);
+      border-bottom-left-radius: var(--rs-radius-lg);
+    }
+    
+    &:last-child {
+      border-left: none;
+      border-top-right-radius: var(--rs-radius-lg);
+      border-bottom-right-radius: var(--rs-radius-lg);
+    }
+  }
+  
+  .form-input:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+  }
+  
+  .form-input:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: none;
+  }
+  
+  .form-input:not(:first-child):not(:last-child) {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+}
+
+/* ========================================
+   FORM VALIDATION STATES
+======================================== */
+
+.form-feedback {
+  @include rs-text-caption;
+  margin-top: var(--rs-spacing-1);
+  display: flex;
+  align-items: center;
+  gap: var(--rs-spacing-1);
+}
+
+.form-feedback-error {
+  color: var(--rs-color-destructive);
+}
+
+.form-feedback-success {
+  color: var(--rs-color-success);
+}
+
+.form-feedback-warning {
+  color: var(--rs-color-warning);
+}
+
+.form-feedback-info {
+  color: var(--rs-color-info);
+}
+
+/* Validation Icons */
+.form-input-with-icon {
+  position: relative;
+  
+  .form-input {
+    padding-right: calc(var(--rs-spacing-8) + var(--rs-spacing-3));
+  }
+  
+  .form-input-icon {
+    position: absolute;
+    right: var(--rs-spacing-3);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+    
+    &.error {
+      color: var(--rs-color-destructive);
+    }
+    
+    &.success {
+      color: var(--rs-color-success);
+    }
+    
+    &.warning {
+      color: var(--rs-color-warning);
+    }
+  }
+}
+
+/* ========================================
+   SUPPLEMENT-SPECIFIC FORM COMPONENTS
+======================================== */
+
+/* Quantity Selector */
+.form-quantity {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--rs-color-border);
+  border-radius: var(--rs-radius-lg);
+  overflow: hidden;
+  max-width: 120px;
+  
+  .quantity-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background-color: var(--rs-color-muted);
+    border: none;
+    color: var(--rs-color-foreground);
+    cursor: pointer;
+    transition: var(--rs-transition-colors);
+    
+    &:hover:not(:disabled) {
+      background-color: var(--rs-color-primary);
+      color: var(--rs-color-primary-foreground);
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+  
+  .quantity-input {
+    border: none;
+    background: transparent;
+    text-align: center;
+    padding: var(--rs-spacing-2);
+    width: 48px;
+    font-weight: var(--rs-font-weight-medium);
+    
+    &:focus {
+      outline: none;
+      background-color: var(--rs-color-input);
+    }
+  }
+}
+
+/* Subscription Options */
+.form-subscription {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rs-spacing-sm);
+  padding: var(--rs-spacing-md);
+  background-color: var(--rs-color-card);
+  border: 2px solid var(--rs-color-border);
+  border-radius: var(--rs-radius-lg);
+  
+  .subscription-option {
+    display: flex;
+    align-items: center;
+    gap: var(--rs-spacing-sm);
+    padding: var(--rs-spacing-sm);
+    border-radius: var(--rs-radius-md);
+    cursor: pointer;
+    transition: var(--rs-transition-colors);
+    
+    &:hover {
+      background-color: var(--rs-color-muted);
+    }
+    
+    &.selected {
+      background-color: rgba(182, 41, 33, 0.1);
+      border: 1px solid var(--rs-color-primary);
+    }
+  }
+  
+  .subscription-details {
+    flex: 1;
+    
+    .subscription-frequency {
+      font-weight: var(--rs-font-weight-medium);
+      color: var(--rs-color-foreground);
+    }
+    
+    .subscription-savings {
+      font-size: var(--rs-font-size-sm);
+      color: var(--rs-color-success);
+    }
+  }
+}
+
+/* Goal Selection */
+.form-goal-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--rs-spacing-sm);
+  
+  .goal-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--rs-spacing-sm);
+    padding: var(--rs-spacing-md);
+    border: 2px solid var(--rs-color-border);
+    border-radius: var(--rs-radius-lg);
+    cursor: pointer;
+    transition: var(--rs-transition-all);
+    text-align: center;
+    
+    &:hover {
+      border-color: var(--rs-color-primary);
+      transform: translateY(-2px);
+      box-shadow: var(--rs-shadow-sm);
+    }
+    
+    &.selected {
+      border-color: var(--rs-color-primary);
+      background-color: rgba(182, 41, 33, 0.1);
+    }
+    
+    .goal-icon {
+      width: 32px;
+      height: 32px;
+      color: var(--rs-color-primary);
+    }
+    
+    .goal-label {
+      font-weight: var(--rs-font-weight-medium);
+      color: var(--rs-color-foreground);
+    }
+  }
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+======================================== */
+
+@media (max-width: 640px) {
+  .form-group-horizontal {
+    flex-direction: column;
+    align-items: stretch;
+    
+    .form-label {
+      min-width: auto;
+    }
+  }
+  
+  .form-checkbox-group-inline,
+  .form-radio-group-inline {
+    flex-direction: column;
+    gap: var(--rs-spacing-sm);
+  }
+  
+  .form-goal-selector {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY ENHANCEMENTS
+======================================== */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .form-input,
+  .form-select,
+  .form-textarea {
+    border-width: 3px;
+  }
+  
+  .form-checkbox,
+  .form-radio {
+    border-width: 3px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .form-input,
+  .form-select,
+  .form-textarea,
+  .form-checkbox,
+  .form-radio,
+  .goal-option,
+  .subscription-option {
+    transition: none;
+  }
+}
