@@ -1,17 +1,861 @@
-/* Error: Undefined mixin.
- *    ,
- * 81 |   @include rs-text-h4;
- *    |   ^^^^^^^^^^^^^^^^^^^
- *    '
- *   assets/cards.scss 81:3  root stylesheet */
+/**
+ * RecoverSups Card Components
+ * Card and container components using design tokens
+ */
+/* Import required mixins */
+/**
+ * RecoverSups Typography Mixins
+ * SCSS mixins for consistent typography using design tokens
+ */
+/* ========================================
+   TYPOGRAPHY MIXINS
+======================================== */
+/* Base Typography Mixin */
+/* Heading Mixins */
+/* Body Text Mixins */
+/* Caption and Label Mixins */
+/* Special Typography for Supplements */
+/* Button Text Mixins */
+/* Link Mixins */
+/* ========================================
+   RESPONSIVE TYPOGRAPHY MIXINS
+======================================== */
+/* Responsive text scaling */
+/* Fluid typography (clamp-based) */
+/* ========================================
+   UTILITY MIXINS
+======================================== */
+/* Text truncation */
+/* Multi-line text truncation */
+/* Text selection styling */
+/* Screen reader only text */
+/* ========================================
+   SUPPLEMENT-SPECIFIC MIXINS
+======================================== */
+/* Supplement goal text */
+/* Ingredient name styling */
+/* Dosage instruction text */
+/* Warning text for supplements */
+/* ========================================
+   ACCESSIBILITY MIXINS
+======================================== */
+/* High contrast mode adaptations */
+/* Reduced motion adaptations */
+/* ========================================
+   BASE CARD STYLES
+======================================== */
+.card, .category-card, .goal-card, .nutrition-card, .product-card {
+  background-color: var(--rs-color-card);
+  color: var(--rs-color-card-foreground);
+  border: 1px solid var(--rs-color-border);
+  border-radius: var(--rs-radius-lg);
+  box-shadow: var(--rs-shadow-card);
+  transition: var(--rs-transition-all);
+  overflow: hidden;
+  position: relative;
+}
 
-body::before {
-  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
-      "Droid Sans Mono", monospace, monospace;
-  white-space: pre;
-  display: block;
-  padding: 1em;
-  margin-bottom: 1em;
-  border-bottom: 2px solid black;
-  content: "Error: Undefined mixin.\a    \2577 \a 81 \2502    @include rs-text-h4;\a    \2502    ^^^^^^^^^^^^^^^^^^^\a    \2575 \a   assets/cards.scss 81:3  root stylesheet";
+.card-interactive, .category-card, .goal-card, .product-card {
+  cursor: pointer;
+}
+.card-interactive:hover, .category-card:hover, .goal-card:hover, .product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--rs-shadow-xl);
+  border-color: var(--rs-color-primary);
+}
+.card-interactive:active, .category-card:active, .goal-card:active, .product-card:active {
+  transform: translateY(-1px);
+  box-shadow: var(--rs-shadow-lg);
+}
+
+/* ========================================
+   CARD LAYOUT COMPONENTS
+======================================== */
+.card-header {
+  padding: var(--rs-spacing-lg) var(--rs-spacing-lg) var(--rs-spacing-md);
+  border-bottom: 1px solid var(--rs-color-border);
+}
+.card-header:last-child {
+  border-bottom: none;
+  padding-bottom: var(--rs-spacing-lg);
+}
+
+.card-body {
+  padding: var(--rs-spacing-lg);
+  flex: 1;
+}
+
+.card-footer {
+  padding: var(--rs-spacing-md) var(--rs-spacing-lg) var(--rs-spacing-lg);
+  border-top: 1px solid var(--rs-color-border);
+  background-color: var(--rs-color-muted);
+  margin-top: auto;
+}
+.card-footer:first-child {
+  border-top: none;
+  background-color: transparent;
+  padding-top: var(--rs-spacing-lg);
+}
+
+.card-content {
+  padding: var(--rs-spacing-lg);
+}
+.card-content:not(:last-child) {
+  border-bottom: 1px solid var(--rs-color-border);
+}
+
+/* ========================================
+   CARD TYPOGRAPHY
+======================================== */
+.card-title {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-semibold);
+  font-size: var(--rs-font-size-xl);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  margin-bottom: var(--rs-spacing-sm);
+  color: var(--rs-color-foreground);
+}
+@media (min-width: 768px) {
+  .card-title {
+    font-size: var(--rs-font-size-2xl);
+  }
+}
+
+.card-subtitle {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-lg);
+  line-height: var(--rs-line-height-relaxed);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  color: var(--rs-color-muted-foreground);
+  margin-bottom: var(--rs-spacing-md);
+}
+
+.card-text {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-base);
+  line-height: var(--rs-line-height-relaxed);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  color: var(--rs-color-card-foreground);
+  line-height: var(--rs-line-height-relaxed);
+}
+.card-text:not(:last-child) {
+  margin-bottom: var(--rs-spacing-md);
+}
+
+.card-caption {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-xs);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-wide);
+  color: var(--rs-color-muted-foreground);
+  color: var(--rs-color-muted-foreground);
+}
+
+/* ========================================
+   CARD VARIANTS
+======================================== */
+/* Elevated Card */
+.card-elevated {
+  box-shadow: var(--rs-shadow-lg);
+  border: none;
+}
+.card-elevated:hover {
+  box-shadow: var(--rs-shadow-2xl);
+}
+
+/* Outlined Card */
+.card-outlined {
+  border: 2px solid var(--rs-color-border);
+  box-shadow: none;
+}
+.card-outlined:hover {
+  border-color: var(--rs-color-primary);
+  box-shadow: var(--rs-shadow-sm);
+}
+
+/* Filled Card */
+.card-filled {
+  background-color: var(--rs-color-muted);
+  border: none;
+  box-shadow: none;
+}
+
+/* Ghost Card */
+.card-ghost {
+  background-color: transparent;
+  border: 1px dashed var(--rs-color-border);
+  box-shadow: none;
+}
+.card-ghost:hover {
+  background-color: var(--rs-color-card);
+  border-style: solid;
+}
+
+/* ========================================
+   CARD SIZES
+======================================== */
+.card-sm .card-header,
+.card-sm .card-body,
+.card-sm .card-content {
+  padding: var(--rs-spacing-md);
+}
+.card-sm .card-footer {
+  padding: var(--rs-spacing-sm) var(--rs-spacing-md) var(--rs-spacing-md);
+}
+
+.card-lg .card-header,
+.card-lg .card-body,
+.card-lg .card-content {
+  padding: var(--rs-spacing-xl);
+}
+.card-lg .card-footer {
+  padding: var(--rs-spacing-lg) var(--rs-spacing-xl) var(--rs-spacing-xl);
+}
+
+/* ========================================
+   PRODUCT CARDS
+======================================== */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: var(--rs-radius-xl);
+  overflow: hidden;
+}
+
+.product-card-image {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--rs-color-primary), var(--rs-color-secondary));
+}
+.product-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--rs-transition-transform);
+}
+.product-card:hover .product-card-image img {
+  transform: scale(1.05);
+}
+
+.product-card-badge {
+  position: absolute;
+  top: var(--rs-spacing-sm);
+  left: var(--rs-spacing-sm);
+  z-index: 1;
+}
+
+.product-card-wishlist {
+  position: absolute;
+  top: var(--rs-spacing-sm);
+  right: var(--rs-spacing-sm);
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border-radius: var(--rs-radius-full);
+  padding: var(--rs-spacing-2);
+  border: none;
+  cursor: pointer;
+  transition: var(--rs-transition-all);
+}
+.product-card-wishlist:hover {
+  background-color: var(--rs-color-primary);
+  color: var(--rs-color-primary-foreground);
+  transform: scale(1.1);
+}
+.product-card-wishlist.active {
+  background-color: var(--rs-color-primary);
+  color: var(--rs-color-primary-foreground);
+}
+
+.product-card-info {
+  padding: var(--rs-spacing-lg);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: var(--rs-spacing-sm);
+}
+
+.product-card-title {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-lg);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  color: var(--rs-color-foreground);
+  margin-bottom: var(--rs-spacing-xs);
+  line-height: var(--rs-line-height-tight);
+}
+@media (min-width: 768px) {
+  .product-card-title {
+    font-size: var(--rs-font-size-xl);
+  }
+}
+
+.product-card-description {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-muted-foreground);
+  color: var(--rs-color-muted-foreground);
+  flex: 1;
+  margin-bottom: var(--rs-spacing-md);
+}
+
+.product-card-price {
+  display: flex;
+  align-items: center;
+  gap: var(--rs-spacing-2);
+  margin-bottom: var(--rs-spacing-md);
+}
+
+.product-card-price-current {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-bold);
+  font-size: var(--rs-font-size-xl);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-tight);
+  color: var(--rs-color-primary);
+  font-size: var(--rs-font-size-lg);
+}
+
+.product-card-price-compare {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-muted-foreground);
+  text-decoration: line-through;
+}
+
+.product-card-actions {
+  display: flex;
+  gap: var(--rs-spacing-sm);
+  margin-top: auto;
+}
+
+/* ========================================
+   SUPPLEMENT-SPECIFIC CARDS
+======================================== */
+/* Nutrition Facts Card */
+.nutrition-card {
+  max-width: 400px;
+}
+.nutrition-card .nutrition-header {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-bold);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-wide);
+  text-transform: uppercase;
+  color: var(--rs-color-primary-foreground);
+  background-color: var(--rs-color-primary);
+  color: var(--rs-color-primary-foreground);
+  padding: var(--rs-spacing-md) var(--rs-spacing-lg);
+  margin: 0;
+  border-bottom: none;
+}
+.nutrition-card .nutrition-content {
+  padding: 0;
+}
+.nutrition-card .nutrition-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--rs-spacing-sm) var(--rs-spacing-lg);
+  border-bottom: 1px solid var(--rs-color-border);
+}
+.nutrition-card .nutrition-row:last-child {
+  border-bottom: none;
+}
+.nutrition-card .nutrition-row.nutrition-row-bold {
+  font-weight: var(--rs-font-weight-semibold);
+  background-color: var(--rs-color-muted);
+}
+.nutrition-card .nutrition-label {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-muted-foreground);
+  color: var(--rs-color-foreground);
+}
+.nutrition-card .nutrition-value {
+  font-family: var(--rs-font-mono);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  color: var(--rs-color-foreground);
+}
+
+/* Goal Card */
+.goal-card {
+  text-align: center;
+  padding: var(--rs-spacing-xl);
+  background: linear-gradient(135deg, var(--rs-color-primary), var(--rs-color-secondary));
+  color: var(--rs-color-primary-foreground);
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+.goal-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  z-index: 1;
+}
+.goal-card > * {
+  position: relative;
+  z-index: 2;
+}
+.goal-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--rs-shadow-2xl);
+}
+
+.goal-card-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto var(--rs-spacing-md);
+  color: var(--rs-color-primary-foreground);
+}
+
+.goal-card-title {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-semibold);
+  font-size: var(--rs-font-size-xl);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  color: var(--rs-color-primary-foreground);
+  margin-bottom: var(--rs-spacing-sm);
+}
+@media (min-width: 768px) {
+  .goal-card-title {
+    font-size: var(--rs-font-size-2xl);
+  }
+}
+
+.goal-card-description {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-base);
+  line-height: var(--rs-line-height-relaxed);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  color: var(--rs-color-primary-foreground);
+  opacity: 0.9;
+}
+
+/* Category Card */
+.category-card {
+  position: relative;
+  min-height: 200px;
+  display: flex;
+  align-items: flex-end;
+  background-size: cover;
+  background-position: center;
+  color: var(--rs-color-primary-foreground);
+}
+.category-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2));
+  z-index: 1;
+}
+.category-card .category-card-content {
+  position: relative;
+  z-index: 2;
+  padding: var(--rs-spacing-lg);
+  width: 100%;
+}
+.category-card .category-card-title {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-semibold);
+  font-size: var(--rs-font-size-2xl);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  color: var(--rs-color-primary-foreground);
+  margin-bottom: var(--rs-spacing-sm);
+}
+@media (min-width: 768px) {
+  .category-card .category-card-title {
+    font-size: var(--rs-font-size-3xl);
+  }
+}
+.category-card .category-card-count {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-base);
+  line-height: var(--rs-line-height-relaxed);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  color: var(--rs-color-primary-foreground);
+  opacity: 0.9;
+}
+
+/* ========================================
+   CONTAINER COMPONENTS
+======================================== */
+.container {
+  max-width: var(--rs-container-xl);
+  margin: 0 auto;
+  padding: 0 var(--rs-spacing-md);
+}
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--rs-spacing-sm);
+  }
+}
+
+.container-sm {
+  max-width: var(--rs-container-sm);
+}
+
+.container-md {
+  max-width: var(--rs-container-md);
+}
+
+.container-lg {
+  max-width: var(--rs-container-lg);
+}
+
+.container-xl {
+  max-width: var(--rs-container-xl);
+}
+
+.container-2xl {
+  max-width: var(--rs-container-2xl);
+}
+
+.container-fluid {
+  max-width: none;
+  width: 100%;
+}
+
+/* ========================================
+   SECTION CONTAINERS
+======================================== */
+.section {
+  padding: var(--rs-spacing-section) 0;
+}
+@media (max-width: 768px) {
+  .section {
+    padding: var(--rs-spacing-xl) 0;
+  }
+}
+
+.section-sm {
+  padding: var(--rs-spacing-xl) 0;
+}
+@media (max-width: 768px) {
+  .section-sm {
+    padding: var(--rs-spacing-lg) 0;
+  }
+}
+
+.section-lg {
+  padding: calc(var(--rs-spacing-section) * 1.5) 0;
+}
+@media (max-width: 768px) {
+  .section-lg {
+    padding: var(--rs-spacing-2xl) 0;
+  }
+}
+
+.section-hero {
+  padding: calc(var(--rs-spacing-section) * 2) 0;
+  background: linear-gradient(135deg, var(--rs-color-primary), var(--rs-color-secondary));
+  color: var(--rs-color-primary-foreground);
+}
+@media (max-width: 768px) {
+  .section-hero {
+    padding: var(--rs-spacing-3xl) 0;
+  }
+}
+
+/* ========================================
+   GRID CONTAINERS
+======================================== */
+.grid {
+  display: grid;
+  gap: var(--rs-gap-4);
+}
+
+.grid-auto {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.grid-1 {
+  grid-template-columns: var(--rs-grid-cols-1);
+}
+
+.grid-2 {
+  grid-template-columns: var(--rs-grid-cols-2);
+}
+
+.grid-3 {
+  grid-template-columns: var(--rs-grid-cols-3);
+}
+
+.grid-4 {
+  grid-template-columns: var(--rs-grid-cols-4);
+}
+
+.grid-6 {
+  grid-template-columns: var(--rs-grid-cols-6);
+}
+
+.grid-12 {
+  grid-template-columns: var(--rs-grid-cols-12);
+}
+
+/* Responsive grid adjustments */
+@media (max-width: 1024px) {
+  .grid-6 {
+    grid-template-columns: var(--rs-grid-cols-4);
+  }
+  .grid-4 {
+    grid-template-columns: var(--rs-grid-cols-3);
+  }
+}
+@media (max-width: 768px) {
+  .grid-6 {
+    grid-template-columns: var(--rs-grid-cols-2);
+  }
+  .grid-4 {
+    grid-template-columns: var(--rs-grid-cols-2);
+  }
+  .grid-3 {
+    grid-template-columns: var(--rs-grid-cols-1);
+  }
+  .grid-2 {
+    grid-template-columns: var(--rs-grid-cols-1);
+  }
+}
+@media (max-width: 480px) {
+  .grid-auto {
+    grid-template-columns: 1fr;
+  }
+}
+/* Grid gaps */
+.grid-gap-0 {
+  gap: var(--rs-gap-0);
+}
+
+.grid-gap-1 {
+  gap: var(--rs-gap-1);
+}
+
+.grid-gap-2 {
+  gap: var(--rs-gap-2);
+}
+
+.grid-gap-3 {
+  gap: var(--rs-gap-3);
+}
+
+.grid-gap-4 {
+  gap: var(--rs-gap-4);
+}
+
+.grid-gap-6 {
+  gap: var(--rs-gap-6);
+}
+
+.grid-gap-8 {
+  gap: var(--rs-gap-8);
+}
+
+/* ========================================
+   FLEX CONTAINERS
+======================================== */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+/* Alignment */
+.items-start {
+  align-items: flex-start;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.items-stretch {
+  align-items: stretch;
+}
+
+.items-baseline {
+  align-items: baseline;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.justify-evenly {
+  justify-content: space-evenly;
+}
+
+/* Flex gaps */
+.flex-gap-0 {
+  gap: var(--rs-spacing-0);
+}
+
+.flex-gap-1 {
+  gap: var(--rs-spacing-1);
+}
+
+.flex-gap-2 {
+  gap: var(--rs-spacing-2);
+}
+
+.flex-gap-3 {
+  gap: var(--rs-spacing-3);
+}
+
+.flex-gap-4 {
+  gap: var(--rs-spacing-4);
+}
+
+.flex-gap-6 {
+  gap: var(--rs-spacing-6);
+}
+
+.flex-gap-8 {
+  gap: var(--rs-spacing-8);
+}
+
+/* ========================================
+   RESPONSIVE HELPERS
+======================================== */
+@media (max-width: 640px) {
+  .sm-hidden {
+    display: none;
+  }
+  .sm-block {
+    display: block;
+  }
+  .sm-flex {
+    display: flex;
+  }
+  .sm-grid {
+    display: grid;
+  }
+}
+@media (max-width: 768px) {
+  .md-hidden {
+    display: none;
+  }
+  .md-block {
+    display: block;
+  }
+  .md-flex {
+    display: flex;
+  }
+  .md-grid {
+    display: grid;
+  }
+}
+@media (max-width: 1024px) {
+  .lg-hidden {
+    display: none;
+  }
+  .lg-block {
+    display: block;
+  }
+  .lg-flex {
+    display: flex;
+  }
+  .lg-grid {
+    display: grid;
+  }
+}
+/* ========================================
+   ACCESSIBILITY ENHANCEMENTS
+======================================== */
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .card, .product-card, .nutrition-card, .goal-card, .category-card {
+    border-width: 2px;
+  }
+  .card-outlined {
+    border-width: 3px;
+  }
+}
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .product-card, .nutrition-card,
+  .goal-card,
+  .category-card,
+  .card-interactive {
+    transition: none;
+  }
+  .product-card-image img {
+    transition: none;
+  }
 }

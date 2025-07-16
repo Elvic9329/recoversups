@@ -1,0 +1,63 @@
+{% comment %}
+  Trending Products Section
+  Display trending or popular products
+{% endcomment %}
+
+<section class="trending-products section">
+  <div class="container">
+    <h2 class="trending-products__title">{{ section.settings.title | default: 'Trending Products' }}</h2>
+    
+    <div class="trending-products__grid">
+      {% assign trending_collection = collections[section.settings.collection] %}
+      {% for product in trending_collection.products limit: section.settings.limit %}
+        <div class="product-card">
+          <a href="{{ product.url }}">
+            {% if product.featured_media %}
+              <img 
+                src="{{ product.featured_media | image_url: width: 300, height: 300 }}"
+                alt="{{ product.featured_media.alt | escape }}"
+                width="300"
+                height="300"
+              >
+            {% endif %}
+            <h3 class="product-card__title">{{ product.title }}</h3>
+            <p class="product-card__price">{{ product.price | money }}</p>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Trending Products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Trending Products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Number of products",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trending Products"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,78 @@
+{% comment %}
+  Testimonials Section
+  Customer reviews and testimonials
+{% endcomment %}
+
+<section class="testimonials section">
+  <div class="container">
+    <div class="testimonials__header">
+      <h2 class="testimonials__title">{{ section.settings.title | default: 'What Our Customers Say' }}</h2>
+      {% if section.settings.description %}
+        <p class="testimonials__description">{{ section.settings.description }}</p>
+      {% endif %}
+    </div>
+    
+    <div class="testimonials__grid">
+      {% for block in section.blocks %}
+        <div class="testimonial-card">
+          <div class="testimonial-card__content">
+            <p class="testimonial-card__text">{{ block.settings.text }}</p>
+          </div>
+          <div class="testimonial-card__author">
+            <strong class="testimonial-card__name">{{ block.settings.author_name }}</strong>
+            {% if block.settings.author_title %}
+              <span class="testimonial-card__title">{{ block.settings.author_title }}</span>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "What Our Customers Say"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Testimonial Text"
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Author Name"
+        },
+        {
+          "type": "text",
+          "id": "author_title",
+          "label": "Author Title"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials"
+    }
+  ]
+}
+{% endschema %}

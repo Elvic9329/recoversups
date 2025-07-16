@@ -1,0 +1,75 @@
+{% comment %}
+  Hero Section
+  Main hero banner with image and content
+{% endcomment %}
+
+<section class="hero section">
+  <div class="hero__content">
+    {% if section.settings.background_image %}
+      <div class="hero__image">
+        <img 
+          src="{{ section.settings.background_image | image_url: width: 1920, height: 800 }}"
+          alt="{{ section.settings.background_image.alt | escape }}"
+          class="hero__bg-image"
+          width="1920"
+          height="800"
+        >
+      </div>
+    {% endif %}
+    
+    <div class="hero__overlay"></div>
+    
+    <div class="container">
+      <div class="hero__text">
+        <h1 class="hero__title">{{ section.settings.title | default: 'Welcome to RecoverSups' }}</h1>
+        {% if section.settings.subtitle %}
+          <p class="hero__subtitle">{{ section.settings.subtitle }}</p>
+        {% endif %}
+        {% if section.settings.button_text %}
+          <a href="{{ section.settings.button_url }}" class="hero__button btn btn-primary">
+            {{ section.settings.button_text }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Welcome to RecoverSups"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero"
+    }
+  ]
+}
+{% endschema %}

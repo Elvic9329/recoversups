@@ -1,0 +1,71 @@
+{% comment %}
+  Why Choose Us Section
+  Company benefits and value propositions
+{% endcomment %}
+
+<section class="why-choose-us section">
+  <div class="container">
+    <h2 class="why-choose-us__title">{{ section.settings.title | default: 'Why Choose Us' }}</h2>
+    
+    <div class="why-choose-us__grid">
+      {% for block in section.blocks %}
+        <div class="feature-card">
+          {% if block.settings.icon %}
+            <div class="feature-card__icon">
+              <img 
+                src="{{ block.settings.icon | image_url: width: 64, height: 64 }}"
+                alt="{{ block.settings.icon.alt | escape }}"
+                width="64"
+                height="64"
+              >
+            </div>
+          {% endif %}
+          <h3 class="feature-card__title">{{ block.settings.title }}</h3>
+          <p class="feature-card__description">{{ block.settings.description }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Why Choose Us",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Why Choose Us"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Why Choose Us"
+    }
+  ]
+}
+{% endschema %}

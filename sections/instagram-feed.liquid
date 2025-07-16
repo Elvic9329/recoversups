@@ -1,0 +1,53 @@
+{% comment %}
+  Instagram Feed Section
+  Social media integration placeholder
+{% endcomment %}
+
+<section class="instagram-feed section">
+  <div class="container">
+    <div class="instagram-feed__header">
+      <h2 class="instagram-feed__title">{{ section.settings.title | default: 'Follow Us' }}</h2>
+      {% if section.settings.description %}
+        <p class="instagram-feed__description">{{ section.settings.description }}</p>
+      {% endif %}
+    </div>
+    
+    <div class="instagram-feed__content">
+      <p class="instagram-feed__placeholder">Instagram feed integration coming soon!</p>
+      {% if section.settings.instagram_url %}
+        <a href="{{ section.settings.instagram_url }}" class="instagram-feed__button btn btn-primary" target="_blank">
+          {{ 'social.follow_instagram' | t }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Instagram Feed",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Follow Us"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Instagram Feed"
+    }
+  ]
+}
+{% endschema %}

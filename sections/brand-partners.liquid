@@ -1,0 +1,78 @@
+{% comment %}
+  Brand Partners Section
+  Logo showcase of partner brands
+{% endcomment %}
+
+<section class="brand-partners section">
+  <div class="container">
+    <h2 class="brand-partners__title">{{ section.settings.title | default: 'Our Partners' }}</h2>
+    
+    <div class="brand-partners__grid">
+      {% for block in section.blocks %}
+        <div class="brand-partner">
+          {% if block.settings.logo %}
+            {% if block.settings.url %}
+              <a href="{{ block.settings.url }}" target="_blank">
+                <img 
+                  src="{{ block.settings.logo | image_url: width: 200, height: 100 }}"
+                  alt="{{ block.settings.name | escape }}"
+                  width="200"
+                  height="100"
+                >
+              </a>
+            {% else %}
+              <img 
+                src="{{ block.settings.logo | image_url: width: 200, height: 100 }}"
+                alt="{{ block.settings.name | escape }}"
+                width="200"
+                height="100"
+              >
+            {% endif %}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Brand Partners",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Our Partners"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "partner",
+      "name": "Partner",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Partner Logo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Partner Name"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Partner URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Partners"
+    }
+  ]
+}
+{% endschema %}

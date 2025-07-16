@@ -1,0 +1,54 @@
+{% comment %}
+  Newsletter Signup Section
+  Email subscription form for marketing campaigns
+{% endcomment %}
+
+<section class="newsletter-signup section">
+  <div class="container">
+    <div class="newsletter-signup__content">
+      <h2 class="newsletter-signup__title">{{ section.settings.title | default: 'Stay Updated' }}</h2>
+      <p class="newsletter-signup__description">{{ section.settings.description | default: 'Subscribe to our newsletter for exclusive offers and health tips.' }}</p>
+      
+      <form class="newsletter-signup__form" action="{{ routes.root_url }}contact#newsletter" method="post">
+        <div class="newsletter-signup__input-group">
+          <input 
+            type="email" 
+            name="contact[email]" 
+            placeholder="{{ 'newsletter.email_placeholder' | t }}"
+            class="newsletter-signup__input"
+            required
+          >
+          <button type="submit" class="newsletter-signup__button btn btn-primary">
+            {{ 'newsletter.submit' | t }}
+          </button>
+        </div>
+        <input type="hidden" name="contact[tags]" value="newsletter">
+      </form>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter Signup",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Stay Updated"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Subscribe to our newsletter for exclusive offers and health tips."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter Signup"
+    }
+  ]
+}
+{% endschema %}

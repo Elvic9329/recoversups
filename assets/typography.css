@@ -1,17 +1,902 @@
-/* Error: Undefined mixin.
- *    ,
- * 12 |   @include rs-text-h1;
- *    |   ^^^^^^^^^^^^^^^^^^^
- *    '
- *   assets/typography.scss 12:3  root stylesheet */
+@charset "UTF-8";
+/**
+ * RecoverSups Typography Components
+ * Typography utility classes using design tokens and mixins
+ */
+/* Import required mixins */
+/**
+ * RecoverSups Typography Mixins
+ * SCSS mixins for consistent typography using design tokens
+ */
+/* ========================================
+   TYPOGRAPHY MIXINS
+======================================== */
+/* Base Typography Mixin */
+/* Heading Mixins */
+/* Body Text Mixins */
+/* Caption and Label Mixins */
+/* Special Typography for Supplements */
+/* Button Text Mixins */
+/* Link Mixins */
+/* ========================================
+   RESPONSIVE TYPOGRAPHY MIXINS
+======================================== */
+/* Responsive text scaling */
+/* Fluid typography (clamp-based) */
+/* ========================================
+   UTILITY MIXINS
+======================================== */
+/* Text truncation */
+/* Multi-line text truncation */
+/* Text selection styling */
+/* Screen reader only text */
+/* ========================================
+   SUPPLEMENT-SPECIFIC MIXINS
+======================================== */
+/* Supplement goal text */
+/* Ingredient name styling */
+/* Dosage instruction text */
+/* Warning text for supplements */
+/* ========================================
+   ACCESSIBILITY MIXINS
+======================================== */
+/* High contrast mode adaptations */
+/* Reduced motion adaptations */
+/* ========================================
+   TYPOGRAPHY UTILITIES USING MIXINS
+======================================== */
+/* Heading Classes */
+.text-h1 {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-bold);
+  font-size: var(--rs-font-size-4xl);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-tight);
+  color: var(--rs-color-foreground);
+}
+@media (min-width: 768px) {
+  .text-h1 {
+    font-size: var(--rs-font-size-5xl);
+  }
+}
 
-body::before {
-  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
-      "Droid Sans Mono", monospace, monospace;
-  white-space: pre;
-  display: block;
-  padding: 1em;
-  margin-bottom: 1em;
-  border-bottom: 2px solid black;
-  content: "Error: Undefined mixin.\a    \2577 \a 12 \2502    @include rs-text-h1;\a    \2502    ^^^^^^^^^^^^^^^^^^^\a    \2575 \a   assets/typography.scss 12:3  root stylesheet";
+.text-h2 {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-bold);
+  font-size: var(--rs-font-size-3xl);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-tight);
+  color: var(--rs-color-foreground);
+}
+@media (min-width: 768px) {
+  .text-h2 {
+    font-size: var(--rs-font-size-4xl);
+  }
+}
+
+.text-h3 {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-semibold);
+  font-size: var(--rs-font-size-2xl);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+}
+@media (min-width: 768px) {
+  .text-h3 {
+    font-size: var(--rs-font-size-3xl);
+  }
+}
+
+.text-h4 {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-semibold);
+  font-size: var(--rs-font-size-xl);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+}
+@media (min-width: 768px) {
+  .text-h4 {
+    font-size: var(--rs-font-size-2xl);
+  }
+}
+
+.text-h5 {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-lg);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+}
+@media (min-width: 768px) {
+  .text-h5 {
+    font-size: var(--rs-font-size-xl);
+  }
+}
+
+.text-h6 {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-base);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+}
+@media (min-width: 768px) {
+  .text-h6 {
+    font-size: var(--rs-font-size-lg);
+  }
+}
+
+/* Body Text Classes */
+.text-body {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-base);
+  line-height: var(--rs-line-height-relaxed);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+}
+
+.text-body-large {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-lg);
+  line-height: var(--rs-line-height-relaxed);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+}
+
+.text-body-small {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-muted-foreground);
+}
+
+/* Caption and Label Classes */
+.text-caption {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-xs);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-wide);
+  color: var(--rs-color-muted-foreground);
+}
+
+.text-label {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+}
+
+/* Link Classes */
+.text-link {
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: var(--rs-color-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: var(--rs-transition-colors);
+}
+.text-link:hover {
+  color: var(--rs-color-accent);
+  text-decoration-thickness: 2px;
+}
+.text-link:focus {
+  outline: 2px solid var(--rs-color-ring);
+  outline-offset: 2px;
+  border-radius: var(--rs-radius-sm);
+}
+
+.text-link-subtle {
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: var(--rs-color-muted-foreground);
+  text-decoration: none;
+  transition: var(--rs-transition-colors);
+}
+.text-link-subtle:hover {
+  color: var(--rs-color-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+.text-link-subtle:focus {
+  outline: 2px solid var(--rs-color-ring);
+  outline-offset: 2px;
+  border-radius: var(--rs-radius-sm);
+}
+
+/* Button Text Classes */
+.text-button {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-normal);
+  text-transform: none;
+}
+
+.text-button-large {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-base);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-normal);
+  text-transform: none;
+}
+
+/* ========================================
+   SUPPLEMENT-SPECIFIC TYPOGRAPHY
+======================================== */
+/* Nutrition Facts Typography */
+.text-nutrition-header {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-bold);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-wide);
+  text-transform: uppercase;
+  color: var(--rs-color-primary-foreground);
+}
+
+.text-nutrition-value {
+  font-family: var(--rs-font-mono);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+}
+
+/* Pricing Typography */
+.text-price {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-bold);
+  font-size: var(--rs-font-size-xl);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-tight);
+  color: var(--rs-color-primary);
+}
+
+.text-price-compare {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-muted-foreground);
+  text-decoration: line-through;
+}
+
+/* Goal and Ingredient Typography */
+.text-goal {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-semibold);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-wide);
+  text-transform: uppercase;
+  color: var(--rs-color-accent);
+}
+
+.text-ingredient {
+  font-family: var(--rs-font-serif);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-base);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  font-style: italic;
+  color: var(--rs-color-foreground);
+}
+
+.text-dosage {
+  font-family: var(--rs-font-mono);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  background-color: var(--rs-color-muted);
+  color: var(--rs-color-foreground);
+  padding: var(--rs-spacing-1) var(--rs-spacing-2);
+  border-radius: var(--rs-radius-sm);
+}
+
+.text-warning {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-xs);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-warning);
+  background-color: var(--rs-color-warning);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ========================================
+   TYPOGRAPHY UTILITIES
+======================================== */
+/* Font Families */
+.font-sans {
+  font-family: var(--rs-font-sans);
+}
+
+.font-serif {
+  font-family: var(--rs-font-serif);
+}
+
+.font-mono {
+  font-family: var(--rs-font-mono);
+}
+
+/* Font Weights */
+.font-light {
+  font-weight: var(--rs-font-weight-light);
+}
+
+.font-normal {
+  font-weight: var(--rs-font-weight-normal);
+}
+
+.font-medium {
+  font-weight: var(--rs-font-weight-medium);
+}
+
+.font-semibold {
+  font-weight: var(--rs-font-weight-semibold);
+}
+
+.font-bold {
+  font-weight: var(--rs-font-weight-bold);
+}
+
+.font-extrabold {
+  font-weight: var(--rs-font-weight-extrabold);
+}
+
+/* Font Sizes */
+.text-xs {
+  font-size: var(--rs-font-size-xs);
+}
+
+.text-sm {
+  font-size: var(--rs-font-size-sm);
+}
+
+.text-base {
+  font-size: var(--rs-font-size-base);
+}
+
+.text-lg {
+  font-size: var(--rs-font-size-lg);
+}
+
+.text-xl {
+  font-size: var(--rs-font-size-xl);
+}
+
+.text-2xl {
+  font-size: var(--rs-font-size-2xl);
+}
+
+.text-3xl {
+  font-size: var(--rs-font-size-3xl);
+}
+
+.text-4xl {
+  font-size: var(--rs-font-size-4xl);
+}
+
+.text-5xl {
+  font-size: var(--rs-font-size-5xl);
+}
+
+/* Line Heights */
+.leading-tight {
+  line-height: var(--rs-line-height-tight);
+}
+
+.leading-normal {
+  line-height: var(--rs-line-height-normal);
+}
+
+.leading-relaxed {
+  line-height: var(--rs-line-height-relaxed);
+}
+
+.leading-loose {
+  line-height: var(--rs-line-height-loose);
+}
+
+/* Letter Spacing */
+.tracking-normal {
+  letter-spacing: var(--rs-tracking-normal);
+}
+
+.tracking-tight {
+  letter-spacing: var(--rs-tracking-tight);
+}
+
+.tracking-tighter {
+  letter-spacing: var(--rs-tracking-tighter);
+}
+
+.tracking-wide {
+  letter-spacing: var(--rs-tracking-wide);
+}
+
+.tracking-wider {
+  letter-spacing: var(--rs-tracking-wider);
+}
+
+.tracking-widest {
+  letter-spacing: var(--rs-tracking-widest);
+}
+
+/* Text Alignment */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+/* Text Transform */
+.uppercase {
+  text-transform: uppercase;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.normal-case {
+  text-transform: none;
+}
+
+/* Text Decoration */
+.underline {
+  text-decoration: underline;
+}
+
+.line-through {
+  text-decoration: line-through;
+}
+
+.no-underline {
+  text-decoration: none;
+}
+
+/* ========================================
+   TEXT COLORS
+======================================== */
+.text-foreground {
+  color: var(--rs-color-foreground);
+}
+
+.text-muted {
+  color: var(--rs-color-muted-foreground);
+}
+
+.text-primary {
+  color: var(--rs-color-primary);
+}
+
+.text-secondary {
+  color: var(--rs-color-secondary);
+}
+
+.text-accent {
+  color: var(--rs-color-accent);
+}
+
+.text-success {
+  color: var(--rs-color-success);
+}
+
+.text-warning {
+  color: var(--rs-color-warning);
+}
+
+.text-destructive {
+  color: var(--rs-color-destructive);
+}
+
+.text-info {
+  color: var(--rs-color-info);
+}
+
+/* ========================================
+   TEXT UTILITY MIXINS
+======================================== */
+/* Text Truncation */
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.text-truncate-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.text-truncate-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Text Selection */
+.text-selection::selection {
+  background-color: var(--rs-color-primary);
+  color: var(--rs-color-primary-foreground);
+}
+
+/* Screen Reader Only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ========================================
+   RESPONSIVE TYPOGRAPHY
+======================================== */
+/* Responsive Heading Utilities */
+.text-responsive-h1 {
+  font-size: var(--rs-font-size-3xl);
+  font-weight: var(--rs-font-weight-bold);
+  line-height: var(--rs-line-height-tight);
+}
+@media (min-width: 768px) {
+  .text-responsive-h1 {
+    font-size: var(--rs-font-size-5xl);
+  }
+}
+
+.text-responsive-h2 {
+  font-size: var(--rs-font-size-2xl);
+  font-weight: var(--rs-font-weight-bold);
+  line-height: var(--rs-line-height-tight);
+}
+@media (min-width: 768px) {
+  .text-responsive-h2 {
+    font-size: var(--rs-font-size-4xl);
+  }
+}
+
+.text-responsive-h3 {
+  font-size: var(--rs-font-size-xl);
+  font-weight: var(--rs-font-weight-semibold);
+  line-height: var(--rs-line-height-normal);
+}
+@media (min-width: 768px) {
+  .text-responsive-h3 {
+    font-size: var(--rs-font-size-3xl);
+  }
+}
+
+/* Fluid Typography */
+.text-fluid-display {
+  font-size: clamp(var(--rs-font-size-4xl), var(--rs-font-size-4xl) + (var(--rs-font-size-5xl) - var(--rs-font-size-4xl)) * (100vw - 320px) / (1200px - 320px), var(--rs-font-size-5xl));
+  font-weight: var(--rs-font-weight-bold);
+  line-height: var(--rs-line-height-tight);
+}
+
+.text-fluid-title {
+  font-size: clamp(var(--rs-font-size-2xl), var(--rs-font-size-2xl) + (var(--rs-font-size-4xl) - var(--rs-font-size-2xl)) * (100vw - 320px) / (1200px - 320px), var(--rs-font-size-4xl));
+  font-weight: var(--rs-font-weight-semibold);
+  line-height: var(--rs-line-height-tight);
+}
+
+/* ========================================
+   TYPOGRAPHY COMPONENTS
+======================================== */
+/* Display Text */
+.display-1 {
+  font-size: var(--rs-font-size-5xl);
+  font-weight: var(--rs-font-weight-bold);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-tighter);
+}
+@media (max-width: 768px) {
+  .display-1 {
+    font-size: var(--rs-font-size-4xl);
+  }
+}
+
+.display-2 {
+  font-size: var(--rs-font-size-4xl);
+  font-weight: var(--rs-font-weight-bold);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-tight);
+}
+@media (max-width: 768px) {
+  .display-2 {
+    font-size: var(--rs-font-size-3xl);
+  }
+}
+
+/* Lead Text */
+.lead {
+  font-size: var(--rs-font-size-lg);
+  font-weight: var(--rs-font-weight-normal);
+  line-height: var(--rs-line-height-relaxed);
+  color: var(--rs-color-muted-foreground);
+}
+
+/* Blockquote */
+.blockquote {
+  font-size: var(--rs-font-size-lg);
+  font-style: italic;
+  line-height: var(--rs-line-height-relaxed);
+  border-left: 4px solid var(--rs-color-primary);
+  padding-left: var(--rs-spacing-lg);
+  margin: var(--rs-spacing-lg) 0;
+  color: var(--rs-color-muted-foreground);
+}
+
+.blockquote-footer {
+  font-size: var(--rs-font-size-sm);
+  font-style: normal;
+  color: var(--rs-color-muted-foreground);
+  margin-top: var(--rs-spacing-sm);
+}
+.blockquote-footer::before {
+  content: "— ";
+}
+
+/* Code and Pre */
+.code {
+  font-family: var(--rs-font-mono);
+  font-size: var(--rs-font-size-sm);
+  background-color: var(--rs-color-muted);
+  color: var(--rs-color-foreground);
+  padding: var(--rs-spacing-1) var(--rs-spacing-2);
+  border-radius: var(--rs-radius-sm);
+}
+
+.pre {
+  font-family: var(--rs-font-mono);
+  font-size: var(--rs-font-size-sm);
+  background-color: var(--rs-color-muted);
+  color: var(--rs-color-foreground);
+  padding: var(--rs-spacing-md);
+  border-radius: var(--rs-radius-lg);
+  overflow-x: auto;
+  line-height: var(--rs-line-height-relaxed);
+}
+
+/* ========================================
+   SUPPLEMENT-SPECIFIC COMPONENTS
+======================================== */
+/* Product Title Hierarchy */
+.product-title {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-bold);
+  font-size: var(--rs-font-size-3xl);
+  line-height: var(--rs-line-height-tight);
+  letter-spacing: var(--rs-tracking-tight);
+  color: var(--rs-color-foreground);
+  color: var(--rs-color-foreground);
+  margin-bottom: var(--rs-spacing-sm);
+}
+@media (min-width: 768px) {
+  .product-title {
+    font-size: var(--rs-font-size-4xl);
+  }
+}
+
+.product-subtitle {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-lg);
+  line-height: var(--rs-line-height-relaxed);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  color: var(--rs-color-muted-foreground);
+  margin-bottom: var(--rs-spacing-md);
+}
+
+/* Supplement Badge Text */
+.supplement-badge {
+  font-family: var(--rs-font-sans);
+  font-size: var(--rs-font-size-xs);
+  font-weight: var(--rs-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--rs-tracking-wide);
+  padding: var(--rs-spacing-1) var(--rs-spacing-2);
+  border-radius: var(--rs-radius-full);
+  background-color: var(--rs-color-accent);
+  color: var(--rs-color-accent-foreground);
+}
+
+/* Ingredient List Text */
+.ingredient-list {
+  font-family: var(--rs-font-serif);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-relaxed);
+  color: var(--rs-color-foreground);
+}
+.ingredient-list .ingredient-name {
+  font-family: var(--rs-font-serif);
+  font-weight: var(--rs-font-weight-normal);
+  font-size: var(--rs-font-size-base);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  font-style: italic;
+  color: var(--rs-color-foreground);
+}
+.ingredient-list .ingredient-amount {
+  font-family: var(--rs-font-mono);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  font-weight: var(--rs-font-weight-medium);
+}
+
+/* Dosage Instructions */
+.dosage-instructions {
+  background-color: var(--rs-color-card);
+  border: 2px solid var(--rs-color-border);
+  border-radius: var(--rs-radius-lg);
+  padding: var(--rs-spacing-md);
+}
+.dosage-instructions .dosage-title {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  margin-bottom: var(--rs-spacing-sm);
+  color: var(--rs-color-primary);
+}
+.dosage-instructions .dosage-text {
+  font-family: var(--rs-font-mono);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  background-color: var(--rs-color-muted);
+  color: var(--rs-color-foreground);
+  padding: var(--rs-spacing-1) var(--rs-spacing-2);
+  border-radius: var(--rs-radius-sm);
+}
+
+/* Warning Text */
+.supplement-warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  border: 1px solid var(--rs-color-warning);
+  border-radius: var(--rs-radius-lg);
+  padding: var(--rs-spacing-md);
+}
+.supplement-warning .warning-title {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-sm);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-foreground);
+  color: var(--rs-color-warning);
+  margin-bottom: var(--rs-spacing-sm);
+}
+.supplement-warning .warning-text {
+  font-family: var(--rs-font-sans);
+  font-weight: var(--rs-font-weight-medium);
+  font-size: var(--rs-font-size-xs);
+  line-height: var(--rs-line-height-normal);
+  letter-spacing: var(--rs-tracking-normal);
+  color: var(--rs-color-warning);
+  background-color: var(--rs-color-warning);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: var(--rs-font-size-sm);
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+======================================== */
+@media (max-width: 640px) {
+  .display-1,
+  .display-2 {
+    text-align: center;
+  }
+  .blockquote {
+    padding-left: var(--rs-spacing-md);
+  }
+  .text-responsive-mobile-center {
+    text-align: center;
+  }
+}
+/* ========================================
+   ACCESSIBILITY ENHANCEMENTS
+======================================== */
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .text-muted {
+    color: var(--rs-color-foreground);
+  }
+  .lead {
+    color: var(--rs-color-foreground);
+  }
+  .blockquote {
+    border-left-width: 6px;
+  }
+}
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .text-link,
+  .text-link-subtle {
+    transition: none;
+  }
+}
+/* ========================================
+   PRINT STYLES
+======================================== */
+@media print {
+  .text-primary,
+  .text-secondary,
+  .text-accent {
+    color: black !important;
+  }
+  .text-link {
+    color: black !important;
+    text-decoration: underline !important;
+  }
+  .supplement-badge {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid black !important;
+  }
 }

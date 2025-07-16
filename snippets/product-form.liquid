@@ -185,7 +185,7 @@
 
       {% if show_pickup_availability %}
         <div class="product-form__pickup-availability" data-pickup-availability>
-          {{ current_variant | pickup_availability }}
+          {% render 'pickup-availability' %}
         </div>
       {% endif %}
     {% endform %}

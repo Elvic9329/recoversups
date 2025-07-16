@@ -1,0 +1,50 @@
+{% comment %}
+  Article Template
+  Displays individual blog article content
+{% endcomment %}
+
+<article class="article-template">
+  <header class="article-header">
+    <h1 class="article-title">{{ article.title }}</h1>
+    
+    <div class="article-meta">
+      <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+        {{ article.published_at | date: '%B %d, %Y' }}
+      </time>
+      {% if article.author %}
+        <span class="article-author">{{ 'blogs.article.by_author' | t: author: article.author }}</span>
+      {% endif %}
+    </div>
+    
+    {% if article.image %}
+      <div class="article-featured-image">
+        <img 
+          src="{{ article.image | image_url: width: 1200, height: 600 }}"
+          alt="{{ article.image.alt | escape }}"
+          class="article-image"
+        >
+      </div>
+    {% endif %}
+  </header>
+
+  <div class="article-content">
+    {{ article.content }}
+  </div>
+
+  <footer class="article-footer">
+    {% if article.tags.size > 0 %}
+      <div class="article-tags">
+        <span class="article-tags__label">{{ 'blogs.article.tags' | t }}:</span>
+        {% for tag in article.tags %}
+          <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="article-tag">{{ tag }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="article-navigation">
+      <a href="{{ blog.url }}" class="article-back">
+        {{ 'blogs.article.back_to_blog' | t: title: blog.title }}
+      </a>
+    </div>
+  </footer>
+</article>

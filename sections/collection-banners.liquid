@@ -1,0 +1,71 @@
+{% comment %}
+  Collection Banners Section
+  Promotional banners for collections
+{% endcomment %}
+
+<section class="collection-banners section">
+  <div class="container">
+    <div class="collection-banners__grid">
+      {% for block in section.blocks %}
+        <div class="collection-banner">
+          {% if block.settings.image %}
+            <img 
+              src="{{ block.settings.image | image_url: width: 400, height: 300 }}"
+              alt="{{ block.settings.image.alt | escape }}"
+              width="400"
+              height="300"
+            >
+          {% endif %}
+          <div class="collection-banner__content">
+            <h3 class="collection-banner__title">{{ block.settings.title }}</h3>
+            {% if block.settings.link %}
+              <a href="{{ block.settings.link }}" class="collection-banner__link btn btn-secondary">
+                {{ block.settings.link_text | default: 'Shop Now' }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection Banners",
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Banner",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link Text",
+          "default": "Shop Now"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Banners"
+    }
+  ]
+}
+{% endschema %}

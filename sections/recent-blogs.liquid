@@ -1,0 +1,73 @@
+{% comment %}
+  Recent Blogs Section
+  Display recent blog posts
+{% endcomment %}
+
+<section class="recent-blogs section">
+  <div class="container">
+    <h2 class="recent-blogs__title">{{ section.settings.title | default: 'Latest Articles' }}</h2>
+    
+    <div class="recent-blogs__grid">
+      {% assign blog = blogs[section.settings.blog] %}
+      {% for article in blog.articles limit: section.settings.limit %}
+        <article class="blog-card">
+          {% if article.image %}
+            <div class="blog-card__image">
+              <img 
+                src="{{ article.image | image_url: width: 400, height: 250 }}"
+                alt="{{ article.image.alt | escape }}"
+                width="400"
+                height="250"
+              >
+            </div>
+          {% endif %}
+          
+          <div class="blog-card__content">
+            <h3 class="blog-card__title">
+              <a href="{{ article.url }}">{{ article.title }}</a>
+            </h3>
+            <p class="blog-card__excerpt">{{ article.excerpt | strip_html | truncate: 120 }}</p>
+            <div class="blog-card__meta">
+              <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                {{ article.published_at | date: '%B %d, %Y' }}
+              </time>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Recent Blogs",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Latest Articles"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Number of articles",
+      "min": 3,
+      "max": 9,
+      "step": 1,
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recent Blogs"
+    }
+  ]
+}
+{% endschema %}

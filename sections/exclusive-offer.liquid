@@ -1,0 +1,67 @@
+{% comment %}
+  Exclusive Offer Section
+  Special promotions and offers
+{% endcomment %}
+
+<section class="exclusive-offer section">
+  <div class="container">
+    <div class="exclusive-offer__content">
+      <h2 class="exclusive-offer__title">{{ section.settings.title | default: 'Exclusive Offer' }}</h2>
+      {% if section.settings.description %}
+        <p class="exclusive-offer__description">{{ section.settings.description }}</p>
+      {% endif %}
+      
+      {% if section.settings.offer_code %}
+        <div class="exclusive-offer__code">
+          <span class="exclusive-offer__code-label">{{ 'offers.code' | t }}:</span>
+          <code class="exclusive-offer__code-value">{{ section.settings.offer_code }}</code>
+        </div>
+      {% endif %}
+      
+      {% if section.settings.button_text %}
+        <a href="{{ section.settings.button_url }}" class="exclusive-offer__button btn btn-primary">
+          {{ section.settings.button_text }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Exclusive Offer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Exclusive Offer"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "offer_code",
+      "label": "Offer Code"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Exclusive Offer"
+    }
+  ]
+}
+{% endschema %}

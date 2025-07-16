@@ -172,7 +172,7 @@
           "position": {{ forloop.index }},
           "name": "{{ product.title | escape }}",
           "description": "{{ product.description | strip_html | truncate: 160 | escape }}",
-          "image": "{{ product.featured_image | img_url: '800x800' }}",
+          "image": "{{ product.featured_image | image_url: width: 800, height: 800 }}",
           "url": "{{ shop.url }}{{ product.url }}",
           "brand": {
             "@type": "Brand",
@@ -209,6 +209,8 @@
       }
     });
   });
+</script>
+
 {% comment %}
 
   Homepage Template

@@ -1,0 +1,70 @@
+{% comment %}
+  Brand Story Section
+  Company story and mission
+{% endcomment %}
+
+<section class="brand-story section">
+  <div class="container">
+    <div class="brand-story__content">
+      <div class="brand-story__text">
+        <h2 class="brand-story__title">{{ section.settings.title | default: 'Our Story' }}</h2>
+        <div class="brand-story__description">{{ section.settings.description }}</div>
+        {% if section.settings.button_text %}
+          <a href="{{ section.settings.button_url }}" class="brand-story__button btn btn-primary">
+            {{ section.settings.button_text }}
+          </a>
+        {% endif %}
+      </div>
+      
+      {% if section.settings.image %}
+        <div class="brand-story__image">
+          <img 
+            src="{{ section.settings.image | image_url: width: 600, height: 400 }}"
+            alt="{{ section.settings.image.alt | escape }}"
+            width="600"
+            height="400"
+          >
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Brand Story",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Our Story"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Story"
+    }
+  ]
+}
+{% endschema %}

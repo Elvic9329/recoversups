@@ -17,10 +17,10 @@ Converts React hero carousel component to Liquid with full customization
           {%- if block.settings.background_image -%}
             <div class="hero-slide-bg absolute inset-0 w-full h-full">
               <img 
-                src="{{ block.settings.background_image | img_url: '1920x800' }}"
-                srcset="{{ block.settings.background_image | img_url: '768x400' }} 768w,
-                        {{ block.settings.background_image | img_url: '1024x533' }} 1024w,
-                        {{ block.settings.background_image | img_url: '1920x800' }} 1920w"
+                src="{{ block.settings.background_image | image_url: width: 1920, height: 800 }}"
+                srcset="{{ block.settings.background_image | image_url: width: 768, height: 400 }} 768w,
+                        {{ block.settings.background_image | image_url: width: 1024, height: 533 }} 1024w,
+                        {{ block.settings.background_image | image_url: width: 1920, height: 800 }} 1920w"
                 sizes="100vw"
                 alt="{{ block.settings.background_image.alt | default: block.settings.title }}"
                 class="w-full h-full object-cover"
