@@ -1,0 +1,52 @@
+{
+  "semi": true,
+  "trailingComma": "es5",
+  "singleQuote": true,
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "arrowParens": "avoid",
+  "endOfLine": "lf",
+  "quoteProps": "as-needed",
+  "proseWrap": "preserve",
+  "htmlWhitespaceSensitivity": "css",
+  "embeddedLanguageFormatting": "auto",
+  "overrides": [
+    {
+      "files": "*.liquid",
+      "options": {
+        "parser": "liquid-html",
+        "printWidth": 120,
+        "tabWidth": 2,
+        "htmlWhitespaceSensitivity": "ignore",
+        "singleQuote": false
+      }
+    },
+    {
+      "files": "*.scss",
+      "options": {
+        "parser": "scss",
+        "printWidth": 100,
+        "singleQuote": true
+      }
+    },
+    {
+      "files": "*.css",
+      "options": {
+        "parser": "css",
+        "printWidth": 100,
+        "singleQuote": true
+      }
+    },
+    {
+      "files": "*.json",
+      "options": {
+        "parser": "json",
+        "printWidth": 100,
+        "tabWidth": 2
+      }
+    }
+  ]
+}

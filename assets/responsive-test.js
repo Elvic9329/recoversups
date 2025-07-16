@@ -43,7 +43,7 @@
       this.detectCurrentBreakpoint();
       this.addTestControls();
       this.bindEvents();
-      
+
       console.log('RecoverSups Responsive Testing initialized');
       console.log('Current breakpoint:', this.currentBreakpoint);
     },
@@ -51,7 +51,7 @@
     // Detect current breakpoint
     detectCurrentBreakpoint: function() {
       const width = window.innerWidth;
-      
+
       if (width < 640) {
         this.currentBreakpoint = 'mobile';
       } else if (width < 768) {
@@ -69,7 +69,7 @@
 
     // Add testing controls to page
     addTestControls: function() {
-      if (document.getElementById('rs-test-controls')) return;
+      if (document.getElementById('rs-test-controls')) { return; }
 
       const controls = document.createElement('div');
       controls.id = 'rs-test-controls';
@@ -130,7 +130,7 @@
     toggleControls: function() {
       const controls = document.getElementById('rs-test-controls');
       const toggle = document.getElementById('rs-test-toggle');
-      
+
       if (controls.style.display === 'none') {
         controls.style.display = 'block';
         toggle.style.display = 'none';
@@ -144,7 +144,7 @@
     showBreakpoints: function() {
       const resultsDiv = document.getElementById('test-results');
       let html = '<div style="margin-bottom: 10px;"><strong>Available Breakpoints:</strong></div>';
-      
+
       Object.entries(window.RSTest.config.breakpoints).forEach(([key, bp]) => {
         html += `
           <div style="margin-bottom: 5px; padding: 5px; background: rgba(255,255,255,0.1); border-radius: 4px;">
@@ -157,14 +157,14 @@
           </div>
         `;
       });
-      
+
       resultsDiv.innerHTML = html;
     },
 
     // Simulate breakpoint (for desktop testing)
     simulateBreakpoint: function(breakpointKey) {
       const bp = window.RSTest.config.breakpoints[breakpointKey];
-      if (!bp) return;
+      if (!bp) { return; }
 
       // Create simulation overlay
       const overlay = document.createElement('div');
@@ -191,7 +191,7 @@
         height: 100%;
         border: none;
       `;
-      
+
       overlay.appendChild(iframe);
       document.body.appendChild(overlay);
 
@@ -239,16 +239,16 @@
 
       // Test 1: Container widths
       this.testContainerWidths();
-      
+
       // Test 2: Grid responsiveness
       this.testGridResponsiveness();
-      
+
       // Test 3: Typography scaling
       this.testTypographyScaling();
-      
+
       // Test 4: Navigation behavior
       this.testNavigationBehavior();
-      
+
       // Test 5: Image responsiveness
       this.testImageResponsiveness();
 
@@ -263,7 +263,7 @@
         const styles = getComputedStyle(container);
         const maxWidth = styles.maxWidth;
         const padding = styles.paddingLeft;
-        
+
         this.testResults.push({
           test: 'Container Width',
           element: container.className,
@@ -279,7 +279,7 @@
       grids.forEach(grid => {
         const styles = getComputedStyle(grid);
         const gridColumns = styles.gridTemplateColumns;
-        
+
         this.testResults.push({
           test: 'Grid Responsiveness',
           element: grid.className,
@@ -296,7 +296,7 @@
         const styles = getComputedStyle(heading);
         const fontSize = parseFloat(styles.fontSize);
         const lineHeight = styles.lineHeight;
-        
+
         this.testResults.push({
           test: 'Typography Scaling',
           element: heading.tagName.toLowerCase(),
@@ -313,7 +313,7 @@
         const styles = getComputedStyle(nav);
         const position = styles.position;
         const zIndex = styles.zIndex;
-        
+
         this.testResults.push({
           test: 'Navigation Behavior',
           element: nav.className || 'navigation',
@@ -327,17 +327,17 @@
     testImageResponsiveness: function() {
       const images = document.querySelectorAll('img');
       let responsiveCount = 0;
-      
+
       images.forEach(img => {
         const styles = getComputedStyle(img);
         const maxWidth = styles.maxWidth;
         const height = styles.height;
-        
+
         if (maxWidth === '100%' || height === 'auto') {
           responsiveCount++;
         }
       });
-      
+
       this.testResults.push({
         test: 'Image Responsiveness',
         element: 'images',
@@ -350,11 +350,11 @@
     displayTestResults: function() {
       const resultsDiv = document.getElementById('test-results');
       let html = '<div style="margin-bottom: 10px;"><strong>Test Results:</strong></div>';
-      
+
       this.testResults.forEach(result => {
-        const statusColor = result.status === 'pass' ? '#10b981' : 
-                           result.status === 'warning' ? '#f59e0b' : '#ef4444';
-        
+        const statusColor = result.status === 'pass' ? '#10b981' :
+          result.status === 'warning' ? '#f59e0b' : '#ef4444';
+
         html += `
           <div style="margin-bottom: 5px; padding: 5px; background: rgba(255,255,255,0.1); border-radius: 4px; border-left: 3px solid ${statusColor};">
             <div style="font-weight: bold;">${result.test}</div>
@@ -363,9 +363,9 @@
           </div>
         `;
       });
-      
+
       resultsDiv.innerHTML = html;
-      
+
       console.log('Responsive tests completed:', this.testResults);
     },
 

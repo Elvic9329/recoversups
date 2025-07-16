@@ -1,0 +1,12 @@
+# Theme Check Configuration for RecoverSups.pe
+# Basic configuration for compatibility
+
+root: .
+
+ignore:
+  - node_modules/**
+  - .git/**
+  - .vscode/**
+  - "*.md"
+  - dist/**
+  - build/**

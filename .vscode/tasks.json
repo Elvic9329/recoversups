@@ -1,0 +1,170 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Shopify: Serve Theme",
+      "type": "shell",
+      "command": "shopify",
+      "args": ["theme", "serve"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new",
+        "showReuseMessage": true,
+        "clear": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Start Shopify theme development server"
+    },
+    {
+      "label": "Shopify: Deploy Theme",
+      "type": "shell",
+      "command": "shopify",
+      "args": ["theme", "push"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Deploy theme to Shopify store"
+    },
+    {
+      "label": "Shopify: Pull Theme",
+      "type": "shell",
+      "command": "shopify",
+      "args": ["theme", "pull"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Pull latest theme from Shopify store"
+    },
+    {
+      "label": "Theme Check: Validate",
+      "type": "shell",
+      "command": "theme-check",
+      "args": ["."],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": {
+        "owner": "theme-check",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+): (.*): (.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      },
+      "detail": "Run Theme Check validation on all files"
+    },
+    {
+      "label": "SCSS: Compile All",
+      "type": "shell",
+      "command": "sass",
+      "args": [
+        "assets/:assets/",
+        "--style=expanded",
+        "--no-source-map",
+        "--watch"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": "$sass",
+      "detail": "Compile SCSS files and watch for changes"
+    },
+    {
+      "label": "Git: Quick Commit",
+      "type": "shell",
+      "command": "git",
+      "args": ["add", ".", "&&", "git", "commit", "-m", "Quick commit from VS Code"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Quick git add and commit"
+    },
+    {
+      "label": "Development: Start All",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+        "Shopify: Serve Theme",
+        "SCSS: Compile All"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "detail": "Start complete development environment"
+    },
+    {
+      "label": "Performance: Test",
+      "type": "shell",
+      "command": "lighthouse",
+      "args": [
+        "https://recoversups.myshopify.com",
+        "--output=json",
+        "--output-path=./lighthouse-report.json",
+        "--chrome-flags=\"--headless\""
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "detail": "Run Lighthouse performance test"
+    }
+  ]
+}

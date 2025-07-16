@@ -8,7 +8,7 @@
 
   // RecoverSups Theme Object
   window.RS = window.RS || {};
-  
+
   // Theme configuration
   window.RS.config = {
     version: '1.0.0',
@@ -28,7 +28,7 @@
   // Lazy Loading Implementation
   window.RS.lazyLoad = {
     observer: null,
-    
+
     init: function() {
       if (!('IntersectionObserver' in window)) {
         this.fallback();
@@ -45,7 +45,7 @@
 
       this.observeImages();
       this.observeComponents();
-      
+
       if (window.RS.performance) {
         window.RS.performance.markers.push({
           name: 'lazy-loading-initialized',
@@ -58,13 +58,13 @@
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const element = entry.target;
-          
+
           if (element.dataset.src) {
             this.loadImage(element);
           } else if (element.dataset.component) {
             this.loadComponent(element);
           }
-          
+
           this.observer.unobserve(element);
         }
       });
@@ -73,23 +73,23 @@
     loadImage: function(img) {
       const src = img.dataset.src;
       const srcset = img.dataset.srcset;
-      
+
       // Create new image to preload
       const imageLoader = new Image();
-      
+
       imageLoader.onload = () => {
         // Apply loaded image
         img.src = src;
-        if (srcset) img.srcset = srcset;
-        
+        if (srcset) { img.srcset = srcset; }
+
         img.classList.remove('lazy-loading');
         img.classList.add('lazy-loaded');
-        
+
         // Trigger fade-in animation
         setTimeout(() => {
           img.classList.add('fade-in');
         }, 10);
-        
+
         if (window.RS.performance) {
           window.RS.performance.markers.push({
             name: 'image-lazy-loaded',
@@ -98,28 +98,28 @@
           });
         }
       };
-      
+
       imageLoader.onerror = () => {
         img.classList.add('lazy-error');
         console.warn('Failed to load lazy image:', src);
       };
-      
+
       imageLoader.src = src;
-      if (srcset) imageLoader.srcset = srcset;
+      if (srcset) { imageLoader.srcset = srcset; }
     },
 
     loadComponent: function(element) {
       const componentName = element.dataset.component;
       const componentData = element.dataset.componentData ? JSON.parse(element.dataset.componentData) : {};
-      
+
       element.classList.remove('lazy-loading');
       element.classList.add('component-loading');
-      
+
       // Simulate component loading (replace with actual component logic)
       setTimeout(() => {
         element.classList.remove('component-loading');
         element.classList.add('component-loaded', 'fade-in');
-        
+
         if (window.RS.performance) {
           window.RS.performance.markers.push({
             name: 'component-lazy-loaded',
@@ -131,8 +131,8 @@
     },
 
     observeImages: function() {
-      if (!window.RS.config.lazyLoading.enableImages) return;
-      
+      if (!window.RS.config.lazyLoading.enableImages) { return; }
+
       const lazyImages = document.querySelectorAll('img[data-src], img[data-srcset]');
       lazyImages.forEach(img => {
         img.classList.add('lazy-loading');
@@ -141,8 +141,8 @@
     },
 
     observeComponents: function() {
-      if (!window.RS.config.lazyLoading.enableComponents) return;
-      
+      if (!window.RS.config.lazyLoading.enableComponents) { return; }
+
       const lazyComponents = document.querySelectorAll('[data-component]');
       lazyComponents.forEach(component => {
         component.classList.add('lazy-loading');
@@ -156,12 +156,12 @@
       lazyImages.forEach(img => {
         this.loadImage(img);
       });
-      
+
       const lazyComponents = document.querySelectorAll('[data-component]');
       lazyComponents.forEach(component => {
         this.loadComponent(component);
       });
-      
+
       console.warn('IntersectionObserver not supported, using fallback lazy loading');
     }
   };
@@ -179,7 +179,7 @@
     cls: null,
     fid: null,
     ttfb: null,
-    
+
     track: function() {
       if (typeof PerformanceObserver !== 'undefined') {
         // Core Web Vitals
@@ -188,13 +188,13 @@
         this.trackCLS();
         this.trackFID();
         this.trackTTFB();
-        
+
         // Additional performance metrics
         this.trackResourceLoading();
         this.trackMemoryUsage();
       }
     },
-    
+
     trackFCP: function() {
       const observer = new PerformanceObserver((entryList) => {
         const entries = entryList.getEntries();
@@ -211,12 +211,12 @@
       });
       observer.observe({ entryTypes: ['paint'] });
     },
-    
+
     trackLCP: function() {
       const observer = new PerformanceObserver((entryList) => {
         const entries = entryList.getEntries();
         const lastEntry = entries[entries.length - 1];
-        
+
         this.lcp = lastEntry.startTime;
         window.RS.performance.markers.push({
           name: 'largest-contentful-paint',
@@ -227,7 +227,7 @@
       });
       observer.observe({ entryTypes: ['largest-contentful-paint'] });
     },
-    
+
     trackCLS: function() {
       let clsValue = 0;
       const observer = new PerformanceObserver((entryList) => {
@@ -237,7 +237,7 @@
           }
         }
         this.cls = clsValue;
-        
+
         // Update CLS marker
         const existingMarker = window.RS.performance.markers.find(m => m.name === 'cumulative-layout-shift');
         if (existingMarker) {
@@ -253,7 +253,7 @@
       });
       observer.observe({ entryTypes: ['layout-shift'] });
     },
-    
+
     trackFID: function() {
       const observer = new PerformanceObserver((entryList) => {
         const entries = entryList.getEntries();
@@ -268,7 +268,7 @@
       });
       observer.observe({ entryTypes: ['first-input'] });
     },
-    
+
     trackTTFB: function() {
       const navigationEntry = performance.getEntriesByType('navigation')[0];
       if (navigationEntry) {
@@ -280,7 +280,7 @@
         });
       }
     },
-    
+
     trackResourceLoading: function() {
       const observer = new PerformanceObserver((entryList) => {
         const entries = entryList.getEntries();
@@ -298,7 +298,7 @@
       });
       observer.observe({ entryTypes: ['resource'] });
     },
-    
+
     trackMemoryUsage: function() {
       if ('memory' in performance) {
         const memory = performance.memory;
@@ -311,7 +311,7 @@
         });
       }
     },
-    
+
     generateReport: function() {
       const report = {
         timestamp: new Date().toISOString(),
@@ -331,10 +331,10 @@
         markers: window.RS.performance.markers,
         scores: this.calculateScores()
       };
-      
+
       return report;
     },
-    
+
     calculateScores: function() {
       const scores = {
         performance: 0,
@@ -342,80 +342,76 @@
         bestPractices: 0,
         seo: 0
       };
-      
+
       // Performance score based on Core Web Vitals
       let performanceScore = 0;
-      if (this.fcp && this.fcp < 1800) performanceScore += 25;
-      else if (this.fcp && this.fcp < 3000) performanceScore += 15;
-      
-      if (this.lcp && this.lcp < 2500) performanceScore += 25;
-      else if (this.lcp && this.lcp < 4000) performanceScore += 15;
-      
-      if (this.cls && this.cls < 0.1) performanceScore += 25;
-      else if (this.cls && this.cls < 0.25) performanceScore += 15;
-      
-      if (this.fid && this.fid < 100) performanceScore += 25;
-      else if (this.fid && this.fid < 300) performanceScore += 15;
-      
+      if (this.fcp && this.fcp < 1800) { performanceScore += 25; } else if (this.fcp && this.fcp < 3000) { performanceScore += 15; }
+
+      if (this.lcp && this.lcp < 2500) { performanceScore += 25; } else if (this.lcp && this.lcp < 4000) { performanceScore += 15; }
+
+      if (this.cls && this.cls < 0.1) { performanceScore += 25; } else if (this.cls && this.cls < 0.25) { performanceScore += 15; }
+
+      if (this.fid && this.fid < 100) { performanceScore += 25; } else if (this.fid && this.fid < 300) { performanceScore += 15; }
+
       scores.performance = performanceScore;
-      
+
       return scores;
     }
   };
-  
+
   // Performance Testing Suite
   window.RS.performanceTest = {
     isRunning: false,
     testResults: [],
-    
+
     run: function() {
-      if (this.isRunning) return;
-      
+      if (this.isRunning) { return; }
+
       this.isRunning = true;
       this.testResults = [];
-      
+
       console.log('🚀 Starting RecoverSups Performance Tests...');
-      
+
       // Test 1: Load Time Analysis
       this.testLoadTimes();
-      
+
       // Test 2: Resource Analysis
       this.testResources();
-      
+
       // Test 3: Render Performance
       this.testRenderPerformance();
-      
+
       // Test 4: JavaScript Performance
       this.testJavaScriptPerformance();
-      
+
       // Test 5: Memory Usage
       this.testMemoryUsage();
-      
+
       // Generate final report
       setTimeout(() => {
         this.generateTestReport();
         this.isRunning = false;
       }, 3000);
     },
-    
+
     testLoadTimes: function() {
       const timing = performance.timing;
       const navigation = performance.getEntriesByType('navigation')[0];
-      
+
       const loadTimes = {
         domContentLoaded: timing.domContentLoadedEventEnd - timing.navigationStart,
         loadComplete: timing.loadEventEnd - timing.navigationStart,
         firstByte: timing.responseStart - timing.requestStart,
         domInteractive: timing.domInteractive - timing.navigationStart
       };
-      
+
       this.testResults.push({
         category: 'Load Times',
         results: loadTimes,
         status: loadTimes.loadComplete < 3000 ? 'good' : loadTimes.loadComplete < 5000 ? 'warning' : 'poor'
       });
     },
-    
+
     testResources: function() {
       const resources = performance.getEntriesByType('resource');
       const analysis = {
@@ -424,18 +420,18 @@
         slowResources: [],
         largeResources: []
       };
-      
+
       resources.forEach(resource => {
         const size = resource.transferSize || 0;
         analysis.totalSize += size;
-        
+
         if (resource.duration > 1000) {
           analysis.slowResources.push({
             name: resource.name.split('/').pop(),
             duration: resource.duration
           });
         }
-        
+
         if (size > 100000) {
           analysis.largeResources.push({
             name: resource.name.split('/').pop(),
@@ -443,39 +439,39 @@
           });
         }
       });
-      
+
       this.testResults.push({
         category: 'Resources',
         results: analysis,
         status: analysis.slowResources.length === 0 && analysis.largeResources.length < 3 ? 'good' : 'warning'
       });
     },
-    
+
     testRenderPerformance: function() {
       const paintEntries = performance.getEntriesByType('paint');
       const renderMetrics = {};
-      
+
       paintEntries.forEach(entry => {
         renderMetrics[entry.name] = entry.startTime;
       });
-      
+
       this.testResults.push({
         category: 'Render Performance',
         results: renderMetrics,
         status: renderMetrics['first-contentful-paint'] < 1800 ? 'good' : 'warning'
       });
     },
-    
+
     testJavaScriptPerformance: function() {
       const start = performance.now();
-      
+
       // Simulate some JS work
       for (let i = 0; i < 100000; i++) {
         Math.random();
       }
-      
+
       const jsExecutionTime = performance.now() - start;
-      
+
       this.testResults.push({
         category: 'JavaScript Performance',
         results: {
@@ -485,12 +481,12 @@
         status: jsExecutionTime < 10 ? 'good' : jsExecutionTime < 50 ? 'warning' : 'poor'
       });
     },
-    
+
     testMemoryUsage: function() {
       if (performance.memory) {
         const memory = performance.memory;
         const usagePercent = (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100;
-        
+
         this.testResults.push({
           category: 'Memory Usage',
           results: {
@@ -503,22 +499,22 @@
         });
       }
     },
-    
+
     generateTestReport: function() {
       console.log('📊 Performance Test Report:');
       console.log('='.repeat(50));
-      
+
       this.testResults.forEach(test => {
         const icon = test.status === 'good' ? '✅' : test.status === 'warning' ? '⚠️' : '❌';
         console.log(`${icon} ${test.category}:`, test.results);
       });
-      
+
       console.log('='.repeat(50));
-      
+
       // Web Vitals summary
       const webVitalsReport = window.RS.webVitals.generateReport();
       console.log('📈 Web Vitals Report:', webVitalsReport);
-      
+
       return {
         performanceTests: this.testResults,
         webVitals: webVitalsReport
@@ -535,10 +531,10 @@
 
     // Initialize lazy loading
     window.RS.lazyLoad.init();
-    
+
     // Start Web Vitals tracking (always enabled for performance monitoring)
     window.RS.webVitals.track();
-    
+
     // Add performance test commands to console
     if (window.RS.config.debug) {
       console.log('🛠️ RecoverSups Performance Tools:');
@@ -570,15 +566,15 @@
         const args = arguments;
         const later = function() {
           timeout = null;
-          if (!immediate) func.apply(context, args);
+          if (!immediate) { func.apply(context, args); }
         };
         const callNow = immediate && !timeout;
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
+        if (callNow) { func.apply(context, args); }
       };
     },
-    
+
     throttle: function(func, limit) {
       let inThrottle;
       return function() {

@@ -1,0 +1,64 @@
+{
+  "name": "recoversups-theme",
+  "version": "1.0.0",
+  "description": "RecoverSups.pe - Premium Supplements Store Theme for Shopify 2.0",
+  "main": "assets/global.js",
+  "scripts": {
+    "dev": "concurrently \"npm run theme:serve\" \"npm run sass:watch\"",
+    "build": "npm run sass:build && npm run js:build && npm run theme:check",
+    "theme:serve": "shopify theme serve --live-reload",
+    "theme:push": "shopify theme push",
+    "theme:pull": "shopify theme pull",
+    "theme:check": "theme-check .",
+    "theme:check:fix": "theme-check . --auto-correct",
+    "sass:build": "sass assets/:assets/ --style=expanded --no-source-map",
+    "sass:watch": "sass assets/:assets/ --watch --style=expanded --no-source-map",
+    "js:build": "echo 'JavaScript build completed'",
+    "js:watch": "echo 'JavaScript watch mode'",
+    "lint": "npm run lint:js && npm run lint:css && npm run lint:liquid",
+    "lint:js": "eslint assets/*.js --fix",
+    "lint:css": "stylelint assets/*.{css,scss} --fix",
+    "lint:liquid": "theme-check .",
+    "format": "prettier --write assets/**/*.{js,css,scss} snippets/**/*.liquid sections/**/*.liquid templates/**/*.liquid layout/**/*.liquid",
+    "test": "npm run theme:check && npm run lint",
+    "clean": "rm -rf node_modules/.cache && rm -rf dist",
+    "setup": "npm install && npm run theme:pull && npm run build"
+  },
+  "keywords": [
+    "shopify",
+    "theme",
+    "ecommerce",
+    "supplements",
+    "responsive",
+    "performance"
+  ],
+  "author": "RecoverSups Development Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^7.6.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.4",
+    "sass": "^1.69.7",
+    "stylelint": "^16.1.0",
+    "stylelint-config-recess-order": "^4.4.0",
+    "stylelint-config-standard-scss": "^13.0.0",
+    "stylelint-order": "^6.0.4",
+    "stylelint-scss": "^6.0.0"
+  },
+  "dependencies": {
+    "browser-sync": "^2.29.3",
+    "chokidar": "^3.5.3"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/recoversups/shopify-theme.git"
+  },
+  "bugs": {
+    "url": "https://github.com/recoversups/shopify-theme/issues"
+  },
+  "homepage": "https://recoversups.pe"
+}

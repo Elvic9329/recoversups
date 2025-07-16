@@ -1,0 +1,112 @@
+{
+  "workbench.colorTheme": "Dark+ (default dark)",
+  "editor.fontSize": 14,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "editor.rulers": [80, 120],
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "files.associations": {
+    "*.liquid": "liquid",
+    "*.scss": "scss",
+    "*.css": "css",
+    "*.js": "javascript",
+    "*.json": "jsonc"
+  },
+  "liquid.format.enable": true,
+  "liquid.format.ignore": [],
+  "liquid.engine": "shopify",
+  "liquid.trace.server": "verbose",
+  
+  "themeCheck.checkOnSave": true,
+  "themeCheck.checkOnOpen": true,
+  "themeCheck.onlySingleFileChecks": false,
+  
+  "css.validate": true,
+  "scss.validate": true,
+  "css.lint.duplicateProperties": "warning",
+  "css.lint.emptyRules": "warning",
+  "css.lint.unknownProperties": "warning",
+  "scss.lint.duplicateProperties": "warning",
+  "scss.lint.emptyRules": "warning",
+  "scss.lint.unknownProperties": "warning",
+  
+  "javascript.validate.enable": true,
+  "javascript.format.enable": true,
+  "javascript.suggest.autoImports": true,
+  "typescript.suggest.autoImports": true,
+  
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  "git.defaultCloneDirectory": "/workspaces",
+  
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.compactFolders": false,
+  
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.git": true,
+    "**/.DS_Store": true
+  },
+  
+  "shopify.theme.host": "recoversups.myshopify.com",
+  "shopify.theme.development": true,
+  "shopify.cli.path": "/usr/local/bin/shopify",
+  
+  "liveSassCompile.settings.formats": [
+    {
+      "format": "expanded",
+      "extensionName": ".css",
+      "savePath": "/assets/"
+    }
+  ],
+  "liveSassCompile.settings.excludeList": [
+    "**/node_modules/**",
+    ".vscode/**"
+  ],
+  "liveSassCompile.settings.generateMap": false,
+  
+  "emmet.includeLanguages": {
+    "liquid": "html",
+    "javascript": "javascriptreact"
+  },
+  "emmet.triggerExpansionOnTab": true,
+  
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.fontSize": 13,
+  
+  "prettier.singleQuote": true,
+  "prettier.semi": true,
+  "prettier.tabWidth": 2,
+  "prettier.trailingComma": "es5",
+  "prettier.printWidth": 80,
+  
+  "cSpell.enabled": true,
+  "cSpell.language": "en,es",
+  "cSpell.words": [
+    "Recoversups",
+    "Shopify",
+    "liquid",
+    "scss",
+    "suplementos",
+    "ecommerce"
+  ]
+}

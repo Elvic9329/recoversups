@@ -1,0 +1,38 @@
+/**
+ * RecoverSups Typography Mixins
+ * SCSS mixins for consistent typography using design tokens
+ */
+/* ========================================
+   TYPOGRAPHY MIXINS
+======================================== */
+/* Base Typography Mixin */
+/* Heading Mixins */
+/* Body Text Mixins */
+/* Caption and Label Mixins */
+/* Special Typography for Supplements */
+/* Button Text Mixins */
+/* Link Mixins */
+/* ========================================
+   RESPONSIVE TYPOGRAPHY MIXINS
+======================================== */
+/* Responsive text scaling */
+/* Fluid typography (clamp-based) */
+/* ========================================
+   UTILITY MIXINS
+======================================== */
+/* Text truncation */
+/* Multi-line text truncation */
+/* Text selection styling */
+/* Screen reader only text */
+/* ========================================
+   SUPPLEMENT-SPECIFIC MIXINS
+======================================== */
+/* Supplement goal text */
+/* Ingredient name styling */
+/* Dosage instruction text */
+/* Warning text for supplements */
+/* ========================================
+   ACCESSIBILITY MIXINS
+======================================== */
+/* High contrast mode adaptations */
+/* Reduced motion adaptations */
