@@ -1,0 +1,284 @@
+/**
+ * RecoverSups Theme Styles
+ * Main theme CSS file - Non-critical styles loaded after critical CSS
+ */
+
+/* ========================================
+   EXTENDED STYLES - Below the fold
+======================================== */
+
+/* Additional component styles that aren't critical for initial render */
+.btn-extended {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-extended::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-extended:hover::before {
+  left: 100%;
+}
+
+/* Enhanced card styles */
+.card-enhanced {
+  background-color: #f7fafc;
+  color: #1a202c;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 200ms ease-in-out;
+}
+
+.card-enhanced:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Form enhancements */
+.form-input-enhanced {
+  width: 100%;
+  padding: 12px;
+  background-color: #e2e8f0;
+  border: 2px solid #cbd5e0;
+  border-radius: 8px;
+  font-family: Montserrat, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  color: #1a202c;
+  transition: border-color 200ms ease-in-out;
+}
+
+.form-input-enhanced:focus {
+  outline: none;
+  border-color: #b62921;
+  box-shadow: 0 0 0 3px rgba(182, 41, 33, 0.1);
+}
+
+/* Grid enhancements */
+.grid-enhanced {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+}
+
+.grid-2-enhanced { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3-enhanced { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-4-enhanced { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+@media (max-width: 768px) {
+  .grid-2-enhanced,
+  .grid-3-enhanced,
+  .grid-4-enhanced {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Utility classes */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mt-4 { margin-top: 16px; }
+.mb-4 { margin-bottom: 16px; }
+.ml-4 { margin-left: 16px; }
+.mr-4 { margin-right: 16px; }
+
+.p-4 { padding: 16px; }
+.px-4 { padding-left: 16px; padding-right: 16px; }
+.py-4 { padding-top: 16px; padding-bottom: 16px; }
+
+/* Dark mode enhancements */
+.dark .card-enhanced {
+  background-color: #2d3748;
+  color: #e2e8f0;
+  border-color: #4a5568;
+}
+
+.dark .form-input-enhanced {
+  background-color: #4a5568;
+  color: #e2e8f0;
+  border-color: #4a5568;
+}
+
+.dark .form-input-enhanced:focus {
+  border-color: #b62921;
+}
+
+/* Responsive helpers */
+@media (max-width: 640px) {
+  .sm-hidden { display: none !important; }
+  .sm-block { display: block !important; }
+  .sm-text-center { text-align: center !important; }
+}
+
+@media (max-width: 768px) {
+  .md-hidden { display: none !important; }
+  .md-block { display: block !important; }
+  .md-text-center { text-align: center !important; }
+}
+
+/* Performance optimizations */
+.will-change-transform { will-change: transform; }
+.will-change-opacity { will-change: opacity; }
+
+/* ========================================
+   LAZY LOADING STYLES
+======================================== */
+
+/* Lazy loading placeholders and states */
+.lazy-loading {
+  opacity: 0;
+  background-color: #e2e8f0;
+  background-image: linear-gradient(
+    90deg,
+    #e2e8f0 0%,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    #e2e8f0
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.lazy-loaded {
+  opacity: 1;
+}
+
+.lazy-error {
+  opacity: 1;
+  background-color: #fed7d7;
+  background-image: none;
+  animation: none;
+}
+
+/* Component loading states */
+.component-loading {
+  opacity: 0.7;
+  background-color: #f7fafc;
+  background-image: linear-gradient(
+    90deg,
+    #f7fafc 0%,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    #f7fafc
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.component-loaded {
+  opacity: 1;
+  background-image: none;
+  animation: none;
+}
+
+/* Shimmer animation for loading states */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Image placeholder with aspect ratio preservation */
+.lazy-image-placeholder {
+  position: relative;
+  overflow: hidden;
+  background-color: #e2e8f0;
+}
+
+.lazy-image-placeholder::before {
+  content: '';
+  display: block;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio by default */
+}
+
+.lazy-image-placeholder img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Aspect ratio variants */
+.lazy-image-placeholder.ratio-1-1::before { padding-bottom: 100%; }
+.lazy-image-placeholder.ratio-4-3::before { padding-bottom: 75%; }
+.lazy-image-placeholder.ratio-3-2::before { padding-bottom: 66.67%; }
+.lazy-image-placeholder.ratio-16-9::before { padding-bottom: 56.25%; }
+
+/* Loading states */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Dark mode lazy loading styles */
+.dark .lazy-loading {
+  background-color: #4a5568;
+  background-image: linear-gradient(
+    90deg,
+    #4a5568 0%,
+    rgba(255, 255, 255, 0.1) 20%,
+    rgba(255, 255, 255, 0.2) 60%,
+    #4a5568
+  );
+}
+
+.dark .component-loading {
+  background-color: #2d3748;
+  background-image: linear-gradient(
+    90deg,
+    #2d3748 0%,
+    rgba(255, 255, 255, 0.1) 20%,
+    rgba(255, 255, 255, 0.2) 60%,
+    #2d3748
+  );
+}
+
+.dark .lazy-image-placeholder {
+  background-color: #4a5568;
+}
+
+/* Shopify-specific styles */
+.shopify-payment-button {
+  margin-top: 16px;
+}
+
+.shopify-payment-button__button {
+  border-radius: 8px !important;
+}
+
+/* Print styles */
+@media print {
+  .no-print { display: none !important; }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .card-enhanced {
+    border: 1px solid #000 !important;
+    box-shadow: none !important;
+  }
+}

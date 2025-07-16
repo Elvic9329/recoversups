@@ -1,0 +1,121 @@
+{%- comment -%}
+  RecoverSups Lazy Loading Component Snippet
+  
+  Usage:
+  {% render 'lazy-component', 
+     component: 'product-recommendations',
+     data: product.id,
+     class: 'product-recommendations-section',
+     placeholder_height: '400px' %}
+{%- endcomment -%}
+
+{%- liquid
+  assign component = component | default: 'generic'
+  assign class = class | default: ''
+  assign placeholder_height = placeholder_height | default: '200px'
+  assign data = data | default: ''
+  
+  assign component_class = 'lazy-component lazy-loading'
+  if class != blank
+    assign component_class = component_class | append: ' ' | append: class
+  endif
+  
+  case component
+    when 'product-recommendations'
+      assign placeholder_text = 'Cargando recomendaciones...'
+    when 'reviews'
+      assign placeholder_text = 'Cargando reseñas...'
+    when 'related-products'
+      assign placeholder_text = 'Cargando productos relacionados...'
+    when 'newsletter-signup'
+      assign placeholder_text = 'Cargando formulario...'
+    else
+      assign placeholder_text = 'Cargando contenido...'
+  endcase
+-%}
+
+<div 
+  class="{{ component_class }}"
+  data-component="{{ component }}"
+  {%- if data != blank -%}
+    data-component-data='{{ data | json }}'
+  {%- endif -%}
+  style="min-height: {{ placeholder_height }}; display: flex; align-items: center; justify-content: center;"
+>
+  {%- comment -%} Loading placeholder {%- endcomment -%}
+  <div class="lazy-component-placeholder">
+    <div class="loading-spinner" style="margin-bottom: 16px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12a9 9 0 11-6.219-8.56"/>
+        <animateTransform
+          attributeName="transform"
+          attributeType="XML"
+          type="rotate"
+          dur="1s"
+          from="0 12 12"
+          to="360 12 12"
+          repeatCount="indefinite"/>
+      </svg>
+    </div>
+    <p style="color: #718096; font-size: 14px; margin: 0;">{{ placeholder_text }}</p>
+  </div>
+</div>
+
+{%- comment -%}
+  Component-specific implementations:
+  
+  <!-- Product Recommendations -->
+  {% render 'lazy-component', 
+     component: 'product-recommendations',
+     data: product.id,
+     class: 'section-padding',
+     placeholder_height: '500px' %}
+  
+  <!-- Customer Reviews -->
+  {% render 'lazy-component', 
+     component: 'reviews',
+     data: product.id,
+     class: 'reviews-section',
+     placeholder_height: '400px' %}
+  
+  <!-- Related Products -->
+  {% render 'lazy-component', 
+     component: 'related-products',
+     data: collection.id,
+     class: 'related-products-grid',
+     placeholder_height: '600px' %}
+  
+  <!-- Newsletter Signup -->
+  {% render 'lazy-component', 
+     component: 'newsletter-signup',
+     class: 'newsletter-section',
+     placeholder_height: '300px' %}
+  
+  JavaScript implementation example:
+  
+  // In global.js, extend the loadComponent function:
+  loadComponent: function(element) {
+    const componentName = element.dataset.component;
+    const componentData = element.dataset.componentData ? JSON.parse(element.dataset.componentData) : {};
+    
+    element.classList.remove('lazy-loading');
+    element.classList.add('component-loading');
+    
+    switch(componentName) {
+      case 'product-recommendations':
+        this.loadProductRecommendations(element, componentData);
+        break;
+      case 'reviews':
+        this.loadReviews(element, componentData);
+        break;
+      case 'related-products':
+        this.loadRelatedProducts(element, componentData);
+        break;
+      case 'newsletter-signup':
+        this.loadNewsletterSignup(element, componentData);
+        break;
+      default:
+        this.loadGenericComponent(element, componentData);
+    }
+  }
+{%- endcomment -%}
