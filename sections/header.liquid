@@ -45,7 +45,7 @@
       <div class="header-logo">
         <a href="{{ routes.root_url }}" aria-label="Go to homepage">
           {% if logo %}
-            <img src="{{ logo | image_url: width: logo_width }}" alt="{{ shop.name }}" loading="lazy">
+            <img src="{{ logo | image_url: width: logo_width }}" alt="{{ shop.name }}" width="{{ logo_width }}" height="{{ logo_height }}" loading="lazy">
           {% else %}
             <h1 class="shop-name">{{ shop.name }}</h1>
           {% endif %}
@@ -140,7 +140,7 @@
   <div class="mobile-nav-header">
     <div class="header-logo">
       {% if logo %}
-        <img src="{{ logo | image_url: width: 120 }}" alt="{{ shop.name }}" loading="lazy">
+        <img src="{{ logo | image_url: width: 120 }}" alt="{{ shop.name }}" width="120" height="auto" loading="lazy">
       {% else %}
         <h2 class="shop-name">{{ shop.name }}</h2>
       {% endif %}
