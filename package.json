@@ -47,6 +47,7 @@
     "stylelint-scss": "^6.0.0"
   },
   "dependencies": {
+    "@anthropic-ai/claude-code": "^1.0.53",
     "browser-sync": "^2.29.3",
     "chokidar": "^3.5.3"
   },

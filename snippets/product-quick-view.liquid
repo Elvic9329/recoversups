@@ -1,0 +1,480 @@
+{% comment %}
+  Product Quick View Modal Component
+  Modal dialog for quick product preview with key details and actions
+{% endcomment %}
+
+<div class="product-quick-view-overlay" id="productQuickViewOverlay">
+  <div class="product-quick-view-modal" id="productQuickViewModal">
+    <!-- Close Button -->
+    <button class="product-quick-view-close" id="productQuickViewClose" aria-label="Close quick view">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <!-- Modal Content -->
+    <div class="product-quick-view-content" id="productQuickViewContent">
+      <!-- Loading State -->
+      <div class="product-quick-view-loading" id="productQuickViewLoading">
+        <div class="product-quick-view-spinner"></div>
+        <p>Loading product details...</p>
+      </div>
+
+      <!-- Product Content (populated by JavaScript) -->
+      <div class="product-quick-view-product" id="productQuickViewProduct" style="display: none;">
+        <!-- Product Images -->
+        <div class="product-quick-view-images">
+          <div class="product-quick-view-main-image" id="productQuickViewMainImage">
+            <!-- Main image will be populated by JS -->
+          </div>
+          <div class="product-quick-view-thumbnails" id="productQuickViewThumbnails">
+            <!-- Thumbnails will be populated by JS -->
+          </div>
+        </div>
+
+        <!-- Product Details -->
+        <div class="product-quick-view-details">
+          <div class="product-quick-view-header">
+            <h2 class="product-quick-view-title" id="productQuickViewTitle"></h2>
+            <div class="product-quick-view-vendor" id="productQuickViewVendor"></div>
+          </div>
+
+          <div class="product-quick-view-price" id="productQuickViewPrice">
+            <!-- Price will be populated by JS -->
+          </div>
+
+          <div class="product-quick-view-description" id="productQuickViewDescription">
+            <!-- Description will be populated by JS -->
+          </div>
+
+          <div class="product-quick-view-variants" id="productQuickViewVariants">
+            <!-- Variants will be populated by JS -->
+          </div>
+
+          <div class="product-quick-view-actions">
+            <form class="product-quick-view-form" id="productQuickViewForm">
+              <!-- Form inputs will be populated by JS -->
+              <div class="product-quick-view-quantity">
+                <label for="productQuickViewQuantity">Quantity:</label>
+                <input type="number" id="productQuickViewQuantity" name="quantity" value="1" min="1">
+              </div>
+              
+              <div class="product-quick-view-buttons">
+                <button type="submit" class="product-quick-view-add-to-cart" id="productQuickViewAddToCart">
+                  <span class="product-quick-view-add-to-cart-text">Add to Cart</span>
+                  <span class="product-quick-view-add-to-cart-loading">Adding...</span>
+                </button>
+                
+                <button type="button" class="product-quick-view-full-details" id="productQuickViewFullDetails">
+                  View Full Details
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Key Features -->
+          <div class="product-quick-view-features" id="productQuickViewFeatures">
+            <!-- Features will be populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div class="product-quick-view-error" id="productQuickViewError" style="display: none;">
+        <div class="product-quick-view-error-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="15" y1="9" x2="9" y2="15"/>
+            <line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+        </div>
+        <h3>Unable to load product</h3>
+        <p>Please try again or visit the product page directly.</p>
+        <button class="product-quick-view-retry" id="productQuickViewRetry">Retry</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .product-quick-view-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--rs-spacing-lg);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--rs-transition-duration) ease-in-out;
+  }
+
+  .product-quick-view-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .product-quick-view-modal {
+    background-color: var(--rs-color-card);
+    border-radius: var(--rs-radius-xl);
+    box-shadow: var(--rs-shadow-2xl);
+    position: relative;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.9) translateY(20px);
+    transition: transform var(--rs-transition-duration) ease-in-out;
+  }
+
+  .product-quick-view-overlay.active .product-quick-view-modal {
+    transform: scale(1) translateY(0);
+  }
+
+  .product-quick-view-close {
+    position: absolute;
+    top: var(--rs-spacing-lg);
+    right: var(--rs-spacing-lg);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--rs-radius-full);
+    border: none;
+    background-color: var(--rs-color-muted);
+    color: var(--rs-color-foreground);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: var(--rs-transition-all);
+  }
+
+  .product-quick-view-close:hover {
+    background-color: var(--rs-color-destructive);
+    color: var(--rs-color-destructive-foreground);
+  }
+
+  .product-quick-view-close svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .product-quick-view-content {
+    padding: var(--rs-spacing-xl);
+    padding-top: calc(var(--rs-spacing-xl) + 40px);
+  }
+
+  .product-quick-view-loading {
+    text-align: center;
+    padding: var(--rs-spacing-3xl) var(--rs-spacing-lg);
+    color: var(--rs-color-muted-foreground);
+  }
+
+  .product-quick-view-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--rs-color-muted);
+    border-top: 3px solid var(--rs-color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto var(--rs-spacing-lg);
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .product-quick-view-product {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--rs-spacing-xl);
+    align-items: start;
+  }
+
+  .product-quick-view-images {
+    display: grid;
+    gap: var(--rs-spacing-md);
+  }
+
+  .product-quick-view-main-image {
+    aspect-ratio: 1;
+    background-color: var(--rs-color-muted);
+    border-radius: var(--rs-radius-lg);
+    overflow: hidden;
+  }
+
+  .product-quick-view-main-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-quick-view-thumbnails {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--rs-spacing-2);
+  }
+
+  .product-quick-view-thumbnail {
+    aspect-ratio: 1;
+    background-color: var(--rs-color-muted);
+    border-radius: var(--rs-radius-md);
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--rs-transition-all);
+    border: 2px solid transparent;
+  }
+
+  .product-quick-view-thumbnail:hover,
+  .product-quick-view-thumbnail.active {
+    border-color: var(--rs-color-primary);
+  }
+
+  .product-quick-view-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-quick-view-details {
+    display: grid;
+    gap: var(--rs-spacing-lg);
+  }
+
+  .product-quick-view-header {
+    border-bottom: 1px solid var(--rs-color-border);
+    padding-bottom: var(--rs-spacing-md);
+  }
+
+  .product-quick-view-title {
+    @include rs-text-h3;
+    color: var(--rs-color-foreground);
+    margin-bottom: var(--rs-spacing-sm);
+  }
+
+  .product-quick-view-vendor {
+    @include rs-text-body;
+    color: var(--rs-color-muted-foreground);
+    text-transform: uppercase;
+    font-weight: var(--rs-font-weight-medium);
+    letter-spacing: 0.5px;
+  }
+
+  .product-quick-view-price {
+    display: flex;
+    align-items: center;
+    gap: var(--rs-spacing-sm);
+  }
+
+  .product-quick-view-price-current {
+    @include rs-text-h4;
+    color: var(--rs-color-foreground);
+    font-weight: var(--rs-font-weight-bold);
+  }
+
+  .product-quick-view-price-compare {
+    @include rs-text-body;
+    color: var(--rs-color-muted-foreground);
+    text-decoration: line-through;
+  }
+
+  .product-quick-view-description {
+    @include rs-text-body;
+    color: var(--rs-color-muted-foreground);
+    line-height: var(--rs-line-height-relaxed);
+  }
+
+  .product-quick-view-variants {
+    display: grid;
+    gap: var(--rs-spacing-md);
+  }
+
+  .product-quick-view-variant-group {
+    display: grid;
+    gap: var(--rs-spacing-sm);
+  }
+
+  .product-quick-view-variant-label {
+    @include rs-text-body;
+    color: var(--rs-color-foreground);
+    font-weight: var(--rs-font-weight-medium);
+  }
+
+  .product-quick-view-variant-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--rs-spacing-2);
+  }
+
+  .product-quick-view-variant-option {
+    padding: var(--rs-spacing-2) var(--rs-spacing-3);
+    border: 1px solid var(--rs-color-border);
+    border-radius: var(--rs-radius-sm);
+    background-color: var(--rs-color-card);
+    color: var(--rs-color-foreground);
+    cursor: pointer;
+    transition: var(--rs-transition-all);
+    font-size: var(--rs-font-size-sm);
+  }
+
+  .product-quick-view-variant-option:hover {
+    border-color: var(--rs-color-primary);
+  }
+
+  .product-quick-view-variant-option.active {
+    border-color: var(--rs-color-primary);
+    background-color: var(--rs-color-primary);
+    color: var(--rs-color-primary-foreground);
+  }
+
+  .product-quick-view-variant-option.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .product-quick-view-actions {
+    border-top: 1px solid var(--rs-color-border);
+    padding-top: var(--rs-spacing-lg);
+  }
+
+  .product-quick-view-form {
+    display: grid;
+    gap: var(--rs-spacing-md);
+  }
+
+  .product-quick-view-quantity {
+    display: flex;
+    align-items: center;
+    gap: var(--rs-spacing-sm);
+  }
+
+  .product-quick-view-quantity label {
+    @include rs-text-body;
+    color: var(--rs-color-foreground);
+    font-weight: var(--rs-font-weight-medium);
+  }
+
+  .product-quick-view-quantity input {
+    width: 80px;
+    padding: var(--rs-spacing-2);
+    border: 1px solid var(--rs-color-border);
+    border-radius: var(--rs-radius-sm);
+    background-color: var(--rs-color-card);
+    color: var(--rs-color-foreground);
+    text-align: center;
+  }
+
+  .product-quick-view-buttons {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--rs-spacing-sm);
+  }
+
+  .product-quick-view-add-to-cart {
+    @extend .btn;
+    @extend .btn-primary;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .product-quick-view-add-to-cart-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity var(--rs-transition-duration) ease-in-out;
+  }
+
+  .product-quick-view-add-to-cart.loading .product-quick-view-add-to-cart-text {
+    opacity: 0;
+  }
+
+  .product-quick-view-add-to-cart.loading .product-quick-view-add-to-cart-loading {
+    opacity: 1;
+  }
+
+  .product-quick-view-full-details {
+    @extend .btn;
+    @extend .btn-outline;
+  }
+
+  .product-quick-view-features {
+    display: grid;
+    gap: var(--rs-spacing-sm);
+  }
+
+  .product-quick-view-feature {
+    display: flex;
+    align-items: center;
+    gap: var(--rs-spacing-sm);
+    @include rs-text-body-small;
+    color: var(--rs-color-muted-foreground);
+  }
+
+  .product-quick-view-feature-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--rs-color-primary);
+  }
+
+  .product-quick-view-error {
+    text-align: center;
+    padding: var(--rs-spacing-xl);
+    color: var(--rs-color-muted-foreground);
+  }
+
+  .product-quick-view-error-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto var(--rs-spacing-md);
+    color: var(--rs-color-destructive);
+  }
+
+  .product-quick-view-error h3 {
+    @include rs-text-h4;
+    color: var(--rs-color-foreground);
+    margin-bottom: var(--rs-spacing-sm);
+  }
+
+  .product-quick-view-error p {
+    @include rs-text-body;
+    margin-bottom: var(--rs-spacing-lg);
+  }
+
+  .product-quick-view-retry {
+    @extend .btn;
+    @extend .btn-primary;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .product-quick-view-modal {
+      max-width: none;
+      width: 100%;
+      max-height: 100vh;
+      border-radius: 0;
+    }
+
+    .product-quick-view-product {
+      grid-template-columns: 1fr;
+    }
+
+    .product-quick-view-content {
+      padding: var(--rs-spacing-lg);
+      padding-top: calc(var(--rs-spacing-lg) + 40px);
+    }
+
+    .product-quick-view-buttons {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

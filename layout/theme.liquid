@@ -187,6 +187,9 @@
   <!-- Cart Drawer -->
   {%- section 'cart-drawer' -%}
   
+  <!-- Product Quick View Modal -->
+  {% render 'product-quick-view' %}
+  
   <!-- Critical JavaScript -->
   <script>
     // RecoverSups Theme Configuration
@@ -222,6 +225,7 @@
   <script src="{{ 'header.js' | asset_url }}" defer></script>
   <script src="{{ 'search.js' | asset_url }}" defer></script>
   <script src="{{ 'cart-drawer.js' | asset_url }}" defer></script>
+  <script src="{{ 'product-card.js' | asset_url }}" defer></script>
   
   <!-- Development Tools -->
   {%- if request.design_mode -%}

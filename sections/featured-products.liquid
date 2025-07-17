@@ -18,95 +18,18 @@
     {% endif %}
 
     <!-- Products Grid -->
-    <div class="products-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-{{ section.settings.desktop_columns }} gap-5 md:gap-6">
+    <div class="products-grid grid grid-auto gap-6">
       {% assign products_collection = collections[section.settings.collection] %}
       {% assign products_to_show = section.settings.products_count | default: 8 %}
       
       {% if products_collection.products.size > 0 %}
         {% for product in products_collection.products limit: products_to_show %}
-          <div class="product-card group">
-            <!-- Product Image Container -->
-            <div class="product-image-container relative mb-4 overflow-hidden rounded-md bg-light-gray">
-              {% if product.featured_image %}
-                <a href="{{ product.url }}" class="block">
-                  <img 
-                    src="{{ product.featured_image | img_url: '400x400' }}" 
-                    alt="{{ product.featured_image.alt | default: product.title }}"
-                    class="w-full h-48 md:h-56 object-cover transition-transform duration-300 group-hover:scale-105"
-                    loading="lazy"
-                  >
-                </a>
-              {% else %}
-                <div class="w-full h-48 md:h-56 bg-light-gray flex items-center justify-center">
-                  <span class="text-medium-gray text-sm">No Image</span>
-                </div>
-              {% endif %}
-
-              <!-- Sale Badge -->
-              {% if product.compare_at_price > product.price %}
-                <div class="sale-badge absolute top-2 left-2 bg-accent-green text-white text-xs font-medium px-2 py-1 rounded-full">
-                  {% assign discount = product.compare_at_price | minus: product.price %}
-                  {% assign discount_percent = discount | times: 100 | divided_by: product.compare_at_price %}
-                  -{{ discount_percent }}%
-                </div>
-              {% endif %}
-            </div>
-
-            <!-- Product Info -->
-            <div class="product-info">
-              <!-- Product Title -->
-              <h3 class="product-title text-product-title font-medium text-dark-gray mb-2 line-clamp-2">
-                <a href="{{ product.url }}" class="hover:text-accent-green transition-colors duration-200">
-                  {{ product.title }}
-                </a>
-              </h3>
-
-              <!-- Product Description -->
-              {% if section.settings.show_description and product.description != blank %}
-                <p class="product-description text-body-sm text-medium-gray mb-3 line-clamp-2">
-                  {{ product.description | strip_html | truncate: 100 }}
-                </p>
-              {% endif %}
-
-              <!-- Product Price -->
-              <div class="product-price mb-4">
-                {% if product.compare_at_price > product.price %}
-                  <span class="sale-price text-price-sale font-bold text-dark-gray">
-                    {{ product.price | money }}
-                  </span>
-                  <span class="original-price text-price-original text-medium-gray line-through ml-2">
-                    {{ product.compare_at_price | money }}
-                  </span>
-                {% else %}
-                  <span class="price text-price-sale font-bold text-dark-gray">
-                    {{ product.price | money }}
-                  </span>
-                {% endif %}
-              </div>
-
-              <!-- Add to Cart Button -->
-              <div class="add-to-cart">
-                {% if product.available %}
-                  <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-form">
-                    <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-                    <button 
-                      type="submit" 
-                      class="add-to-cart-btn w-full bg-accent-green text-white font-medium py-2 px-4 rounded-sm hover:bg-opacity-90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-accent-green focus:ring-offset-2"
-                    >
-                      Add to Cart
-                    </button>
-                  </form>
-                {% else %}
-                  <button 
-                    disabled 
-                    class="add-to-cart-btn w-full bg-medium-gray text-white font-medium py-2 px-4 rounded-sm cursor-not-allowed"
-                  >
-                    Sold Out
-                  </button>
-                {% endif %}
-              </div>
-            </div>
-          </div>
+          {% render 'product-card', 
+             product: product,
+             show_description: section.settings.show_description,
+             show_quick_view: section.settings.show_quick_view,
+             card_size: section.settings.card_size,
+             image_aspect_ratio: section.settings.image_aspect_ratio %}
         {% endfor %}
       {% else %}
         <!-- Fallback for no products -->

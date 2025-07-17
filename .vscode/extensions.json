@@ -2,7 +2,6 @@
   "recommendations": [
     // 🚀 SHOPIFY DEVELOPMENT ESSENTIALS (Críticas)
     "shopify.theme-check-vscode",
-    "shopify.liquid",
     
     // 🎨 CSS/SCSS DEVELOPMENT
     "glenn2223.live-sass",
@@ -12,15 +11,13 @@
     "stylelint.vscode-stylelint",
     
     // 📝 JAVASCRIPT/TYPESCRIPT
-    "ms-vscode.vscode-eslint",
+    "dbaeumer.vscode-eslint",
     "ms-vscode.vscode-typescript-next",
     
     // 🔧 GENERAL DEVELOPMENT
     "esbenp.prettier-vscode",
-    "ms-vscode.vscode-json",
     "redhat.vscode-yaml",
     "formulahendry.auto-rename-tag",
-    "ms-vscode.vscode-html-language-features",
     
     // 🌳 GIT & VERSION CONTROL
     "mhutchie.git-graph",
@@ -35,17 +32,10 @@
     "oderwat.indent-rainbow",
     "pkief.material-icon-theme",
     "wayou.vscode-todo-highlight",
-    "ms-vscode.vscode-colorize",
     
     // 📖 MARKDOWN & DOCUMENTATION
     "yzhang.markdown-all-in-one",
-    "davidanson.vscode-markdownlint",
-    
-    // 🚀 PERFORMANCE & MONITORING
-    "ms-vscode.vscode-performance",
-    
-    // 🔍 DEBUGGING & TESTING
-    "ms-vscode.vscode-chrome-debug-core"
+    "davidanson.vscode-markdownlint"
   ],
   "unwantedRecommendations": [
     "ms-vscode.vscode-typescript",
