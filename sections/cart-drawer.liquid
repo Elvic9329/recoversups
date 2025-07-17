@@ -1,0 +1,235 @@
+{% comment %}
+  Cart Drawer Component
+  Advanced cart functionality with real-time updates for Recoversups.pe
+{% endcomment %}
+
+<!-- Cart Drawer Overlay -->
+<div class="cart-drawer-overlay" id="cart-drawer-overlay" onclick="cartDrawer.close()">
+</div>
+
+<!-- Cart Drawer -->
+<div class="cart-drawer" id="cart-drawer">
+  <!-- Cart Header -->
+  <div class="cart-drawer__header">
+    <h2 class="cart-drawer__title">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="9" cy="21" r="1"></circle>
+        <circle cx="20" cy="21" r="1"></circle>
+        <path d="m1 1 4 4 5.5 11h7.5l4-9H5"></path>
+      </svg>
+      Tu Carrito
+      <span class="cart-drawer__count" id="cart-count-drawer">0</span>
+    </h2>
+    
+    <button class="cart-drawer__close" onclick="cartDrawer.close()" aria-label="Cerrar carrito">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18"></path>
+        <path d="M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Cart Content -->
+  <div class="cart-drawer__content">
+    <!-- Empty Cart State -->
+    <div class="cart-drawer__empty" id="cart-empty-state">
+      <div class="cart-empty-illustration">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="9" cy="21" r="1"></circle>
+          <circle cx="20" cy="21" r="1"></circle>
+          <path d="m1 1 4 4 5.5 11h7.5l4-9H5"></path>
+        </svg>
+      </div>
+      <h3 class="cart-empty__title">Tu carrito está vacío</h3>
+      <p class="cart-empty__subtitle">Agrega algunos suplementos premium para empezar</p>
+      <button class="btn btn-primary cart-empty__cta" onclick="cartDrawer.close()">
+        Continuar Comprando
+      </button>
+    </div>
+
+    <!-- Cart Items -->
+    <div class="cart-drawer__items" id="cart-items-container">
+      <!-- Cart items will be dynamically loaded here -->
+    </div>
+
+    <!-- Cart Recommendations -->
+    <div class="cart-drawer__recommendations" id="cart-recommendations">
+      <h3 class="cart-recommendations__title">Productos Recomendados</h3>
+      <div class="cart-recommendations__grid" id="cart-recommendations-grid">
+        <!-- Recommendations will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Footer -->
+  <div class="cart-drawer__footer" id="cart-footer">
+    <!-- Cart Summary -->
+    <div class="cart-summary">
+      <div class="cart-summary__row">
+        <span class="cart-summary__label">Subtotal</span>
+        <span class="cart-summary__value" id="cart-subtotal">$0.00</span>
+      </div>
+      
+      <div class="cart-summary__row cart-summary__row--discount" id="cart-discount-row" style="display: none;">
+        <span class="cart-summary__label">Descuento</span>
+        <span class="cart-summary__value cart-summary__value--discount" id="cart-discount">-$0.00</span>
+      </div>
+      
+      <div class="cart-summary__row cart-summary__row--total">
+        <span class="cart-summary__label">Total</span>
+        <span class="cart-summary__value cart-summary__value--total" id="cart-total">$0.00</span>
+      </div>
+    </div>
+
+    <!-- Shipping Info -->
+    <div class="cart-shipping-info">
+      <div class="shipping-progress" id="shipping-progress">
+        <div class="shipping-progress__bar">
+          <div class="shipping-progress__fill" id="shipping-progress-fill"></div>
+        </div>
+        <p class="shipping-progress__text" id="shipping-progress-text">
+          Añade <span class="shipping-remaining" id="shipping-remaining">$50.00</span> para obtener envío gratis
+        </p>
+      </div>
+    </div>
+
+    <!-- Cart Actions -->
+    <div class="cart-actions">
+      <button class="btn btn-secondary btn-full cart-actions__view-cart" onclick="window.location.href='/cart'">
+        Ver Carrito Completo
+      </button>
+      
+      <button class="btn btn-primary btn-full cart-actions__checkout" id="cart-checkout-btn" onclick="cartDrawer.checkout()">
+        <span class="checkout-text">Proceder al Checkout</span>
+        <span class="checkout-price" id="checkout-total">$0.00</span>
+      </button>
+    </div>
+
+    <!-- Trust Badges -->
+    <div class="cart-trust-badges">
+      <div class="trust-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>Compra Segura</span>
+      </div>
+      
+      <div class="trust-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 6 9 17l-5-5"></path>
+        </svg>
+        <span>Envío Gratis +$50</span>
+      </div>
+      
+      <div class="trust-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 6h18l-2 13H5L3 6z"></path>
+          <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+        </svg>
+        <span>Devolución 30 días</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cart Loading State -->
+<div class="cart-loading" id="cart-loading">
+  <div class="cart-loading__spinner">
+    <svg width="24" height="24" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" opacity="0.25"/>
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none" stroke-dasharray="63" stroke-dashoffset="63" opacity="0.75">
+        <animate attributeName="stroke-dasharray" dur="1.5s" values="0 63;31.5 31.5;63 0;31.5 31.5;0 63" repeatCount="indefinite"/>
+        <animate attributeName="stroke-dashoffset" dur="1.5s" values="0;-15.75;-31.5;-47.25;-63" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+  </div>
+</div>
+
+<!-- Add to Cart Success Toast -->
+<div class="cart-toast" id="cart-toast">
+  <div class="cart-toast__content">
+    <div class="cart-toast__icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 6 9 17l-5-5"></path>
+      </svg>
+    </div>
+    <div class="cart-toast__text">
+      <p class="cart-toast__title">¡Producto añadido!</p>
+      <p class="cart-toast__subtitle" id="cart-toast-subtitle">Se agregó al carrito</p>
+    </div>
+    <button class="cart-toast__action" onclick="cartDrawer.open()">
+      Ver Carrito
+    </button>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cart Drawer",
+  "class": "section-cart-drawer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Configuración del Carrito"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_cart_drawer",
+      "label": "Activar cart drawer",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_recommendations",
+      "label": "Mostrar productos recomendados",
+      "default": true
+    },
+    {
+      "type": "number",
+      "id": "recommendations_count",
+      "label": "Número de productos recomendados",
+      "default": 3,
+      "info": "Máximo 6 productos"
+    },
+    {
+      "type": "number",
+      "id": "free_shipping_threshold",
+      "label": "Umbral para envío gratis (en centavos)",
+      "default": 5000,
+      "info": "50.00 = 5000 centavos"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_badges",
+      "label": "Mostrar badges de confianza",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Animaciones"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_add_animations",
+      "label": "Activar animaciones de agregar al carrito",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "drawer_position",
+      "label": "Posición del drawer",
+      "options": [
+        {
+          "value": "right",
+          "label": "Derecha"
+        },
+        {
+          "value": "left",
+          "label": "Izquierda"
+        }
+      ],
+      "default": "right"
+    }
+  ]
+}
+{% endschema %}

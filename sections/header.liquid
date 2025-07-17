@@ -122,15 +122,13 @@
           </svg>
         </button>
 
-        <button class="header-icon" onclick="openCart()" aria-label="Open cart">
+        <button class="header-icon" data-cart-open aria-label="Open cart">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 3h2l.4 2M7 13h10l4-8H5.4m1.6 8L5 3H3"/>
             <circle cx="9" cy="21" r="1"/>
             <circle cx="20" cy="21" r="1"/>
           </svg>
-          {% if cart.item_count > 0 %}
-            <span class="cart-count">{{ cart.item_count }}</span>
-          {% endif %}
+          <span class="cart-count header-cart-count" data-cart-count style="display: {% if cart.item_count > 0 %}flex{% else %}none{% endif %};">{{ cart.item_count }}</span>
         </button>
 
         <button class="mobile-menu-toggle" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
@@ -388,12 +386,7 @@
     }
   }
 
-  // Cart functionality
-  function openCart() {
-    // This would integrate with your cart drawer implementation
-    // For now, redirect to cart page
-    window.location.href = '{{ routes.cart_url }}';
-  }
+  // Cart functionality (handled by cart-drawer.js)
 
   // Keyboard navigation
   document.addEventListener('keydown', function(e) {

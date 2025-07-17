@@ -4277,8 +4277,21 @@ body {
   align-items: center;
   justify-content: center;
   line-height: 1;
+  animation: cartCountBounce 0.3s ease;
+  transition: all 0.2s ease;
 }
 
+@keyframes cartCountBounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-4px);
+  }
+  60% {
+    transform: translateY(-2px);
+  }
+}
 /* ========================================
    ACCOUNT DROPDOWN STYLES
 ======================================== */

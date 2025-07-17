@@ -1,110 +1,71 @@
-# RecoverSups.pe - Git Ignore File
-# Shopify Theme Development
-
-# Dependencies
+# Node.js
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+package-lock.json
 
-# Compiled CSS files (generated from SCSS)
-assets/*.css
-!assets/theme.css
+# Shopify CLI
+.shopify/
+.shopifyignore
 
-# Development files
-.vscode/chrome-debug-data*/
+# Build outputs
+dist/
+build/
+assets/*.css.map
+assets/*.js.map
+
+# IDE and Editor files
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
-# Environment files
+# Logs
+*.log
+logs/
+
+# Environment variables
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# Logs
-logs
-*.log
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Coverage directory used by tools like istanbul
-coverage/
-*.lcov
-
-# nyc test coverage
-.nyc_output
-
-# Dependency directories
-jspm_packages/
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# parcel-bundler cache (https://parceljs.org/)
-.cache
-.parcel-cache
-
-# next.js build output
-.next
-
-# nuxt.js build output
-.nuxt
-
-# vuepress build output
-.vuepress/dist
-
-# Serverless directories
-.serverless/
-
-# FuseBox cache
-.fusebox/
-
-# DynamoDB Local files
-.dynamodb/
-
-# TernJS port file
-.tern-port
-
-# Temporary files
-*.tmp
-*.temp
-.test-*
-
-# IDE files
-.idea/
-*.swp
-*.swo
-
-# OS generated files
-.DS_Store?
-ehthumbs.db
-Icon?
-
-# Shopify CLI
-.shopify/
-
-# Build outputs
-dist/
-build/
-
 # Cache
 .cache/
 .sass-cache/
+.npm/
+.eslintcache
+.stylelintcache
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Theme Kit
+config.yml
+config.yaml
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Testing
+coverage/
+.nyc_output/

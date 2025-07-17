@@ -184,6 +184,9 @@
     {%- section 'footer' -%}
   </footer>
   
+  <!-- Cart Drawer -->
+  {%- section 'cart-drawer' -%}
+  
   <!-- Critical JavaScript -->
   <script>
     // RecoverSups Theme Configuration
@@ -218,6 +221,7 @@
   <script src="{{ 'global.js' | asset_url }}" defer></script>
   <script src="{{ 'header.js' | asset_url }}" defer></script>
   <script src="{{ 'search.js' | asset_url }}" defer></script>
+  <script src="{{ 'cart-drawer.js' | asset_url }}" defer></script>
   
   <!-- Development Tools -->
   {%- if request.design_mode -%}

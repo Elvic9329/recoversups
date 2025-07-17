@@ -17,7 +17,7 @@
 
 <div class="product-form" data-section-id="{{ section.id }}">
   <product-form data-product-id="{{ product.id }}" data-section-id="{{ section.id }}">
-    {% form 'product', product, id: product_form_id, class: 'product-form__form', novalidate: 'novalidate', data-type: 'add-to-cart-form' %}
+    {% form 'product', product, id: product_form_id, class: 'product-form__form', novalidate: 'novalidate', data-cart-form: true %}
       <input type="hidden" name="id" value="{{ current_variant.id }}" class="product-variant-id">
       
       {%- unless product.has_only_default_variant -%}
@@ -164,9 +164,9 @@
                 data-add-to-cart>
           <span class="btn__text" data-add-to-cart-text>
             {%- if current_variant.available -%}
-              Add to cart
+              Añadir al carrito
             {%- else -%}
-              Sold out
+              Agotado
             {%- endif -%}
           </span>
           <span class="btn__loading" data-loading-spinner>
@@ -349,7 +349,7 @@
       const isAvailable = this.currentVariant.available;
       
       this.addToCartButton.disabled = !isAvailable;
-      this.addToCartText.textContent = isAvailable ? 'Add to cart' : 'Sold out';
+      this.addToCartText.textContent = isAvailable ? 'Añadir al carrito' : 'Agotado';
       
       if (isAvailable) {
         this.addToCartButton.classList.remove('btn--disabled');
@@ -466,19 +466,16 @@
     }
 
     handleAddToCartSuccess(item) {
-      // Update cart count
-      this.updateCartCount();
-      
       // Show success message
-      this.showSuccess('Added to cart!');
+      this.showSuccess('¡Agregado al carrito!');
       
-      // Open cart drawer if available
-      const cartDrawer = document.querySelector('cart-drawer');
-      if (cartDrawer) {
-        cartDrawer.open();
+      // Use cart drawer if available
+      if (window.cartDrawer) {
+        window.cartDrawer.loadCartData();
+        window.cartDrawer.openDrawer();
       }
       
-      // Trigger cart update event
+      // Trigger cart update event for other components
       document.dispatchEvent(new CustomEvent('cart:updated', { detail: { item } }));
     }
 
@@ -487,17 +484,9 @@
     }
 
     async updateCartCount() {
-      try {
-        const response = await fetch('/cart.js');
-        const cart = await response.json();
-        
-        const cartCountElements = document.querySelectorAll('.cart-count');
-        cartCountElements.forEach(element => {
-          element.textContent = cart.item_count;
-          element.style.display = cart.item_count > 0 ? 'block' : 'none';
-        });
-      } catch (error) {
-        console.error('Failed to update cart count:', error);
+      // Cart count is handled by the cart drawer class
+      if (window.cartDrawer) {
+        window.cartDrawer.updateCartCount();
       }
     }
 
